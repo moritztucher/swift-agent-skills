@@ -41,6 +41,11 @@ Every iOS project maintains a `VIEW-INVENTORY.md` at the project root.
 
 **Discovery rule:** before implementing a custom solution for a common UI need (list margins, scroll insets, tab accessories, color mixing, recursive lists, badges, menus, quick-look previews, etc.), check Context7/skills for a built-in modifier first. If you'd reach for a custom `View` or `ViewModifier` and the need is generic, you're probably reinventing one of Apple's recent additions.
 
+**Swift Concurrency — same rule.** Concurrency semantics evolved fast (Swift 5.5 → 6, strict concurrency, `@concurrent`, default isolation) and training data is consistently behind:
+
+- **`swift-concurrency` skill** — invoke for any diagnostic involving `@MainActor`, actors, `Sendable`, data races, async/await refactors, or Swift 6 migration warnings.
+- **Context7 backups** — `/avdlee/swift-concurrency-agent-skill` (Antoine van der Lee, 829 snippets) or `/twostraws/swift-concurrency-agent-skill` (Paul Hudson, 208 snippets) for deeper queries.
+
 For other frameworks, use Context7 when unfamiliar.
 
 ---
