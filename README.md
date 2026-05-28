@@ -109,8 +109,9 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 | Skill | What it does | Source |
 |-------|--------------|--------|
-| `swiftui-pro` | Comprehensive SwiftUI code review — modern APIs, performance, accessibility | [Paul Hudson](https://www.hackingwithswift.com/) (MIT) |
-| `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | Community |
+| `swiftui-pro` | Comprehensive SwiftUI code review — modern APIs, performance, accessibility | [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) (Paul Hudson, MIT) |
+| `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
+| `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
 
 ### Git + PR workflow
 
@@ -216,7 +217,7 @@ The workflow composes left-to-right: brief → epic detail → preflight → TDD
 
 ## Disclaimer
 
-Not affiliated with Anthropic. Claude Code is Anthropic's product; this repo provides community-contributed skills and configuration. `swiftui-pro` is reproduced under its MIT license — full attribution in the skill's frontmatter.
+Not affiliated with Anthropic. Claude Code is Anthropic's product. Third-party skills are reproduced under their own licenses with full attribution in each skill's frontmatter — `swiftui-pro` from [Paul Hudson](https://github.com/twostraws/SwiftUI-Agent-Skill) (MIT), `swiftui-expert-skill` and `swift-concurrency` from [Antoine van der Lee](https://github.com/AvdLee).
 
 ---
 
