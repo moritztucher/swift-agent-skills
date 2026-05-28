@@ -33,7 +33,15 @@ Every iOS project maintains a `VIEW-INVENTORY.md` at the project root.
 | Concurrency | async/await only |
 | State | @Observable pattern |
 
-Use Context7 for up-to-date docs when implementing unfamiliar frameworks.
+**SwiftUI API freshness — non-negotiable.** Training data lags new iOS modifier APIs by 1–2 cycles, so even on "familiar" SwiftUI work, default to consulting current sources before writing custom view code:
+
+- **Context7** — `/websites/developer_apple_swiftui` (Apple's official SwiftUI docs, 15k+ snippets) for any modifier, View, or API question.
+- **`swiftui-pro` skill** (Paul Hudson) — invoke when writing or reviewing SwiftUI; nudges toward modern APIs and modifier-first patterns.
+- **`swiftui-expert-skill`** (Antoine van der Lee) — invoke for iOS 26 Liquid Glass and recent platform additions.
+
+**Discovery rule:** before implementing a custom solution for a common UI need (list margins, scroll insets, tab accessories, color mixing, recursive lists, badges, menus, quick-look previews, etc.), check Context7/skills for a built-in modifier first. If you'd reach for a custom `View` or `ViewModifier` and the need is generic, you're probably reinventing one of Apple's recent additions.
+
+For other frameworks, use Context7 when unfamiliar.
 
 ---
 
