@@ -1,358 +1,98 @@
 ---
 name: ios-onboarding-audit
-description: Audit an existing onboarding flow or design one from scratch. Analyzes activation psychology, permission timing, progressive disclosure, visual identity, and time-to-value. Spawns onboarding, UX, and UI design advisors. Produces docs/ONBOARDING-AUDIT.md.
+description: Audit an existing onboarding flow or design one from scratch. In audit mode it walks the real flow in the simulator (reset → screenshot each step → judge the lived sequence), evaluating time-to-value, permission timing, progressive disclosure, and first-impression craft. Spawns onboarding, UX, and UI advisors. Produces docs/ONBOARDING-AUDIT.md.
 user_invocable: true
 argument-hint: <optional: "new" for greenfield design, or feature path e.g. "Features/Onboarding">
 ---
 
-# iOS Onboarding Audit
+# /ios-onboarding-audit — Onboarding Audit
 
-You audit an existing onboarding flow or design one from scratch for an iOS/SwiftUI project. This skill operates in two modes:
+Audit an existing onboarding flow, or design one from scratch. Two modes:
 
-- **Audit mode** (default) — scan existing onboarding code, evaluate against best practices, produce findings + elevation opportunities.
-- **Greenfield mode** (argument: `new`) — no onboarding exists yet. Read project context, then produce a recommended onboarding blueprint.
+- **Audit mode** (default) — onboarding exists. **Walk it in the simulator and judge the lived sequence**, then produce findings + improvements.
+- **Greenfield mode** (`new`, or no onboarding found) — nothing to run. Produce a recommended blueprint from project context, marked **unvalidated**.
 
-**Key constraint:** Suggests, never decides. All recommendations use "Consider:" framing.
+**Suggests, never decides** — recommendations use "Consider:" framing. **No code changes** — offer to implement after the report. **Output:** `docs/ONBOARDING-AUDIT.md`.
 
-**Output:** `docs/ONBOARDING-AUDIT.md`
+## Principles
 
----
+- **Walk it, don't infer it.** Onboarding is a timed sequence experienced over several screens — pacing, friction, and the screen-1 emotional hit can't be judged from source. In audit mode, step through the real flow and judge the screenshots; count actual taps/seconds to the activation moment rather than estimating from code.
+- **Judge the experience, not a rulebook.** Severity reflects real friction/drop-off risk on screen, not deviation from a "best practice" checklist. A short, fast onboarding that works is a *strength*, not an opportunity to add screens. Don't manufacture findings.
+- **Fit this app.** Recommendations reference the project's own personality and design system, never generic onboarding advice. The onboarding should feel like *this* app from screen 1.
+- **Metrics are what to measure, not targets to hit.** Suggest the events worth instrumenting; don't invent pass/fail thresholds for a specific app.
 
-## Rules
+## Visual Loop (audit mode — required)
 
-- **Read before judging** — scan all onboarding-related Views and flows before writing findings.
-- **Three advisors** — spawn the onboarding advisor (strategy), UX advisor (interaction/HIG), and UI design advisor (visual craft) for a complete review.
-- **Severity on every finding** — no unclassified observations.
-- **Acknowledge strengths** — call out what works, not just problems.
-- **Cite locations** — every finding references specific files and lines (audit mode) or project brief sections (greenfield mode).
-- **No code changes** — this is an audit/blueprint. Offer to implement after the report.
-- **Match the app's identity** — recommendations must reference the project's design system and brand personality, not generic advice.
-
----
+Onboarding only shows on first launch, so **reset first-launch state before each run**:
+1. `axe list-simulators` for a booted UDID (boot one if needed).
+2. **Reset:** `xcrun simctl uninstall <UDID> <bundleID>` then reinstall — clears `UserDefaults`/`@AppStorage` so onboarding shows. (Or find the completion flag — grep `@AppStorage`/`hasCompletedOnboarding`/`hasLaunched` — and clear just that key.)
+3. Build & install & launch (`xcodebuild … build` → `simctl install` → `simctl launch`).
+4. **Walk it:** at each step, `axe screenshot --output .design/onboard-NN.png`, **Read the PNG**, then advance with AXe (`axe tap --label "Continue"/"Get Started"/"Skip" --udid <UDID>`; see `/ios-automate`). Capture every screen through to the **activation moment** (the first real use of the app).
+5. Note the actual tap/second count to activation, which screens are skippable, and where a real user would hesitate or bail.
 
 ## Flow
 
-### 1. Determine Mode
+### 1. Mode & context
+- `new` argument, or no onboarding Views found (glob `*Onboarding*`, `*Welcome*`, `*Intro*`, `*Walkthrough*`, `*GetStarted*`, `*FirstLaunch*`, `*Setup*`) → **Greenfield**. Else → **Audit**.
+- Read for context: `CLAUDE.md`, `docs/PROJECT-BRIEF.md` (users, purpose, tone), `docs/DESIGN-SYSTEM.md` (identity, pushed levers) if present, `ARCHITECTURE.md` (navigation). Note permissions the app declares (grep Info.plist / target settings for `NS*UsageDescription`).
 
-- If argument is `new` or no onboarding Views exist → **Greenfield mode** (Step 2B)
-- If onboarding Views exist → **Audit mode** (Step 2A)
+### 2A. Audit mode
+Run the **Visual Loop** to walk and capture the real flow. Pair each screenshot with its View code to note: purpose (value prop / personalization / permission / setup / tutorial), skippable?, the action that advances, permissions asked (cold vs. just-in-time with value), and the visual craft on screen. Identify the **activation moment** and any re-entry path (TipKit / "Getting Started").
 
-**Context gathering (both modes):**
-1. Read `CLAUDE.md` — tech stack, architecture decisions.
-2. Read `docs/PROJECT-BRIEF.md` — target users, app purpose, features, tone.
-3. Read `docs/DESIGN-SYSTEM.md` — established visual identity, design levers being pushed.
-4. Read `ARCHITECTURE.md` — navigation approach, data flow.
-5. Note which permissions the app uses (grep for `NSHealthShareUsageDescription`, `NSLocationWhenInUseUsageDescription`, `NSCameraUsageDescription`, `NSUserTrackingUsageDescription`, etc. in Info.plist or target settings).
+**Spawn the three advisors with the screenshots** (pass the `.design/onboard-*.png` paths + brief context; tell them to Read the images and judge the rendered flow):
+- **`ios-onboarding-advisor`** — strategy: time-to-value, permission timing, progressive disclosure, personalization, flow pattern, drop-off risks, emotional first impression, what to measure.
+- **`ios-ux-advisor`** — interaction/HIG: skip & back affordances, progress indication, tap targets, Dynamic Type, VoiceOver, keyboard handling on input screens, loading/error states (incl. permission denial).
+- **`ios-ui-design-advisor`** — visual craft: does screen 1 set the app's identity, are its pushed levers active, is there a genuine micro-delight moment.
 
----
+Integrate their annotations; you own the final findings.
 
-### 2A. Audit Mode (Existing Onboarding)
+### 2B. Greenfield mode (blueprint — unvalidated)
+From context, determine the activation moment, the minimum setup required before it, permissions (by sensitivity), personalization potential, and the app's personality. Spawn `ios-onboarding-advisor` (recommend flow pattern + screen-by-screen sequence + permission timing + activation placement + one micro-delight + what to defer to TipKit + metrics) and `ios-ui-design-advisor` (how the app's levers should manifest per screen so it feels like the app, not a template). Mark the blueprint **unvalidated — verify by walking it once built**.
 
-#### Scan
-
-1. Glob for onboarding-related files: `*Onboarding*`, `*Welcome*`, `*Intro*`, `*Walkthrough*`, `*Tutorial*`, `*GetStarted*`, `*FirstLaunch*`, `*Setup*`.
-2. Read all matched View files. For each, note:
-   - Screen purpose (value prop, personalization, permission ask, setup, tutorial)
-   - Whether it's skippable
-   - What user action advances to the next screen
-   - Permissions requested (if any)
-   - Personalization questions (if any)
-   - Time estimate per screen (text density, required actions)
-   - Visual craft (animations, custom elements, design lever usage)
-3. Identify the activation moment — what's the first real action the user takes after onboarding?
-4. Check for re-entry paths — can the user revisit tips/tutorials later? (grep for TipKit usage, "Getting Started" sections)
-5. Check for conditional flows — does the onboarding differ based on context (new vs. returning user, sign-up vs. sign-in)?
-
-#### Spawn Advisors
-
-Spawn all three advisors in parallel:
-
-**Onboarding Advisor** (`ios-onboarding-advisor`):
-```
-Audit this iOS app's onboarding flow.
-
-App context:
-- Purpose: {FROM PROJECT BRIEF}
-- Target users: {FROM PROJECT BRIEF}
-- Permissions needed: {LIST}
-
-Onboarding screens in order:
-{SCREEN-BY-SCREEN SUMMARY WITH FILE PATHS}
-
-Post-onboarding first screen: {WHAT THE USER SEES AFTER ONBOARDING}
-
-Evaluate against:
-1. Time-to-value — how many taps/seconds to activation moment?
-2. Permission timing — are asks just-in-time with value explanation, or cold/upfront?
-3. Progressive disclosure — teach by doing or explain then use?
-4. Personalization — does the onboarding adapt the experience?
-5. Flow pattern — which pattern is used (none/welcome/walkthrough/interactive/gated)?
-6. Drop-off risks — which screens are likely to lose users and why?
-7. Emotional first impression — does the onboarding match the app's personality?
-8. Anti-patterns — any present?
-9. Metrics — what should be measured?
-
-Return findings as numbered list with: Type (Strong/Concern/Opportunity/Measurement),
-Severity (HIGH/MEDIUM/LOW), Screen reference, Principle, Observation, Suggestion.
-
-Also return a recommended flow revision if significant improvements are possible.
-```
-
-**UX Advisor** (`ios-ux-advisor`):
-```
-Review these onboarding screens for UX and HIG compliance:
-
-{SCREEN LIST WITH KEY OBSERVATIONS}
-
-Check: skip button presence, back navigation, progress indicators, tap targets,
-Dynamic Type, VoiceOver labels, keyboard handling on input screens,
-loading states during account creation, error handling on permission denial.
-
-Return only numbered annotations. No preamble.
-```
-
-**UI Design Advisor** (`ios-ui-design-advisor`):
-```
-Review these onboarding screens for visual design craft:
-
-{SCREEN LIST WITH KEY OBSERVATIONS}
-
-Design system context: {FROM DESIGN-SYSTEM.md — pushed levers, palette, typography}
-
-Evaluate: Does the onboarding set the app's visual tone from screen 1?
-Are the app's pushed design levers (Typography, Color, Vocabulary, Data Viz,
-Status Indicators) active in the onboarding or does it feel like a generic template?
-Is there a micro-delight moment?
-
-Return only numbered annotations. No preamble.
-```
-
----
-
-### 2B. Greenfield Mode (No Onboarding Exists)
-
-#### Analyze Requirements
-
-From project context, determine:
-1. **Activation moment** — what's the core value action? (from project brief features/epics)
-2. **Required setup** — what MUST happen before the user can reach the activation moment? (account? permissions? data entry?)
-3. **Permissions needed** — list all, categorize by sensitivity (low: notifications, medium: location, high: health/camera/tracking)
-4. **Personalization potential** — are there user personas or use-case branches?
-5. **App personality** — what are the pushed design levers? (from design system)
-6. **Complexity level** — is the app's core action self-evident or does it need teaching?
-
-#### Spawn Advisors
-
-Spawn the onboarding advisor:
-
-```
-Design an onboarding flow for a new iOS app.
-
-App context:
-- Purpose: {FROM PROJECT BRIEF}
-- Target users: {FROM PROJECT BRIEF}
-- Core value action (activation moment): {IDENTIFIED ABOVE}
-- Required setup before activation: {LIST}
-- Permissions needed: {LIST WITH SENSITIVITY}
-- Personalization potential: {PERSONAS/BRANCHES}
-- App personality: {FROM DESIGN SYSTEM — pushed levers, tone}
-- Complexity: {SELF-EVIDENT / NEEDS TEACHING / NOVEL INTERACTION}
-
-Recommend:
-1. Flow pattern (none/welcome/walkthrough/interactive/gated) with rationale
-2. Screen-by-screen sequence — for each screen: purpose, content, user action, estimated time
-3. Permission timing — when each permission is asked and the value explanation
-4. Personalization approach (if applicable)
-5. Activation moment placement — which screen/action
-6. Micro-delight moment — one specific suggestion matching the app's design levers
-7. What to defer to contextual tips (TipKit) vs. include in onboarding
-8. Metrics to track
-
-For each recommendation, explain the trade-off and expected impact.
-```
-
-Also spawn the UI design advisor for visual direction:
-
-```
-Recommend visual direction for this app's onboarding.
-
-App design system: {FROM DESIGN-SYSTEM.md}
-Pushed levers: {WHICH 2-3 LEVERS}
-App personality: {TONE/ADJECTIVES}
-
-For each onboarding screen in this sequence:
-{PROPOSED SCREEN SEQUENCE FROM ONBOARDING ADVISOR}
-
-Suggest how the app's pushed design levers should manifest. The onboarding should
-feel like the app from screen 1, not a generic template that gives way to the real app.
-
-Return screen-by-screen visual direction annotations. No preamble.
-```
-
----
-
-### 3. Generate Report
-
-Write to `docs/ONBOARDING-AUDIT.md`.
+### 3. Report → `docs/ONBOARDING-AUDIT.md`
 
 ```markdown
-# Onboarding Audit — {Project Name}
+# Onboarding Audit — {Project}
 
-**Date:** {YYYY-MM-DD}
-**Mode:** {Audit / Greenfield}
-**Auditor:** /ios-onboarding-audit
+**Date:** {YYYY-MM-DD} · **Mode:** {Audit / Greenfield} · **Walked in simulator:** {yes / no — greenfield}
 
----
-
-## Executive Summary
-
-{3-5 sentences: current state (or absence) of onboarding, biggest opportunity,
-recommended flow pattern, estimated time-to-activation.}
-
----
+## Summary
+{3–5 sentences: current state (or absence), the lived first impression, biggest opportunity, recommended pattern, actual time-to-activation.}
 
 ## App Context
+Core value action · activation moment · required permissions (+ sensitivity) · pushed design levers · personality.
 
-| Aspect | Value |
-|--------|-------|
-| **Core value action** | {What the user came to do} |
-| **Activation moment** | {First time user experiences core value} |
-| **Required permissions** | {List with sensitivity levels} |
-| **Pushed design levers** | {From design system} |
-| **App personality** | {Tone adjectives} |
+## Current Flow {audit mode}
+Screen-by-screen, from the walk:
+| # | Screen | Purpose | Skippable | Taps in | Friction observed (from screenshot) |
+**Measured time-to-activation:** {actual taps/seconds from launch to activation}
 
----
-
-## Current Flow Assessment
-
-{Audit mode: screen-by-screen breakdown of existing flow.
-Greenfield mode: "No onboarding exists. Recommendation follows."}
-
-### Screen-by-Screen
-
-| # | Screen | Purpose | Skippable | Est. Time | Risk |
-|---|--------|---------|-----------|-----------|------|
-| 1 | {Name} | {Purpose} | {Yes/No} | {Xs} | {Drop-off risk} |
-| ... | | | | | |
-
-**Estimated time-to-activation:** {total seconds/taps from launch to activation moment}
-
----
-
-## Findings
-
-{Audit mode only — skip in greenfield mode}
-
-### ONBOARD-1: {Title} — {SEVERITY}
-- **Screen:** {Which screen or flow point}
-- **Principle:** {Onboarding principle}
-- **Observation:** {What was found}
-- **Consider:** {Suggestion with expected impact}
-
-...
-
----
+## Findings {audit mode}
+#### ONBOARD-N: {title} — {HIGH/MEDIUM/LOW}
+- **Screen:** {which screenshot/step} · `path/to/View.swift:line`
+- **Observation:** {what's true in the lived flow}
+- **Consider:** {suggestion + expected impact}
 
 ## Strengths
+{What works in the flow — cite screens. A fast, clean flow is a strength.}
 
-{What works well in the current onboarding — or in greenfield mode,
-what project context gives the onboarding a head start (strong design system,
-clear activation moment, etc.)}
-
----
-
-## Recommended Flow
-
-{Both modes — the recommended onboarding sequence.}
-
-### Flow Pattern: {Pattern name}
-
-**Rationale:** {Why this pattern fits this app}
-
-### Screen Sequence
-
-#### Screen 1: {Name}
-- **Purpose:** {What this screen achieves}
-- **Content:** {What the user sees — specific, not vague}
-- **User action:** {What advances to next screen}
-- **Visual direction:** {How the app's design levers manifest here}
-- **Estimated time:** {Seconds}
-
-#### Screen 2: {Name}
-...
-
-#### Activation: {First Real Action}
-- **What happens:** {The user does the core thing for the first time}
-- **Celebration:** {How the app acknowledges this moment — specific to design levers}
-
-### Permission Strategy
-
-| Permission | When | Pre-Permission Value Explanation | Fallback if Denied |
-|------------|------|--------------------------------|---------------------|
-| {e.g., Notifications} | {Screen # or trigger} | {One-line value pitch} | {What happens without it} |
-| ... | | | |
-
-### Personalization
-
-{Personalization approach, or "Not recommended for this app — [reason]"}
-
-### Deferred to Contextual Tips
-
-{What should NOT be in onboarding but taught later via TipKit or coach marks}
-
-- {Feature/gesture} — surface when: {trigger condition}
-- ...
-
----
+## Recommended Flow {both modes}
+Pattern + rationale, then screen-by-screen (purpose · content · advancing action · visual direction · est. time), the activation moment + how it's acknowledged, a permission strategy table (permission · when · pre-permission value · fallback if denied), personalization (or "not recommended — why"), and what to defer to contextual tips.
 
 ## Micro-Delight Moment
+One concrete moment of craft matching the app's levers — specific enough to implement.
 
-{One specific, concrete suggestion for a moment of craft/surprise in the onboarding
-that matches the app's pushed design levers. Specific enough to implement from
-this description alone.}
-
----
-
-## Metrics Plan
-
-| Metric | Target | How to Measure |
-|--------|--------|---------------|
-| Completion rate | > 80% | {Implementation note} |
-| Drop-off per screen | < 15% each | {Implementation note} |
-| Time-to-activation | < {X}s | {Implementation note} |
-| Permission grant rate | > 60% | {Implementation note} |
-| Day 1 retention | > 40% | {Implementation note} |
-| Day 7 retention | > 20% | {Implementation note} |
-
----
+## Metrics to Instrument
+The events worth tracking (completion, per-screen drop-off, time-to-activation, permission grant, D1/D7 retention) — *what* to measure and how; set targets per the team's own benchmarks, not invented ones.
 
 ## Implementation Notes
+Navigation (sheet / NavigationStack / paged TabView), completion-state storage, conditional paths, TipKit setup, analytics events.
 
-{Practical notes for the developer implementing this onboarding}
-
-- **Navigation:** {Sheet flow? NavigationStack? Paging TabView?}
-- **State tracking:** {How to track onboarding completion — UserDefaults key, @AppStorage}
-- **Conditional paths:** {Different flows for different user states}
-- **TipKit setup:** {Tips to configure for post-onboarding education}
-- **Analytics events:** {Key events to log}
-
----
-
-## Quick Wins
-
-{3-5 highest-impact, lowest-effort improvements — audit mode only}
-
-1. **{Title}** — {Description}. Expected impact: {what improves}.
-2. ...
+## Quick Wins {audit mode}
+3–5 highest-impact, lowest-effort improvements with file paths.
 ```
 
-### 4. Summary in Chat
+Severity is judged by real friction/drop-off impact seen in the walk — never by distance from a generic checklist.
 
-After writing the report:
-- Mode and verdict (one sentence)
-- Time-to-activation: current vs. recommended
-- List any HIGH findings
-- Recommended flow pattern + screen count
-- The micro-delight suggestion (one sentence)
-- Point to the report file
-- Offer to create an onboarding epic (greenfield) or implement improvements (audit)
+### 4. Summary in chat
+Mode + one-sentence verdict, measured vs. recommended time-to-activation, any HIGH findings, recommended pattern + screen count, the micro-delight (one line), pointer to the report, and an offer to implement (audit) or scaffold the flow (greenfield).

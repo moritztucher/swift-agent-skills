@@ -100,7 +100,7 @@ Then **build features UI-first** — write the UI layer so the flow feels good, 
 | `/ios-review` | Thorough code review on changes or specified files |
 | `/ios-audit` | Holistic project audit through PM, UX, UI, ARCH lenses |
 | `/ios-design-audit` | Visual craft audit — screenshots the running app and judges the real screens — with severity-rated findings + elevation suggestions |
-| `/ios-onboarding-audit` | Audit (or design from scratch) an onboarding flow for activation psychology and time-to-value |
+| `/ios-onboarding-audit` | Walk the real onboarding flow in the simulator (or design one from scratch) — activation psychology, permission timing, measured time-to-value |
 
 ### Ship
 
