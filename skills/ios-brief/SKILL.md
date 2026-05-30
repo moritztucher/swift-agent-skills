@@ -1,91 +1,72 @@
 ---
 name: ios-brief
-description: Collaboratively build a structured project brief before implementation begins. Detects whether the project already has code — for a fresh project it runs a guided conversation; for an existing codebase it explores first, pre-fills what it observes, and asks only about gaps. Writes docs/PROJECT-BRIEF.md.
+description: Build and maintain docs/PROJECT-BRIEF.md — the project's living source of truth. Drafts the brief from the ios-init description (and existing code), then refines by reaction instead of a long interview. Breaks features into UI vs Logic/Backend layers, bucketed MVP vs Later. Re-run anytime to update the brief in place.
 user_invocable: true
 ---
 
 # /ios-brief — Project Brief
 
-Help the user create a comprehensive project brief. Your role is purely documentary — ask questions, capture answers, produce a structured markdown brief. **No code, no implementation, no assumptions about intent.**
+Build and maintain `docs/PROJECT-BRIEF.md` — the project's **living source of truth**: concise, readable, and kept current as the app evolves. No code, no implementation.
 
-> **Next step:** once the brief is written, hand off to `/ios-epic <n>` to expand each epic into an implementation doc. This skill points there at the end.
+> **Next step:** this is your living reference — start building against it (UI first, then logic), and re-run `/ios-brief` anytime to keep it current.
 
-## Rules
+## How this works
 
-- **Never assume** — always ask. For existing code, observe structure but ask about purpose; never infer intent from code.
-- **No implementation, no code changes** — this is a brief only.
-- **One topic at a time** — confirm understanding before moving on.
-- **Track confidence internally** — keep going until ~90% confidence in the project outline, or the user says "done".
-- **Follow the natural conversation** — the topic order is a guide, not a rigid script.
-- **Pre-filled sections are proposals** — mark them "Observed from codebase" / "Decided during init" and get confirmation.
+- **Draft-first, not interrogation.** Propose a full draft from what's already known, then let the user correct it. Don't march through topics one question at a time.
+- **Assume, then confirm.** Infer from the init description and any code; mark inferences as assumptions and let the user fix them. Don't refuse to assume.
+- **Q&A stays in chat.** Never write questions into the document — keep it a clean reference.
+- **It's a living document.** Re-running updates the existing brief in place rather than starting over.
 
 ---
 
-## Step 0 — Detect Mode & Handoffs
+## Step 0 — Gather Context (silent)
 
-1. **Check for `/ios-init` handoff:** if `docs/.ios-init-decisions.json` exists, read it and pre-fill into working context:
-   - **The `description` blurb** — the user already described the project to `/ios-init`. Use it to draft the **elevator pitch**, and to seed the **Problem Statement**, **Target Users** (from `audience`: B2C/B2B/internal), and **MVP Scope**. Present these as "Here's what I took from your earlier description — correct or expand?" rather than asking from scratch.
-   - **Technical Requirements** (platforms, database, networking, auth, navigation, sync, offline, integrations) and **Non-Functional** (accessibility, biometrics, keychain). Present as "Already decided during project setup" and confirm.
-   - Do **not** re-ask anything the description or decisions already answered — only fill gaps and go deeper where the brief needs more than init captured.
-2. **Detect existing code:** look for `*.xcodeproj`/`*.xcworkspace`/`Package.swift`/`*.swift`.
-   - **Code found → Existing path** (run Phase E1 exploration first).
-   - **No code → Fresh path** (skip straight to the conversation).
-
-Both paths share the same topic set and the same write step.
+1. **`/ios-init` handoff:** if `docs/.ios-init-decisions.json` exists, read it. The `description` blurb seeds the elevator pitch, Problem, Target Users (from `audience`), and the MVP feature set; the technical decisions (platforms, database, networking, auth, sync, offline, integrations) fill Technical Requirements. Don't re-ask any of it.
+2. **Update mode:** if `docs/PROJECT-BRIEF.md` already exists, read it — this run **revises it in place**. Preserve the user's wording and any sections they've edited; only change what's actually new or corrected.
+3. **Existing code:** if there's a codebase, do a quick silent scan (structure, tech stack from manifests, existing features from file/folder names, current state from TODOs/WIP/broken tests). For an existing project, present a short "here's what I found" summary and confirm before drafting.
 
 ---
 
-## Phase E1 — Codebase Exploration (Existing path only, silent)
+## Step 1 — Draft the Brief
 
-Do all of this before presenting anything:
+From everything gathered, **draft every section at once** (see Output). Fill what you can confidently; mark genuine gaps `[TBD]` and clearly-inferred values as assumptions (e.g. "_assumed — correct me_"). For the **Features** section, propose the feature list, sort each into **MVP** or **Later**, and take a first pass at splitting each feature into its **UI** and **Logic & Backend** layers.
 
-1. **Structure** — top-level dirs and key subdirectories.
-2. **Tech stack** — languages, frameworks, dependencies from manifests (`Package.swift`, `Podfile`, etc.).
-3. **Existing features** — infer from file/folder names, view files, route definitions, model names, test files.
-4. **Existing docs** — `README.md`, `ARCHITECTURE.md`, `CLAUDE.md`, `docs/`, ADRs, changelogs.
-5. **Git history** — age (`git log --reverse --format='%ai' | head -1`), recent activity (`git log --oneline -10`), contributors (`git shortlog -sn --no-merges | head -5`).
-6. **Current state** — TODOs, WIP branches, broken/disabled tests.
-
-Then **present findings**: structure, tech stack (with versions if visible), existing features (grouped), existing docs, project age & activity. Ask: _"Does this look accurate? Anything I missed or got wrong?"_ Wait for confirmation before proceeding.
+Present the draft to the user (or write a first version of `docs/PROJECT-BRIEF.md` and walk them through it) — whichever makes it easier to react.
 
 ---
 
-## Conversation — Walk Through Topics
+## Step 2 — Refine (one batched round)
 
-Greet briefly and explain: you'll ask questions to build `docs/PROJECT-BRIEF.md`; no code will be written. If init decisions were found, say so. If existing code was scanned, note you'll build on what you observed.
+Ask only what you genuinely can't infer, **grouped into a single round** — let the user answer in any order, then iterate until they're happy or say "done." Typical gaps:
 
-Cover these, one at a time, in whatever order feels natural. **Skip or confirm** anything already pre-filled from init or the scan; only ask what you can't derive.
+- **Problem / why** — if the description didn't make it explicit
+- **Target users** — specifics beyond the audience tag
+- **MVP line** — which proposed features are MVP vs Later
+- **Feature breakdown** — for each feature, confirm/adjust the UI pieces and the Logic & Backend pieces (you propose the split; the user trims or adds)
+- **Out of scope** — what's explicitly *not* being built
+- **Success metrics** — how they'll know it worked
+- **Risks / unknowns** — anything to flag
 
-- **Project Identity** — project name (confirm, don't assume from folder), 1–2 sentence elevator pitch.
-- **Problem Statement** — what pain point does this solve? Why does it need to exist?
-- **Target Users** — who is this for? Their needs, frustrations, goals.
-- **Core Features** — prioritized list, one by one, scope clarified per feature. (Existing path: present observed features, ask about priority and what's missing/planned.)
-- **Technical Requirements** — platform, stack, constraints, integrations, APIs, data storage. *(Skip/confirm if pre-filled from init or scan.)*
-- **Non-Functional Requirements** — performance, security, accessibility, scalability, offline support. *(Skip/confirm if pre-filled.)*
-- **MVP Scope** — what's in v1 vs. future? (Existing path: what's already shipped vs. still planned.)
-- **Success Metrics** — how do we measure if this worked?
-- **Open Questions** — unknowns, risks, dependencies, tech debt to research later.
-- **Epics & Implementation Order** — propose epics (large work chunks) with ordered steps, dependencies, and which steps can run in parallel. (Existing path: distinguish **already built** / **in progress** / **planned**; list steps for planned work only.) Confirm before writing.
-
-For each topic: ask → (present observation, if any) → listen → follow up → summarize → confirm before moving on.
+Don't gate on a confidence score; refine until the user is satisfied.
 
 ---
 
-## Wrap Up & Write
+## Step 3 — Write / Update
 
-When you reach ~90% confidence or the user says "done":
+1. Read the template at `~/.claude/docs/templates/project-brief-template.md`.
+2. Create `docs/` if needed.
+3. Write (or update in place) `docs/PROJECT-BRIEF.md`. Set the **Last updated** line to today.
+4. In update mode, briefly note what changed since the last version.
 
-1. Present a full summary of everything captured; ask for corrections/additions.
-2. Read the template at `~/.claude/docs/templates/project-brief-template.md`.
-3. Create `docs/` if it doesn't exist.
-4. Write the completed brief to `docs/PROJECT-BRIEF.md`.
-5. Remind: "This is a brief only — implementation starts separately."
-6. **Offer the `/ios-epic` handoff** — suggest expanding the first epic with `/ios-epic 1`.
+---
 
 ## Output
 
-`docs/PROJECT-BRIEF.md` follows the template and contains only what the user explicitly provided or confirmed. Mark thin sections **TBD** rather than guessing.
+`docs/PROJECT-BRIEF.md` follows the template and contains only what the user provided or confirmed. Mark thin sections `[TBD]` rather than guessing. Sections: Problem · Target Users · **Features** · Technical Requirements · Non-Functional · *(Existing Codebase — existing projects only)* · Success Metrics · Open Questions & Risks.
 
-- If init decisions were used, note in Technical Requirements: "Decided during project initialization (`/ios-init`)."
-- **Existing path:** include an **Existing Codebase** section (between Non-Functional Requirements and MVP Scope) documenting structure, tech stack, confirmed features, and current state — factual, from scan + confirmation. In Epics, clearly separate already built / in progress / planned.
-- For Epics generally: synthesize discussed features into logical epics with ordered steps, dependencies noted, and parallelizable steps called out. This is the one section where you propose structure — but confirm before writing.
+**The Features section is the work artifact.** It replaces formal epics/step planning:
+- Features are grouped **MVP** and **Later** (this defines scope — there is no separate "MVP scope" section).
+- Each feature is split into a **UI** layer and a **Logic & Backend** layer, so the UI can be built first and logic layered in after.
+- **No implementation-order, dependency, or parallel tables** — the brief decomposes work, it doesn't sequence it.
+
+If init decisions were used, note in Technical Requirements: "Decided during project initialization (`/ios-init`)." For an existing project, fill the **Existing Codebase** section from the scan + confirmation, and tag features as already built / in progress / planned within the MVP/Later grouping.

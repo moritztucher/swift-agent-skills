@@ -2,9 +2,11 @@
 
 > {{ELEVATOR_PITCH}}
 
+_Last updated {{DATE}} · living source of truth — keep this current as the app evolves._
+
 ---
 
-## Problem Statement
+## Problem
 
 {{What pain point does this solve? Why does this need to exist?}}
 
@@ -12,20 +14,37 @@
 
 {{Who is this for? What are their needs, frustrations, or goals?}}
 
-## Core Features
+## Features
 
-_Prioritized — most important first._
+> Each feature is split into its **UI** layer and its **Logic & Backend** layer, so the UI can be built first (flow-first) and logic layered in after. Build order within a bucket is up to you — this is a decomposition, not a sequence.
 
-| # | Feature | Description | Priority |
-|---|---------|-------------|----------|
-| 1 | {{Feature}} | {{Description}} | Must-have |
+### MVP
+
+#### {{Feature Name}}
+_{{One line on what it does for the user.}}_
+- **UI:** {{Screens, flows, components, states this feature needs}}
+- **Logic & Backend:** {{Data models, services, business rules, integrations}}
+
+#### {{Feature Name}}
+_{{…}}_
+- **UI:** {{…}}
+- **Logic & Backend:** {{…}}
+
+### Later
+
+#### {{Feature Name}}
+_{{…}}_
+- **UI:** {{…}}
+- **Logic & Backend:** {{…}}
+
+_Move features between MVP and Later as scope shifts._
 
 ## Technical Requirements
 
-- **Platform:** {{e.g., iOS, web, cross-platform}}
-- **Stack:** {{e.g., SwiftUI, React, etc.}}
+- **Platforms:** {{iOS, iPadOS, …}}
+- **Stack:** {{SwiftUI, SwiftData, …}}
 - **Integrations:** {{APIs, third-party services}}
-- **Data Storage:** {{e.g., SwiftData, PostgreSQL, etc.}}
+- **Data Storage:** {{e.g., SwiftData, CloudKit}}
 - **Constraints:** {{Any technical limitations or requirements}}
 
 ## Non-Functional Requirements
@@ -33,49 +52,20 @@ _Prioritized — most important first._
 - **Performance:** {{Response times, load expectations}}
 - **Security:** {{Auth, data protection, compliance}}
 - **Accessibility:** {{Standards, requirements}}
-- **Scalability:** {{Expected growth, load}}
 - **Offline Support:** {{Required? What works offline?}}
 
 ## Existing Codebase
 
-> _This section is included for existing projects. Remove for greenfield._
+> _Included for existing projects. Remove for greenfield._
 
 - **Project Structure:** {{overview of directory layout}}
 - **Tech Stack:** {{observed languages, frameworks, dependencies}}
 - **Existing Features:** {{confirmed working features}}
 - **Current State:** {{what's shipped, what's in progress, what's broken}}
 
-## MVP Scope
-
-### In v1
-{{What's included in the first version}}
-
-### Future Versions
-{{What's explicitly deferred}}
-
 ## Success Metrics
 
-{{How do we measure if this project worked? What does success look like?}}
-
-## Epics & Implementation Order
-
-### Epic 1: {{Epic Name}}
-_{{Brief description of what this epic delivers}}_
-
-| Step | Task | Dependencies | Parallel? |
-|------|------|-------------|-----------|
-| 1.1 | {{Task}} | None | — |
-| 1.2 | {{Task}} | 1.1 | — |
-| 1.3 | {{Task}} | None | Yes, with 1.2 |
-
-### Epic 2: {{Epic Name}}
-_{{Brief description}}_
-
-| Step | Task | Dependencies | Parallel? |
-|------|------|-------------|-----------|
-| 2.1 | {{Task}} | Epic 1 | — |
-
-_Add more epics as needed._
+{{How do we measure if this worked? What does success look like?}}
 
 ## Open Questions & Risks
 
@@ -83,4 +73,4 @@ _Add more epics as needed._
 
 ---
 
-_Generated on {{DATE}} with `/ios-brief`_
+_Generated / updated with `/ios-brief`_
