@@ -23,7 +23,10 @@ Help the user create a comprehensive project brief. Your role is purely document
 
 ## Step 0 — Detect Mode & Handoffs
 
-1. **Check for `/ios-init` handoff:** if `docs/.ios-init-decisions.json` exists, read it and pre-fill into working context — project name, Technical Requirements (platform, database, networking, auth, navigation, sync, offline, integrations), Non-Functional (accessibility, biometrics, keychain). Present these as "Already decided during project setup" and confirm; do **not** re-ask them.
+1. **Check for `/ios-init` handoff:** if `docs/.ios-init-decisions.json` exists, read it and pre-fill into working context:
+   - **The `description` blurb** — the user already described the project to `/ios-init`. Use it to draft the **elevator pitch**, and to seed the **Problem Statement**, **Target Users** (from `audience`: B2C/B2B/internal), and **MVP Scope**. Present these as "Here's what I took from your earlier description — correct or expand?" rather than asking from scratch.
+   - **Technical Requirements** (platforms, database, networking, auth, navigation, sync, offline, integrations) and **Non-Functional** (accessibility, biometrics, keychain). Present as "Already decided during project setup" and confirm.
+   - Do **not** re-ask anything the description or decisions already answered — only fill gaps and go deeper where the brief needs more than init captured.
 2. **Detect existing code:** look for `*.xcodeproj`/`*.xcworkspace`/`Package.swift`/`*.swift`.
    - **Code found → Existing path** (run Phase E1 exploration first).
    - **No code → Fresh path** (skip straight to the conversation).

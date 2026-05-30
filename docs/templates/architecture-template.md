@@ -7,10 +7,18 @@
 
 **App Name:** [Name]
 **Bundle ID:** [com.company.appname]
-**Target iOS:** [iOS 18+]
+**Platforms:** [iOS | iPadOS | macOS | visionOS | tvOS | watchOS]
+**Deployment Targets:** [iOS 18.0, …]
 **Database:** [SwiftData | RealmSwift | None]
+**Distribution:** [Open source ([license]) | Commercial / proprietary]
 
 ## System Architecture
+
+> Tailor this diagram to the project — it is a starting point, not a fixed shape.
+> Draw only the layers that exist: drop **External Services → Network** for a
+> local-only app, add a **Sync / CloudKit** box when sync is used, and add
+> platform-specific scenes (e.g. a macOS `Settings` scene, a watchOS scene) for
+> each selected platform. For an existing codebase, reflect the real layers found.
 
 ```
 ┌─────────────────────────────────────────────────────────┐

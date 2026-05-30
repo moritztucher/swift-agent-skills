@@ -214,17 +214,17 @@ The skills compose into a lifecycle: **Setup → Plan → Build → Verify → S
 
 ## Project Initialization (/ios-init)
 
-Two phases:
+Detects **new** / **fresh Xcode scaffold** / **existing** codebase and adapts. Typical flow: create the Xcode project → run `/ios-init` → describe the project in a few sentences.
 
-**Phase A — Setup:** Ask 4 questions:
-1. Database: SwiftData / RealmSwift / CoreData / None
-2. iOS Target: iOS 18+ / iOS 26+ / Other
-3. Git Prefix: e.g., P66, APP
-4. Bundle ID: e.g., com.company.appname
+**Step 1 — Project Description:** the user describes the project in 1–5 sentences (what it is, storage, platforms, open-source/commercial, B2B/B2C). The skill mines this for technical *and* product signals, pre-fills decisions, and only asks about gaps. The raw blurb is carried into `/ios-brief`.
 
-**Phase B — Tech Architecture Brainstorm:** Iteratively ask about networking, auth, navigation, sync, offline support, 3rd-party integrations, etc. Track confidence (30% -> 90%). Stop when 90% or user says "done."
+**Setup path (new / fresh scaffold):**
+- **A1 Setup:** Platforms (multi-select: iOS / iPadOS / macOS / visionOS / tvOS / watchOS), deployment target, database, distribution (open source / commercial), audience (B2B / B2C), git prefix, bundle ID.
+- **A2 Tech brainstorm:** networking, auth, navigation, sync, offline, integrations — confidence-tracked (→90%). Scaffolds the folder structure.
 
-Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md`, `docs/decisions/ADR-0001`, `CHANGELOG.md`, project folder structure, and optionally `Backlog.md` (pre-seeded with tasks from tech choices).
+**Adopt path (existing):** scan the codebase, present findings, fill only undetectable gaps; document the existing structure instead of scaffolding.
+
+Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md` (diagram tailored to the actual decisions), `docs/decisions/ADR-0001`, `CHANGELOG.md`, `VIEW-INVENTORY.md`, `.gitignore`, `LICENSE` (when applicable), `README.md`, folder structure (new/fresh only), and optionally `Backlog.md`. Repo files are generated-if-missing — never silently overwritten. Finishes by writing `docs/.ios-init-decisions.json` and handing off to `/ios-brief`.
 
 ---
 

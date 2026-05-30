@@ -73,7 +73,7 @@ The 26 skills group into the lifecycle phases. **`/ios` is the front door** — 
 |-------|--------------|
 | `/ios` | Orchestrator — detects project state, shows a status map, routes to the next step |
 | `/ios-load` | Load the iOS guide into an ad-hoc chat that has no project `CLAUDE.md` |
-| `/ios-init` | Initialize a project — new or existing. Auto-detects: scaffolds docs for greenfield, or scans + pre-fills from an existing codebase |
+| `/ios-init` | Initialize a project — describe it in a few sentences, then it generates the doc set + `.gitignore`, `LICENSE`, `README`. Auto-detects new / fresh-scaffold / existing and asks only about gaps |
 
 ### Plan
 
