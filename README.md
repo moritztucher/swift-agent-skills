@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`22 skills · 4 agents · 3 hooks · 77 iOS framework guides`
+`22 skills · 4 agents · 3 hooks · 70 iOS reference guides`
 
 ---
 
@@ -145,19 +145,19 @@ Specialists invoked via the Task tool from inside skills. They advise; the paren
 
 ## Hooks
 
-Shell hooks that run automatically. Configured in `settings/settings.json.example`.
+Shell hooks that run automatically. The first two are wired up in `settings/settings.json.example`; `definition-of-done.sh` ships ready to use but is **opt-in** (not enabled in the example — add it as a `Stop` hook if you want it).
 
-| Hook | When | What it does |
-|------|------|--------------|
-| `swiftlint-autofix.sh` | After every Edit/Write to a `.swift` file | Runs `swiftlint lint --fix` quietly |
-| `notify-done.sh` | When Claude stops | macOS notification with the Glass sound |
-| `definition-of-done.sh` | On task completion | Builds the Xcode project, runs tests, checks SwiftLint — blocks completion if any fails |
+| Hook | When | What it does | In example? |
+|------|------|--------------|-------------|
+| `swiftlint-autofix.sh` | After every Edit/Write to a `.swift` file | Runs `swiftlint lint --fix` quietly | ✅ |
+| `notify-done.sh` | When Claude stops | macOS notification with the Glass sound | ✅ |
+| `definition-of-done.sh` | On stop (if wired) | Builds the Xcode project, runs tests, checks SwiftLint — blocks completion if any fails | ⬜️ opt-in |
 
 ---
 
 ## iOS framework guides
 
-77 reference guides under `docs/ios/`, organized by domain:
+70 reference guides under `docs/ios/`, organized by domain:
 
 - **swiftui/** — Liquid Glass adoption, AttributedString, TipKit, Charts, performance, webview, design craft patterns
 - **appkit/** — AppKit guide, AppKit Liquid Glass
