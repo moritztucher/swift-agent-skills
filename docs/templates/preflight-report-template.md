@@ -72,4 +72,4 @@ _Features or requirements from the project brief not addressed by any epic._
 
 ---
 
-_Generated with `/preflight-check`_
+_Generated with `/ios-preflight`_

@@ -118,7 +118,7 @@ _Things a human tester must verify on a real device that automated tests cannot 
 
 ## Open Questions
 
-_Answer a question by changing its status to `Answered` and writing your choice + notes in the Answer field. Then run `/epic-detail {{NUMBER}}` again._
+_Answer a question by changing its status to `Answered` and writing your choice + notes in the Answer field. Then run `/ios-epic {{NUMBER}}` again._
 
 {{Questions go here — see question format in skill definition}}
 
@@ -130,4 +130,4 @@ _Previously answered questions, kept for reference._
 
 ---
 
-_Generated with `/epic-detail` from PROJECT-BRIEF.md_
+_Generated with `/ios-epic` from PROJECT-BRIEF.md_

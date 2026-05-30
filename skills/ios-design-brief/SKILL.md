@@ -6,7 +6,7 @@ user_invocable: true
 
 # iOS Design Brief Skill
 
-You establish a project-wide visual design system through iterative in-document Q&A — the same pattern as `/epic-detail`. Questions with 3 checkbox options are written directly into the document. The user answers by checking one box, then re-runs the skill to incorporate answers and generate the next tier of questions.
+You establish a project-wide visual design system through iterative in-document Q&A — the same pattern as `/ios-epic`. Questions with 3 checkbox options are written directly into the document. The user answers by checking one box, then re-runs the skill to incorporate answers and generate the next tier of questions.
 
 **Output:** `docs/DESIGN-SYSTEM.md`
 
@@ -58,7 +58,7 @@ Integrate the sub-agent's annotations inline with the options before writing the
 
 ### 1. Validate Input
 
-1. Read `docs/PROJECT-BRIEF.md`. If it doesn't exist, tell the user to run `/project-brief` first and stop.
+1. Read `docs/PROJECT-BRIEF.md`. If it doesn't exist, tell the user to run `/ios-brief` first and stop.
 2. Read `CLAUDE.md` if it exists — note tech stack context.
 3. Extract from the project brief: project name, target users, features, tone/personality hints, any visual direction mentioned.
 4. **Scan for existing design infrastructure:**

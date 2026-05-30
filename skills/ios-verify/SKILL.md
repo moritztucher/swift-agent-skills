@@ -9,6 +9,8 @@ argument-hint: <epic number, e.g. "1" for EPIC-1>
 
 You are a senior QA lead performing comprehensive implementation verification for an iOS project. Your goal is to check that every acceptance criterion in an epic is (a) covered by a test and (b) passing. You run all tests, map results to ACs, and produce a gap report.
 
+> **Next step:** when all ACs pass, run `/ios-review` for a final code review, then `/ios-commit` and `/ios-pr`.
+
 ## Input
 
 `$ARGUMENTS` is an epic number (e.g., `1` for EPIC-1).
@@ -20,7 +22,7 @@ If empty, ask the user for the epic number.
 ## Phase 1 — Parse All ACs
 
 1. Read `docs/epics/EPIC-{number}.md`.
-   - If it doesn't exist, tell the user to run `/epic-detail {number}` first and stop.
+   - If it doesn't exist, tell the user to run `/ios-epic {number}` first and stop.
 2. Extract every acceptance criterion. For each AC, capture:
    - **AC ID** (AC-1, AC-2, ...)
    - **Criterion** (the testable statement)
@@ -233,5 +235,5 @@ Print and save the report to `docs/epics/EPIC-{number}_verification.md`.
 - **AC-ID matching is case-insensitive** — `AC-1`, `ac-1`, `Ac-1` all match
 - **Truncate criterion text** in the matrix table to ~60 chars for readability
 - **Always save the report file** in addition to printing it
-- **If no tests exist at all**, recommend running `/ios-implement-epic {N}` which includes TDD test generation
+- **If no tests exist at all**, recommend running `/ios-implement {N}` which includes TDD test generation
 - **Parse xcodebuild output carefully** — handle both pass and fail output formats

@@ -1,4 +1,5 @@
 ---
+name: ios-commit
 description: Create a well-formatted git commit following project conventions
 disable-model-invocation: true
 ---

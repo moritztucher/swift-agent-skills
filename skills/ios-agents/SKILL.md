@@ -1,4 +1,5 @@
 ---
+name: ios-agents
 description: Display all available agent types that can be invoked via the Task tool
 disable-model-invocation: true
 ---

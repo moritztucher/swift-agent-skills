@@ -1,4 +1,5 @@
 ---
+name: ios-test
 description: Run unit tests and UI tests for the iOS project
 disable-model-invocation: true
 ---

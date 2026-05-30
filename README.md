@@ -4,15 +4,15 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`34 skills · 4 agents · 3 hooks · 77 iOS framework guides`
+`26 skills · 4 agents · 3 hooks · 77 iOS framework guides`
 
 ---
 
 ## What this is
 
-A working, opinionated `~/.claude/` setup focused on shipping production iOS apps with Claude Code. It encodes a full TDD-style workflow — from project brief → epic detail → preflight → TDD implement → verify — alongside specialist skills for SwiftUI craft, design audits, onboarding, paywalls, App Store optimization, and simulator automation.
+A working, opinionated `~/.claude/` setup focused on shipping production iOS apps with Claude Code. It encodes a full TDD-style workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation.
 
-It's the configuration I use day-to-day. The skills compose into pipelines (e.g. `/project-brief` → `/epic-detail` → `/preflight-check` → `/ios-implement-epic` → `/ios-verify`), but each one stands on its own. Drop into any iOS project and they pick up the local `CLAUDE.md` for context.
+It's the configuration I use day-to-day. The skills compose into one pipeline (`/ios-init` → `/ios-brief` → `/ios-epic` → `/ios-preflight` → `/ios-implement` → `/ios-verify` → `/ios-commit` → `/ios-pr`), but each one stands on its own. Not sure what to run next? Type **`/ios`** — the orchestrator detects where your project is and routes you to the right step. Drop into any iOS project and they pick up the local `CLAUDE.md` for context.
 
 ## What this isn't
 
@@ -59,53 +59,63 @@ To opt a project into the iOS guide, add this as the first line of the project's
 @~/.claude/docs/ios/ios-guide.md
 ```
 
-`/ios-init` and `/ios-init-existing` add this automatically when they scaffold a new project's `CLAUDE.md`.
+`/ios-init` adds this automatically when it scaffolds a project's `CLAUDE.md` (it auto-detects new vs. existing codebases).
 
 ---
 
 ## Skills
 
-### iOS development workflow
+The 26 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+
+### Setup
 
 | Skill | What it does |
 |-------|--------------|
-| `/load-ios` | Load the iOS guide into an ad-hoc chat that has no project `CLAUDE.md` |
-| `/ios-init` | Scaffold a new iOS project: `CLAUDE.md`, memory, architecture doc, first ADR, changelog |
-| `/ios-init-existing` | Scan an existing iOS codebase and generate the same docs pre-filled with observed facts |
-| `/project-brief` | Build a structured project brief through guided Q&A |
-| `/project-brief-existing` | Same, but pre-fills from an existing codebase first |
-| `/epic-detail` | Expand a brief epic into an implementation doc with [UI]/[UX]/[ARCH] questions |
-| `/preflight-check` | Cross-validate brief + epics for contradictions and missing dependencies |
-| `/ios-implement-epic` | Full TDD epic delivery — write XCTests, implement, verify ACs, fix gaps |
-| `/ios-verify` | Run XCTests, map to epic ACs, produce coverage matrix + gap report |
+| `/ios` | Orchestrator — detects project state, shows a status map, routes to the next step |
+| `/ios-load` | Load the iOS guide into an ad-hoc chat that has no project `CLAUDE.md` |
+| `/ios-init` | Initialize a project — new or existing. Auto-detects: scaffolds docs for greenfield, or scans + pre-fills from an existing codebase |
+
+### Plan
+
+| Skill | What it does |
+|-------|--------------|
+| `/ios-brief` | Build a structured project brief through guided Q&A (explores existing code first if present) |
+| `/ios-design-brief` | Establish a project-wide design system through iterative in-document Q&A |
+| `/ios-epic` | Expand a brief epic into an implementation doc with [UI]/[UX]/[ARCH] questions + ACs |
+| `/ios-preflight` | Cross-validate brief + epics for contradictions and missing dependencies |
+
+### Build
+
+| Skill | What it does |
+|-------|--------------|
+| `/ios-implement` | Full TDD epic delivery — write XCTests, implement, verify ACs, fix gaps |
+| `/ios-design-elevate` | Implement design elevation across an app, view by view, without touching business logic |
 | `/ios-build` | Build the Xcode project and report results |
 | `/ios-test` | Run unit and UI tests |
-| `/ios-commit` | Create a well-formed commit following project conventions |
+| `/ios-automate` | iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video |
+
+### Verify
+
+| Skill | What it does |
+|-------|--------------|
+| `/ios-verify` | Run XCTests, map to epic ACs, produce coverage matrix + gap report |
 | `/ios-review` | Thorough code review on changes or specified files |
 | `/ios-audit` | Holistic project audit through PM, UX, UI, ARCH lenses |
-| `/ios-agents` | List all available subagents |
-| `axe` | iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video |
-
-### Design + UX
-
-| Skill | What it does |
-|-------|--------------|
-| `/ios-design-brief` | Establish a project-wide design system through iterative in-document Q&A |
 | `/ios-design-audit` | Visual craft audit — color, typography, motion, hierarchy — with elevation suggestions |
-| `/ios-design-elevate` | Implement design elevation across an app, view by view, without touching business logic |
 | `/ios-onboarding-audit` | Audit (or design from scratch) an onboarding flow for activation psychology and time-to-value |
-| `/onboarding-cro` | Optimize post-signup onboarding and first-run experience |
-| `/paywall-upgrade-cro` | Create or optimize in-app paywalls, upgrade screens, and feature gates |
 
-### App Store
+### Ship
 
 | Skill | What it does |
 |-------|--------------|
-| `/aso-audit` | Audit an App Store or Google Play listing against competitors |
-| `/aso-review` | Review an active Apple Search Ads campaign and suggest next-week adjustments |
-| `/appstore-whatsnew` | Summarize git commits between two version tags into a paste-ready release note |
+| `/ios-commit` | Create a well-formed commit following project conventions |
+| `/pr-to-develop` | Create a PR from current branch into develop with a structured template |
+| `/pr-to-main` | Create a release PR from develop into main |
+| `/ios-release-notes` | Summarize git commits between two version tags into a paste-ready App Store "What's New" |
 
-### SwiftUI + Swift craft
+### SwiftUI + Swift craft (model-invoked)
+
+These trigger automatically while you read, write, or review SwiftUI and concurrency code — they aren't part of the linear path.
 
 | Skill | What it does | Source |
 |-------|--------------|--------|
@@ -113,22 +123,12 @@ To opt a project into the iOS guide, add this as the first line of the project's
 | `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
 | `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
 
-### Git + PR workflow
+### Meta
 
 | Skill | What it does |
 |-------|--------------|
-| `/pr-to-develop` | Create a PR from current branch into develop with a structured template |
-| `/pr-to-main` | Create a release PR from develop into main |
-
-### Meta + productivity
-
-| Skill | What it does |
-|-------|--------------|
+| `/ios-agents` | List all available subagents |
 | `/compact-summary` | Compress the current session into a reusable context primer for the next chat |
-| `/skill-creator` | Create, edit, optimize, and evaluate skills |
-| `/mcp-builder` | Guide for building high-quality MCP servers in Python or TypeScript |
-| `/doc-coauthoring` | Structured workflow for co-authoring docs, specs, and proposals |
-| `/init-custom` | Initialize a non-iOS project with the standard doc set |
 
 ---
 
@@ -177,7 +177,7 @@ Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@imp
 
 ## Templates
 
-`docs/templates/` contains the doc skeletons used by `/ios-init`, `/epic-detail`, and the brief workflow:
+`docs/templates/` contains the doc skeletons used by `/ios-init`, `/ios-epic`, and the brief workflow:
 
 - `project-brief-template.md`
 - `architecture-template.md`
@@ -196,11 +196,11 @@ Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@imp
 
 The setup splits into three layers:
 
-1. **Skills** are slash-commands the user invokes (`/ios-init`, `/aso-audit`, etc.). Each is a `SKILL.md` with frontmatter and instructions. Some have evals (`evals/evals.json`) for measuring trigger accuracy.
+1. **Skills** are slash-commands the user invokes (`/ios-init`, `/ios-brief`, etc.), grouped by lifecycle phase (Setup → Plan → Build → Verify → Ship). Each is a `SKILL.md` with frontmatter and instructions. `/ios` is the orchestrator that reads project state and routes to the right phase. Some skills carry evals (`evals/evals.json`) for measuring trigger accuracy.
 2. **Agents** are specialists Claude spawns via the Task tool. They have a narrower scope and toolset than the main thread. Skills like `/ios-design-audit` and `/ios-onboarding-audit` spawn the design and onboarding advisors for parallel analysis.
-3. **Docs + templates** are the reference layer. The iOS guide loads via `@~/.claude/docs/ios/ios-guide.md` in a project's `CLAUDE.md`. Framework guides are read on demand. Templates feed `/ios-init` and `/epic-detail`.
+3. **Docs + templates** are the reference layer. The iOS guide loads via `@~/.claude/docs/ios/ios-guide.md` in a project's `CLAUDE.md`. Framework guides are read on demand. Templates feed `/ios-init` and `/ios-epic`.
 
-The workflow composes left-to-right: brief → epic detail → preflight → TDD implement → verify → commit → PR. Each step writes a deliverable to `docs/` in the project so the next step has structured input.
+The workflow composes left-to-right: init → brief → epic → preflight → TDD implement → verify → commit → PR. Each step writes a deliverable to `docs/` in the project so the next step has structured input, and each skill points forward to the next.
 
 ---
 
@@ -210,7 +210,7 @@ The workflow composes left-to-right: brief → epic detail → preflight → TDD
 - [Claude Code](https://docs.claude.com/claude-code) installed and authenticated
 - Xcode and `xcodebuild` on PATH for iOS skills
 - `swiftlint` (optional, for the autofix hook)
-- [AXe](https://github.com/cameroncooke/AXe) CLI (optional, for the `axe` simulator-automation skill)
+- [AXe](https://github.com/cameroncooke/AXe) CLI (optional, for the `/ios-automate` simulator-automation skill)
 - `gh` CLI (optional, for PR-creation skills)
 
 ---

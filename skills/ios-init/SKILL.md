@@ -1,138 +1,169 @@
 ---
-description: Initialize a new iOS project with standard configuration files (CLAUDE.md, memory, architecture, changelog)
+name: ios-init
+description: Initialize an iOS project with the standard documentation set (CLAUDE.md, memory, ARCHITECTURE.md, first ADR, changelog, view inventory). Detects whether the directory is greenfield or an existing codebase — for greenfield it runs a guided tech-decision Q&A; for existing code it scans and pre-fills everything observable, asking only about gaps.
+user_invocable: true
 ---
 
-# /ios-init - iOS Project Initialization
+# /ios-init — iOS Project Initialization
 
-Initialize a new iOS project with standard configuration files and technical architecture decisions.
+Initialize an iOS project with the standard configuration and documentation files. This skill handles **both** a brand-new project and an existing codebase — it auto-detects which and adapts.
 
-## Instructions
+> **Next step:** after init, hand off to `/ios-brief` to define scope and epics. This skill offers that handoff automatically.
 
-### Step 0 — Existing Project Guard
+---
 
-Before doing anything, check if the current directory already has initialization files:
+## Step 0 — Detect Mode
 
-1. Check for `CLAUDE.md`, `ARCHITECTURE.md`, `.claude/memory.md`, or `docs/decisions/ADR-0001-initial-architecture.md`
-2. **If any exist**, warn the user:
-   > "This project already has initialization files: [list found files]. Running `/ios-init` will overwrite them. Options:"
-   > - **Update** — re-run Phase B only, merge new tech decisions into existing files
-   > - **Overwrite** — start fresh, replace all init files
-   > - **Cancel** — stop and keep existing files
-3. If the user chooses **Update**, skip Phase A (read existing values from CLAUDE.md), go straight to Phase B, then merge new decisions into existing files without losing content that was added after init.
-4. If the user chooses **Overwrite**, proceed normally.
-5. **If no init files exist**, proceed normally.
+Before anything else, determine which path to run:
 
-### Phase A — Project Setup
+1. **Scan for existing code:** look for `*.xcodeproj`, `*.xcworkspace`, `Package.swift`, or any `*.swift` files.
+   - **Code found → Existing path** (Section B). Observe first, ask second.
+   - **No code found → Greenfield path** (Section A). Guided Q&A.
+2. **Existing-init guard:** check for `CLAUDE.md`, `ARCHITECTURE.md`, `.claude/memory.md`, or `docs/decisions/ADR-0001-initial-architecture.md`. If any exist, warn the user before proceeding:
+   > "This project already has init files: [list]. Options: **Update** (merge new decisions, keep existing content), **Overwrite** (replace), **Cancel**."
+   - **Update:** read existing values, only fill gaps / add missing sections, never clobber content added after init.
+   - **Overwrite:** proceed normally.
+   - **Cancel:** stop.
 
-1. Ask the user these questions using AskUserQuestion:
-   - Database: SwiftData / RealmSwift / CoreData / None
-   - iOS Target: iOS 18+ / iOS 26+
-   - Git Prefix: (text input for commit prefixes, e.g., P66, APP)
-   - Bundle ID: (text input, e.g., com.company.appname)
+Announce the detected mode in one line, then proceed to the matching section. Both paths converge at **Section C — Generate Files**.
 
-### Phase B — Technical Architecture Brainstorm
+---
 
-After Phase A, introduce a **Tech Confidence Level** that tracks how ready the technical foundation is. Iterate through named batches of questions until confidence reaches **90%** or the user says "done."
+## Section A — Greenfield Path (no existing code)
+
+### A1 — Project Setup
+
+Ask with AskUserQuestion:
+- **Database:** SwiftData / RealmSwift / CoreData / None
+- **iOS Target:** iOS 18+ / iOS 26+
+- **Git Prefix:** text input for commit prefixes (e.g., P66, APP)
+- **Bundle ID:** text input (e.g., com.company.appname)
+
+### A2 — Technical Architecture Brainstorm
+
+Introduce a **Tech Confidence Level** that tracks how ready the technical foundation is. Iterate through named batches until confidence reaches **90%** or the user says "done."
 
 **How confidence works:**
-- Starts at **~30%** after Phase A (we know database, target, prefix, bundle ID)
-- Each batch of resolved decisions increases confidence
+- Starts at **~30%** after A1 (database, target, prefix, bundle ID known)
+- Each batch of resolved decisions increases it
 - Core decisions (networking, auth, navigation) are weighted heavily (~15% each)
-- Follow-up decisions (sync, offline, biometrics) are lighter (~5-10% each)
-- At the end of each batch, present the current confidence level and remaining open questions
-- When fewer than 3 questions remain and they're minor, suggest answers and ask user to confirm
+- Follow-ups (sync, offline, biometrics) are lighter (~5–10% each)
+- At the end of each batch, present current confidence and remaining open questions
+- When fewer than 3 minor questions remain, suggest answers and ask the user to confirm
 
-**Present each batch as a numbered list with concrete options. Mark recommended options with ⭐ where one clearly fits best.**
+Present each batch as a numbered list with concrete options. Mark recommended options with ⭐.
 
-#### Batch 1 — Core Stack (~30% -> ~75%)
-
-Always ask these three questions together:
-
-1. **Networking:** REST ⭐ / GraphQL / None (local-only app)
+#### Batch 1 — Core Stack (~30% → ~75%)
+Always ask these three together:
+1. **Networking:** REST ⭐ / GraphQL / None (local-only)
 2. **Auth:** Apple Sign-In / Firebase Auth / Custom / None
-3. **Navigation complexity:** Simple (single NavigationStack) / Multi-tab (TabView + stacks) ⭐ / Deep linking required
+3. **Navigation:** Simple (single NavigationStack) / Multi-tab (TabView + stacks) ⭐ / Deep linking required
 
-#### Batch 2 — Data Strategy (ask based on Batch 1 answers)
+#### Batch 2 — Data Strategy (ask only what's relevant to Batch 1)
+- **If database chosen** → Sync: Local-only ⭐ / CloudKit / Custom backend
+- **If networking chosen** → Offline: Online-only ⭐ / Offline-first with sync / Cache-only
+- **If auth chosen** → Biometrics for sensitive actions? Yes ⭐ / No
 
-Only ask questions that are relevant based on previous answers. Pick the applicable ones:
-
-- **If database chosen** -> Sync strategy: Local-only ⭐ / CloudKit sync / Custom backend sync
-- **If networking chosen** -> Offline support: Online-only ⭐ / Offline-first with sync / Cache-only
-- **If auth chosen** -> Biometrics: Face ID/Touch ID for sensitive actions? Yes ⭐ / No
-
-#### Batch 3 — Integrations & Polish (remaining questions to reach 90%)
-
-- **3rd-party services:** Any known integrations? (e.g., RevenueCat, Firebase Analytics, push notifications)
-- **Concurrency model:** Heavy background work expected? (e.g., media processing, large imports) Yes / No ⭐
+#### Batch 3 — Integrations & Polish (reach 90%)
+- **3rd-party services:** RevenueCat, Firebase Analytics, push, etc.?
+- **Concurrency model:** Heavy background work expected? Yes / No ⭐
 - **Keychain usage:** Sensitive credentials beyond auth tokens? (auto-yes if auth chosen)
 - **Accessibility priority:** Standard ⭐ / High
 
-**Each batch:**
-1. Present open questions with concrete options (2-4 per question)
-2. Read user's answers
-3. Move answered questions to resolved decisions
-4. Surface any new questions triggered by answers
-5. Update confidence level and present it: `Tech Confidence: XX% | Remaining: [list of open questions]`
-6. If confidence >= 90%, proceed to file generation
+**Each batch:** present open questions → read answers → move to resolved → surface new questions triggered by answers → update and print confidence (`Tech Confidence: XX% | Remaining: …`). At ≥90%, proceed to Section C.
 
-**If user says "done" before 90%:** Accept it, note remaining open questions as TBD in generated files, and proceed.
+**If the user says "done" before 90%:** accept it, mark remaining as **TBD** in generated files, proceed.
 
-### Step 2 — Generate Files
-
-Create the following files based on all answers from Phase A and Phase B:
-
-#### Project Folder Structure
-
-Scaffold the standard MVVM directory structure with `.gitkeep` files so the folders are tracked by git:
+Then in Section C, **scaffold the standard folder structure** (Greenfield only):
 
 ```
 App/                    # App entry point, configuration
   .gitkeep
-Core/                   # Services, managers, extensions, shared models
-  Services/
-    .gitkeep
-  Managers/
-    .gitkeep
-  Extensions/
-    .gitkeep
-  Models/
-    .gitkeep
-Features/               # Feature modules
-  .gitkeep
-ViewComponents/         # Shared reusable UI components
-  .gitkeep
-Resources/              # Assets, localization, fonts
-  .gitkeep
+Core/
+  Services/   .gitkeep
+  Managers/   .gitkeep
+  Extensions/ .gitkeep
+  Models/     .gitkeep
+Features/     .gitkeep
+ViewComponents/ .gitkeep
+Resources/    .gitkeep
 bip/                    # Build-in-public trail — see CLAUDE.md → Build in Public
   BUILD-LOG.md
 ```
 
-#### CLAUDE.md (project root)
+---
 
-**First line must be the iOS guide import** so the project opts into the global iOS rules (the user's global `~/.claude/CLAUDE.md` is now slim and domain-agnostic):
+## Section B — Existing Path (code detected)
 
+**Core principle: observe first, ask second.** Scan silently, pre-fill everything derivable, only ask about genuine gaps.
+
+### B1 — Silent Codebase Scan
+Perform all of these before presenting anything:
+
+- **Structure:** top-level dirs; MVVM/MVC/other; presence of `App/`, `Core/`, `Features/`, `ViewComponents/`, `Resources/`; note non-standard layout.
+- **Xcode project:** `*.xcodeproj`/`*.xcworkspace` → schemes, targets, bundle ID, deployment target, test targets.
+- **Dependencies:** `Package.swift`, `Podfile`, `Cartfile` → list with inferred purpose.
+- **Tech-stack detection** (scan imports/patterns):
+  | What | How to detect |
+  |------|---------------|
+  | Database | `import SwiftData` / `RealmSwift` / `CoreData` |
+  | Networking | `Alamofire`, `URLSession`, `Apollo` (GraphQL) |
+  | Auth | `AuthenticationServices`, `FirebaseAuth`, custom auth services |
+  | State mgmt | `@Observable` vs `@ObservableObject`/`@Published` vs Combine |
+  | Concurrency | `async/await` vs Combine vs completion handlers |
+  | Navigation | `NavigationStack`/`NavigationPath` vs `NavigationView` vs `NavigationLink(destination:)` |
+  | UI framework | SwiftUI / UIKit / mixed |
+  | DI | Environment vs singletons vs manual injection |
+  | Offline/sync | CloudKit, sync services, `NWPathMonitor` |
+  | Biometrics | `import LocalAuthentication` |
+  | Push | `UNUserNotificationCenter` |
+  | Analytics | Firebase Analytics, Mixpanel, custom |
+  | Payments | StoreKit, RevenueCat |
+  | Location | `CoreLocation`, `MapKit` |
+- **Architecture patterns:** ViewModel style; business logic leaking into Views; NavigationCoordinator; service/manager layer; protocol abstractions.
+- **Existing docs:** `CLAUDE.md`, `ARCHITECTURE.md`, `.claude/memory.md`, `README.md`, `docs/` — note current vs stale.
+- **Git:** age (`git log --reverse --format='%ai' | head -1`), recent activity (`git log --oneline -10`), branch, uncommitted changes.
+- **Quality signals:** `.swiftlint.yml`, tests, `PrivacyInfo.xcprivacy`, `.gitignore` completeness.
+- **View inventory scan** (for `VIEW-INVENTORY.md`): shared components under `ViewComponents/`; feature components under `Features/*/Views/ViewComponents/`; top-level `*View` screens under `Features/*/Views/`; custom `ViewModifier`/`ButtonStyle`/`LabelStyle`/`ToggleStyle`/`TextFieldStyle`. For each capture: type name, path, public init signature, one-line purpose. Group by feature.
+
+### B2 — Present Findings
+Summarize: project (name, bundle ID, deployment target, schemes), architecture (pattern, navigation, DI), tech stack, dependencies, integrations, structure, existing docs, code quality, git state. Then ask: _"Does this look accurate? Anything I missed or got wrong?"_ Wait for confirmation.
+
+### B3 — Fill Gaps (ask ONLY what code can't reveal)
+- **Always:** Git prefix; any corrections to the scan.
+- **Only if undetectable:** sync strategy (if DB found but unclear); offline support; accessibility priority (Standard/High); planned-but-not-yet-coded integrations.
+- **Never ask** about anything already detected — those are settled facts.
+
+In Section C, **do NOT scaffold folders** — document the existing structure in ARCHITECTURE.md instead. Pre-fill `VIEW-INVENTORY.md` from the B1 scan (delete example rows, populate tables). Mark generated decisions as "Observed from existing codebase" rather than "Decided." For files that already exist, present a diff and ask merge-vs-overwrite (for ADR-0001, if it exists, create ADR-0002 "Architecture Documentation Update" instead).
+
+---
+
+## Section C — Generate Files (both paths)
+
+Create these from all gathered/observed facts.
+
+### CLAUDE.md (project root)
+
+**First line must be the iOS guide import** so the project opts into the global iOS rules:
 ```
 @~/.claude/docs/ios/ios-guide.md
 ```
 
-**Second, a `## Role` section** with the senior-engineer framing (one line is fine):
-
+**`## Role`:**
 ```
 ## Role
 
 You are a senior iOS engineer. Apply the judgment of someone who has shipped production apps for years — question requirements that conflict with platform conventions, prefer Apple-native APIs, and call out work that would not pass a senior code review.
 ```
 
-**Third, a `## View Inventory` section** referencing the inventory file:
-
+**`## View Inventory`:**
 ```
 ## View Inventory
 
 Read `VIEW-INVENTORY.md` before implementing any new View, ViewModifier, or shared UI component. If a matching component already exists, reuse or extend it. When you add, rename, or delete a shared component, update `VIEW-INVENTORY.md` in the same diff.
 ```
 
-**Fourth, a `## Build in Public` section** so every project carries the build-in-public capture habit. Also scaffold a `bip/` folder at the project root with a `BUILD-LOG.md` stub (a short header pointing back at this section):
-
+**`## Build in Public`** (Greenfield also scaffolds `bip/BUILD-LOG.md`):
 ```
 ## Build in Public
 
@@ -147,128 +178,60 @@ All build-in-public material lives in `bip/`:
 Posting itself stays dumb-simple — one honest post, no production. `bip/` is the raw material, not a content pipeline.
 ```
 
-Then the project-specific config:
-- Project name (infer from directory or ask)
-- Database choice
-- iOS target version
-- Git prefix for commits
-- Bundle ID
-- Any project-specific rules
-- **`## Technical Decisions` section** capturing all resolved answers from Phase B:
-  - Networking approach
-  - Auth strategy
-  - Navigation pattern
-  - Sync strategy
-  - Offline support
-  - 3rd-party integrations
-  - Any other resolved decisions
-  - Mark unresolved decisions as **TBD** if user stopped early
+Then project-specific config: project name, bundle ID, iOS target, git prefix, database, and a **`## Technical Decisions`** section capturing every resolved/detected choice (networking, auth, navigation, sync, offline, integrations). Mark unresolved as **TBD**. On the Existing path, note "Generated from existing codebase scan."
 
-#### .claude/memory.md
+**If CLAUDE.md already exists:** present a diff, merge vs overwrite. When merging, ensure the import line, `## Role`, and `## View Inventory` are present.
 
-Use template from `~/.claude/docs/templates/project-memory-template.md`, then **pre-fill the Decisions section** with all Phase B choices. Format each as:
-
+### .claude/memory.md
+Template: `~/.claude/docs/templates/project-memory-template.md`. Pre-fill Decisions with each choice:
 ```
-- [YYYY-MM-DD] [Decision area]: [Choice] — [Brief rationale from discussion]
+- [YYYY-MM-DD] Networking: REST — standard choice for the backend API
+- [YYYY-MM-DD] Auth: Apple Sign-In — simplest for iOS-only app
+- [YYYY-MM-DD] Navigation: Multi-tab — 3+ distinct sections
 ```
+Existing path: label as "Observed from existing codebase."
 
-Example:
-```
-- [2026-03-17] Networking: REST — standard choice for the backend API
-- [2026-03-17] Auth: Apple Sign-In — simplest for iOS-only app, no 3rd-party dependency
-- [2026-03-17] Navigation: Multi-tab — app has 3+ distinct sections
-```
+### ARCHITECTURE.md
+Template: `~/.claude/docs/templates/architecture-template.md`. Fill navigation, networking, auth, data-storage table, third-party integrations, data-flow (sync/cache layer if relevant). Existing path: also fill dependencies table, feature-modules table, and update the system-architecture diagram to reflect actual layers. Mark unresolved sections **TBD**. If it already exists, merge vs overwrite.
 
-#### ARCHITECTURE.md
+### docs/decisions/ADR-0001-initial-architecture.md
+Template: `~/.claude/docs/templates/adr-template.md`.
+- Greenfield: Title "Initial Architecture Decisions"; Context = project goals/constraints; Decision = all resolved decisions; Consequences = pros/cons; Alternatives Considered = per core decision; Date = today.
+- Existing: Title "Existing Architecture Documentation"; Context = "observed from the existing codebase and confirmed by the team"; Decision = detected choices. If ADR-0001 exists, create ADR-0002 instead.
 
-Use template from `~/.claude/docs/templates/architecture-template.md`, filled with:
-- Project name, database choice, iOS target (from Phase A)
-- **Navigation section:** Fill with chosen pattern (simple stack, multi-tab, deep linking)
-- **Data Storage table:** Populate with actual database and sync choices
-- **Third-Party Integrations:** Pre-fill with any chosen services (auth provider, analytics, etc.)
-- **Data Flow section:** Update if offline-first or sync is involved — describe the sync/cache layer
-- **Networking section:** Fill with REST/GraphQL choice and offline strategy
-- Mark any unresolved sections as **TBD** if user stopped early
+### CHANGELOG.md
+Template: `~/.claude/docs/templates/changelog-template.md`, version 0.1.0 (Greenfield) or inferred current version (Existing). Existing path: only create if missing.
 
-#### docs/decisions/ADR-0001-initial-architecture.md
+### VIEW-INVENTORY.md (project root)
+Copy `~/.claude/docs/templates/view-inventory-template.md`, replace `{{ProjectName}}` and `{{YYYY-MM-DD}}`.
+- Greenfield: leave example rows as illustrations.
+- Existing: delete example rows, populate Shared Components / Feature Components / Screens / View Modifiers & Styles from the B1 scan. Purpose ≤8 words; Key Inputs = trimmed public init params. If it exists, merge vs overwrite.
 
-Generate the first ADR using the template from `~/.claude/docs/templates/adr-template.md`:
-- **Title:** "Initial Architecture Decisions"
-- **Status:** Accepted
-- **Context:** Summarize the project goals and constraints discussed during init
-- **Decision:** Document all resolved technical decisions from Phase A and B in a structured list
-- **Consequences:** List the pros/cons of the chosen stack
-- **Alternatives Considered:** For each core decision (networking, auth, navigation), briefly note the alternatives that were available but not chosen
-- **Date:** Today's date
+### Backlog.md (optional)
+Ask if wanted. Pre-seed:
+- Greenfield (from decisions): folder structure + navigation coordinator; `NetworkService` (if networking); auth flow + Keychain + biometrics (if auth); DB models + persistence (if database); sync + conflict resolution (if sync); offline cache + reachability (if offline); one task per 3rd-party integration. Place under **Features > High Priority**.
+- Existing (from observed gaps): `// TODO:` comments found in code; missing test coverage; missing `PrivacyInfo.xcprivacy`; SwiftLint setup; `@ObservableObject`→`@Observable` migrations; `NavigationView`→`NavigationStack` migrations.
 
-#### CHANGELOG.md
+---
 
-Use template from `~/.claude/docs/templates/changelog-template.md` with initial version 0.1.0.
+## Section D — Validate, Hint, Hand Off (both paths)
 
-#### VIEW-INVENTORY.md (project root)
+### D1 — Post-Init Validation
+1. CLAUDE.md ↔ ARCHITECTURE.md — every tech decision matches.
+2. CLAUDE.md ↔ ADR — decisions consistent.
+3. Backlog ↔ Tech Decisions — every non-None choice / observed gap has a task.
+4. memory.md — an entry per resolved/detected decision.
+Fix inconsistencies silently unless genuinely ambiguous.
 
-Copy `~/.claude/docs/templates/view-inventory-template.md` to the project root as `VIEW-INVENTORY.md`. Replace `{{ProjectName}}` with the project name and `{{YYYY-MM-DD}}` with today's date. Leave the example rows in place as illustrations — the user (and Claude) will fill it in as components are created. This file is the canonical index of shared UI components; `CLAUDE.md` already instructs future sessions to read it before implementing new Views.
-
-#### Backlog.md (optional, pre-seeded)
-
-Ask if user wants a backlog file. If yes, use template from `~/.claude/docs/templates/backlog-template.md` and **pre-seed with initial tasks** derived from Phase B decisions:
-
-**Always include:**
-- [ ] Set up project folder structure and navigation coordinator
-
-**If networking chosen:**
-- [ ] Implement `NetworkService` with base URL configuration
-- [ ] Add API error handling and response models
-
-**If auth chosen:**
-- [ ] Implement authentication flow ([chosen provider])
-- [ ] Set up Keychain storage for credentials
-- [ ] Add biometric authentication (if chosen)
-
-**If database chosen:**
-- [ ] Configure [database] with initial data models
-- [ ] Implement data persistence layer
-
-**If sync chosen:**
-- [ ] Implement sync strategy ([chosen approach])
-- [ ] Add conflict resolution handling
-
-**If offline support chosen:**
-- [ ] Implement offline data cache
-- [ ] Add network reachability monitoring
-
-**For each 3rd-party integration:**
-- [ ] Integrate [service name] — [purpose]
-
-Place these under **Features > High Priority**. Leave other sections from the template as-is.
-
-### Step 3 — Post-Init Validation
-
-After generating all files, perform a quick consistency check:
-
-1. **Cross-reference CLAUDE.md ↔ ARCHITECTURE.md** — verify that every tech decision in CLAUDE.md's Technical Decisions section has a matching entry in ARCHITECTURE.md (networking, auth, navigation, sync, database).
-2. **Cross-reference CLAUDE.md ↔ ADR-0001** — verify the ADR's Decision section matches CLAUDE.md's Technical Decisions.
-3. **Check Backlog ↔ Tech Decisions** — if Backlog.md exists, verify every non-None tech choice has at least one corresponding task.
-4. **Check memory.md** — verify the Decisions section has an entry for each resolved Phase B decision.
-
-If any inconsistency is found, fix it silently. Do not bother the user unless the inconsistency is ambiguous.
-
-### Step 4 — Context7 & Framework Guide Hints
-
-After generating files, check which frameworks/services were chosen and:
-
-1. **Use Context7** (via `resolve-library-id` then `query-docs`) to fetch the latest setup/integration docs for each chosen 3rd-party service (e.g., RevenueCat, Firebase Auth). Add a brief note in the ADR's References section with the current recommended version and any critical setup steps.
-
-2. **Print framework guide hints** — for each chosen technology that has a matching guide in `~/.claude/docs/ios/`, remind the user:
-
+### D2 — Context7 & Framework Guide Hints
+1. **Context7** (`resolve-library-id` → `query-docs`): fetch current setup docs for each chosen/detected 3rd-party service (RevenueCat, Firebase Auth, …). Add a note in the ADR References with the recommended version and critical setup steps. Existing path: flag dependencies that are outdated vs current.
+2. **Print framework guide hints** for each technology with a matching guide:
    ```
    Relevant framework guides for your stack:
    - [Technology]: ~/.claude/docs/ios/[category]/[guide].md
    ```
-
-   Map decisions to guides:
-   | Decision | Guide Path |
-   |----------|-----------|
+   | Decision | Guide |
+   |----------|-------|
    | SwiftData | `docs/ios/data/swiftdata.md` |
    | RealmSwift | `docs/ios/data/realmswift.md` |
    | CloudKit sync | `docs/ios/data/cloudkit.md` |
@@ -280,16 +243,12 @@ After generating files, check which frameworks/services were chosen and:
    | WidgetKit | `docs/ios/system/widgetkit.md` |
    | CoreLocation | `docs/ios/system/corelocation.md` |
    | HealthKit | `docs/ios/system/healthkit.md` |
+   List only guides matching actual choices.
 
-   Only list guides that match the user's actual choices.
-
-### Step 5 — Wrap Up & Handoff
-
-After creating all files:
-- List all created files and folders
-- Suggest running `git add` to stage them
-- Remind about updating ARCHITECTURE.md with specific project details as they evolve
-- **Offer `/project-brief` handoff:** Ask the user if they want to continue with `/project-brief` to define the project scope and epics. If they say yes, write a `docs/.ios-init-decisions.json` file containing all resolved tech decisions in a structured format so `/project-brief` can read it:
+### D3 — Wrap Up & Handoff
+- List all created/updated files and folders; note any skipped (already existed). Existing path: list detected tech-debt items.
+- Suggest `git add` to stage them.
+- **Offer `/ios-brief` handoff:** ask if the user wants to continue with `/ios-brief` to define scope and epics. If yes, write `docs/.ios-init-decisions.json` so the brief can read it, then invoke `/ios-brief` directly — don't ask the user to run it manually.
 
 ```json
 {
@@ -311,7 +270,7 @@ After creating all files:
 }
 ```
 
-Then invoke `/project-brief` directly — do not ask the user to run it manually.
+---
 
 ## Template Locations
 

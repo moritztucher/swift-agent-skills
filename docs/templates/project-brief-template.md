@@ -83,4 +83,4 @@ _Add more epics as needed._
 
 ---
 
-_Generated on {{DATE}} with `/project-brief`_
+_Generated on {{DATE}} with `/ios-brief`_

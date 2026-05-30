@@ -1,4 +1,5 @@
 ---
+name: ios-build
 description: Build the Xcode project and report results
 disable-model-invocation: true
 ---

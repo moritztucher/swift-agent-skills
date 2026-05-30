@@ -130,4 +130,4 @@ Project-specific context lives in per-project `CLAUDE.md` files. Projects opt in
 |--------|-------|---------------|
 | iOS | `~/.claude/docs/ios/ios-guide.md` | Add `@~/.claude/docs/ios/ios-guide.md` to the project's root `CLAUDE.md` |
 
-The iOS guide bundles: core stack, naming, architecture rules, ViewModel rules, SwiftUI rules, Swift style, security, testing, the full `/ios-*` workflow, and pointers to framework guides and templates. `/ios-init` and `/ios-init-existing` add the import automatically when scaffolding a new project `CLAUDE.md`.
+The iOS guide bundles: core stack, naming, architecture rules, ViewModel rules, SwiftUI rules, Swift style, security, testing, the full `/ios-*` workflow, and pointers to framework guides and templates. `/ios-init` adds the import automatically when scaffolding a new project `CLAUDE.md` (it auto-detects new vs. existing codebases). Run `/ios` anytime to see where a project is in the workflow and what to do next.

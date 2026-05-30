@@ -1,4 +1,5 @@
 ---
+name: pr-to-main
 description: Create a release pull request from develop into main with the team's release PR template
 ---
 

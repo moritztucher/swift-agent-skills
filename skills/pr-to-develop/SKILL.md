@@ -1,4 +1,5 @@
 ---
+name: pr-to-develop
 description: Create a pull request from the current branch into the develop branch with the team's PR template
 ---
 
