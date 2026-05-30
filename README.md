@@ -80,7 +80,7 @@ The 26 skills group into the lifecycle phases. **`/ios` is the front door** — 
 | Skill | What it does |
 |-------|--------------|
 | `/ios-brief` | Build & maintain the living project brief — features split into UI + Logic/Backend, MVP vs Later (draft-first; reads the init description) |
-| `/ios-design-brief` | Establish a project-wide design system through iterative in-document Q&A |
+| `/ios-design-brief` | Establish the visual design system — looks at the running app, proposes a direction in chat, writes implementable specs |
 
 Then **build features UI-first** — write the UI layer so the flow feels good, then layer in logic & backend — using the Build tools below.
 
@@ -88,7 +88,7 @@ Then **build features UI-first** — write the UI layer so the flow feels good, 
 
 | Skill | What it does |
 |-------|--------------|
-| `/ios-design-elevate` | Implement design elevation across an app, view by view, without touching business logic |
+| `/ios-design-elevate` | Apply the design system view by view, verifying each screen visually (build → screenshot → compare → iterate); never touches business logic |
 | `/ios-build` | Build the Xcode project and report results |
 | `/ios-test` | Run unit and UI tests |
 | `/ios-automate` | iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video |
@@ -99,7 +99,7 @@ Then **build features UI-first** — write the UI layer so the flow feels good, 
 |-------|--------------|
 | `/ios-review` | Thorough code review on changes or specified files |
 | `/ios-audit` | Holistic project audit through PM, UX, UI, ARCH lenses |
-| `/ios-design-audit` | Visual craft audit — color, typography, motion, hierarchy — with elevation suggestions |
+| `/ios-design-audit` | Visual craft audit — screenshots the running app and judges the real screens — with severity-rated findings + elevation suggestions |
 | `/ios-onboarding-audit` | Audit (or design from scratch) an onboarding flow for activation psychology and time-to-value |
 
 ### Ship
