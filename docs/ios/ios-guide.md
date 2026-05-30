@@ -166,13 +166,14 @@ Before suggesting commits:
 
 ## iOS Development Workflow
 
-The skills compose into a lifecycle: **Setup → Plan → Build → Verify → Ship.** Not sure where you are? Run **`/ios`** — the orchestrator detects the project's state and routes you to the right next step.
+The skills compose into a light lifecycle: **Setup → Plan → Build → Verify → Ship.** Not sure where you are? Run **`/ios`** — the orchestrator detects the project's state and routes you to the right next step.
+
+The build philosophy is **UI-first**: get the app's flow feeling good with the UI layer before wiring logic and backend. The brief decomposes each feature into a UI layer and a Logic & Backend layer so you can do exactly that. There is no formal epic/preflight/TDD-delivery pipeline.
 
 **Standard path (works for new *and* existing projects — `/ios-init` and `/ios-brief` auto-detect which):**
 ```
-/ios-init → /ios-brief → /ios-design-brief → /ios-epic {N} → /ios-preflight
-    → /ios-implement {N} → /ios-design-audit → /ios-design-elevate
-    → /ios-verify {N} → /ios-review → /ios-commit → /ios-pr
+/ios-init → /ios-brief → /ios-design-brief → build features UI-first, then logic
+    → /ios-design-audit / /ios-design-elevate → /ios-review → /ios-commit → /pr-to-develop
 ```
 
 **Design-only improvement:**
@@ -184,31 +185,26 @@ The skills compose into a lifecycle: **Setup → Plan → Build → Verify → S
 |-------|-------|-------------|--------|
 | Setup | `/ios` | Detect project state, show the map, route to the next step | — |
 | Setup | `/ios-load` | Load iOS guide into an ad-hoc chat with no project `CLAUDE.md` | — |
-| Setup | `/ios-init` | New **or** existing project: setup + tech brainstorm, or scan + pre-fill | CLAUDE.md, ARCHITECTURE.md, ADR-0001, folder structure |
-| Plan | `/ios-brief` | Define scope, features, epics (reads ios-init decisions; scans existing code) | docs/PROJECT-BRIEF.md |
+| Setup | `/ios-init` | New / fresh / existing project: description-led setup + repo files | CLAUDE.md, ARCHITECTURE.md, ADR-0001, .gitignore, LICENSE, README |
+| Plan | `/ios-brief` | Living source of truth: features split into UI + Logic/Backend, MVP vs Later | docs/PROJECT-BRIEF.md |
 | Plan | `/ios-design-brief` | Establish project-wide visual design system through Q&A | docs/DESIGN-SYSTEM.md |
-| Plan | `/ios-epic {N}` | Expand epic into implementation doc with PM/UX/UI/ARCH questions + ACs | docs/epics/EPIC-{N}.md |
-| Plan | `/ios-preflight` | Validate brief + all epics for contradictions and gaps | docs/PREFLIGHT-REPORT.md |
-| Build | `/ios-implement {N}` | TDD delivery: write tests → implement → verify → fix gaps → report | Production + test code |
+| Build | *(write code)* | Build the next MVP feature UI-first, then layer in logic & backend | Production code |
 | Build | `/ios-design-elevate` | Rewrite visual layer to match design system — theme, levers, consistency | Elevated Views + theme layer |
 | Build | `/ios-build`, `/ios-test`, `/ios-automate` | Build the project, run tests, drive the simulator | Build/test results |
-| Verify | `/ios-verify {N}` | Run all tests, map results to ACs, produce gap report | docs/epics/EPIC-{N}_verification.md |
 | Verify | `/ios-review` | Severity-rated code review (CRITICAL/HIGH/MEDIUM/LOW) | review-{file}.md |
 | Verify | `/ios-audit` | Four-lens audit (PM/UX/UI/ARCH) of project or feature | docs/AUDIT-REPORT.md |
 | Verify | `/ios-design-audit` | Audit visual craft against pattern library benchmarks | docs/DESIGN-AUDIT.md |
 | Verify | `/ios-onboarding-audit` | Onboarding audit or greenfield design (activation, permissions, flow) | docs/ONBOARDING-AUDIT.md |
 | Ship | `/ios-commit` | Well-formed commit following project conventions | Commit |
-| Ship | `/ios-pr`, `/ios-release-pr` | PR into develop; release PR develop → main | Pull request |
+| Ship | `/pr-to-develop`, `/pr-to-main` | PR into develop; release PR develop → main | Pull request |
 | Ship | `/ios-release-notes` | Categorized release summary + App Store "What's New" from git | Release notes |
 
 **Rules:**
-- **Plan** steps write to `docs/` — no code, confidence-tracked (90% threshold)
-- **Build/Verify** steps produce code + tests with pass/fail verification
-- `/ios-design-elevate` runs after functional code works, before final verify, and must not break existing tests
-- All acceptance criteria MUST have an AC-ID (e.g., `AC-1`) and a test type (`unit` / `integration` / `ui`)
-- Test names MUST include AC-ID: `/// AC-1: criterion` + `test_AC1_method_condition_expected()`
-- Implementation is not complete until `/ios-verify` passes and `/ios-review` has no CRITICAL issues
-- Design is not complete until `/ios-design-audit` shows at least 2-3 levers at "bold" and no HIGH findings remain
+- **Plan** writes to `docs/` — no code. The brief is a living reference; re-run `/ios-brief` to keep it current.
+- **Build UI-first** — make the flow feel good before wiring logic. Tests are encouraged for logic/backend but not gated by a formal verification step.
+- `/ios-design-elevate` rewrites only the visual layer and must not break existing behaviour.
+- A change isn't done until `/ios-review` shows no CRITICAL issues.
+- Design isn't done until `/ios-design-audit` shows at least 2-3 levers at "bold" and no HIGH findings remain.
 
 ---
 

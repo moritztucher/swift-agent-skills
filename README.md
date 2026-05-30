@@ -4,15 +4,15 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`26 skills · 4 agents · 3 hooks · 77 iOS framework guides`
+`22 skills · 4 agents · 3 hooks · 77 iOS framework guides`
 
 ---
 
 ## What this is
 
-A working, opinionated `~/.claude/` setup focused on shipping production iOS apps with Claude Code. It encodes a full TDD-style workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation.
+A working, opinionated `~/.claude/` setup focused on shipping production iOS apps with Claude Code. It encodes a light, **UI-first** workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation. Plan with a living brief, build the flow before the logic, ship.
 
-It's the configuration I use day-to-day. The skills compose into one pipeline (`/ios-init` → `/ios-brief` → `/ios-epic` → `/ios-preflight` → `/ios-implement` → `/ios-verify` → `/ios-commit` → `/ios-pr`), but each one stands on its own. Not sure what to run next? Type **`/ios`** — the orchestrator detects where your project is and routes you to the right step. Drop into any iOS project and they pick up the local `CLAUDE.md` for context.
+It's the configuration I use day-to-day. The skills compose into one pipeline (`/ios-init` → `/ios-brief` → build features UI-first → `/ios-review` → `/ios-commit` → `/pr-to-develop`), but each one stands on its own. Not sure what to run next? Type **`/ios`** — the orchestrator detects where your project is and routes you to the right step. Drop into any iOS project and they pick up the local `CLAUDE.md` for context.
 
 ## What this isn't
 
@@ -79,16 +79,15 @@ The 26 skills group into the lifecycle phases. **`/ios` is the front door** — 
 
 | Skill | What it does |
 |-------|--------------|
-| `/ios-brief` | Build a structured project brief through guided Q&A (explores existing code first if present) |
+| `/ios-brief` | Build & maintain the living project brief — features split into UI + Logic/Backend, MVP vs Later (draft-first; reads the init description) |
 | `/ios-design-brief` | Establish a project-wide design system through iterative in-document Q&A |
-| `/ios-epic` | Expand a brief epic into an implementation doc with [UI]/[UX]/[ARCH] questions + ACs |
-| `/ios-preflight` | Cross-validate brief + epics for contradictions and missing dependencies |
+
+Then **build features UI-first** — write the UI layer so the flow feels good, then layer in logic & backend — using the Build tools below.
 
 ### Build
 
 | Skill | What it does |
 |-------|--------------|
-| `/ios-implement` | Full TDD epic delivery — write XCTests, implement, verify ACs, fix gaps |
 | `/ios-design-elevate` | Implement design elevation across an app, view by view, without touching business logic |
 | `/ios-build` | Build the Xcode project and report results |
 | `/ios-test` | Run unit and UI tests |
@@ -98,7 +97,6 @@ The 26 skills group into the lifecycle phases. **`/ios` is the front door** — 
 
 | Skill | What it does |
 |-------|--------------|
-| `/ios-verify` | Run XCTests, map to epic ACs, produce coverage matrix + gap report |
 | `/ios-review` | Thorough code review on changes or specified files |
 | `/ios-audit` | Holistic project audit through PM, UX, UI, ARCH lenses |
 | `/ios-design-audit` | Visual craft audit — color, typography, motion, hierarchy — with elevation suggestions |
@@ -177,17 +175,15 @@ Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@imp
 
 ## Templates
 
-`docs/templates/` contains the doc skeletons used by `/ios-init`, `/ios-epic`, and the brief workflow:
+`docs/templates/` contains the doc skeletons used by `/ios-init` and `/ios-brief`:
 
 - `project-brief-template.md`
 - `architecture-template.md`
-- `epic-detail-template.md`
 - `adr-template.md`
 - `backlog-template.md`
 - `changelog-template.md`
 - `design-system-template.md`
 - `view-inventory-template.md`
-- `preflight-report-template.md`
 - `project-memory-template.md`
 
 ---
@@ -198,9 +194,9 @@ The setup splits into three layers:
 
 1. **Skills** are slash-commands the user invokes (`/ios-init`, `/ios-brief`, etc.), grouped by lifecycle phase (Setup → Plan → Build → Verify → Ship). Each is a `SKILL.md` with frontmatter and instructions. `/ios` is the orchestrator that reads project state and routes to the right phase. Some skills carry evals (`evals/evals.json`) for measuring trigger accuracy.
 2. **Agents** are specialists Claude spawns via the Task tool. They have a narrower scope and toolset than the main thread. Skills like `/ios-design-audit` and `/ios-onboarding-audit` spawn the design and onboarding advisors for parallel analysis.
-3. **Docs + templates** are the reference layer. The iOS guide loads via `@~/.claude/docs/ios/ios-guide.md` in a project's `CLAUDE.md`. Framework guides are read on demand. Templates feed `/ios-init` and `/ios-epic`.
+3. **Docs + templates** are the reference layer. The iOS guide loads via `@~/.claude/docs/ios/ios-guide.md` in a project's `CLAUDE.md`. Framework guides are read on demand. Templates feed `/ios-init` and `/ios-brief`.
 
-The workflow composes left-to-right: init → brief → epic → preflight → TDD implement → verify → commit → PR. Each step writes a deliverable to `docs/` in the project so the next step has structured input, and each skill points forward to the next.
+The workflow composes left-to-right: init → brief → build features UI-first → review → commit → PR. The brief is a living source of truth — it decomposes each feature into a UI layer and a Logic & Backend layer so you can build the flow before the logic. `/ios` reads project state and points you to the next step.
 
 ---
 

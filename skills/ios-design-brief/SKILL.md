@@ -6,7 +6,7 @@ user_invocable: true
 
 # iOS Design Brief Skill
 
-You establish a project-wide visual design system through iterative in-document Q&A — the same pattern as `/ios-epic`. Questions with 3 checkbox options are written directly into the document. The user answers by checking one box, then re-runs the skill to incorporate answers and generate the next tier of questions.
+You establish a project-wide visual design system through iterative in-document Q&A. Questions with 3 checkbox options are written directly into the document. The user answers by checking one box, then re-runs the skill to incorporate answers and generate the next tier of questions.
 
 **Output:** `docs/DESIGN-SYSTEM.md`
 
