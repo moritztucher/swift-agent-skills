@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-A curated Claude Code setup for iOS developers — skills, agents, slash commands, and configuration for shipping SwiftUI apps faster.
+A curated Claude Code setup for iOS developers — skills, agents, slash commands, and configuration for shipping SwiftUI apps faster. **SwiftUI-first, not UIKit.**
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
@@ -10,7 +10,7 @@ By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](
 
 ## What this is
 
-A working, opinionated `~/.claude/` setup focused on shipping production iOS apps with Claude Code. It encodes a light, **UI-first** workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation. Plan with a living brief, build the flow before the logic, ship.
+A working, opinionated `~/.claude/` setup focused on shipping production **SwiftUI** apps with Claude Code. It's SwiftUI-first throughout — views are SwiftUI, state is `@Observable`, navigation is `NavigationStack`; UIKit/AppKit appear only where you genuinely must bridge (a few system pickers, AppKit for macOS targets). It encodes a light, **UI-first** workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation. Plan with a living brief, build the flow before the logic, ship.
 
 It's built around the mistakes Claude makes on iOS by default — and corrects them. It won't nest a `NavigationStack` inside another `NavigationStack` and break your back button. It reaches for `@Observable` instead of `@Published` / `ObservableObject`, because it's 2026. It won't ship a tappable control without an `.accessibilityLabel`. The taste is baked into the skills, not bolted on after.
 
@@ -18,6 +18,7 @@ It's the configuration I use day-to-day. The skills compose into one pipeline (`
 
 ## What this isn't
 
+- Not a UIKit toolkit — it's **SwiftUI-first**; UIKit only shows up where you must bridge (MessageUI, PhotosPicker, etc.), and AppKit only for macOS
 - Not a fork of every public Claude Code skill — it's curated, not comprehensive
 - Not a framework — it's a config snapshot you copy into `~/.claude/`
 - Not a substitute for thinking about your architecture — the skills surface decisions, you still make them
