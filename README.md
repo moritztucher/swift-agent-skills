@@ -1,6 +1,6 @@
 # Swift Agent Skills
 
-A curated collection of agent skills for shipping **SwiftUI** apps — skills, agents, slash commands, and configuration for Apple-platform development. **SwiftUI-first, not UIKit.** Packaged for Claude Code.
+Currency-checked agent skills for shipping **SwiftUI** apps — a SwiftUI-first lifecycle, craft specialists, and Apple-framework experts. **SwiftUI-first, not UIKit.** Built for Claude Code; installs into any [Agent Skills](https://agentskills.io)–compatible agent.
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
