@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 67 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 71 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -89,6 +89,10 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [wifiaware](wifiaware/SKILL.md): iOS 26 peer-to-peer Wi-Fi Aware — publish/subscribe services, paired-device connections, performance modes.
 - [speech-analyzer](speech-analyzer/SKILL.md): iOS 26 on-device transcription — SpeechAnalyzer/SpeechTranscriber, asset reservation, file vs live, volatile results.
 - [visual-intelligence](visual-intelligence/SKILL.md): iOS 26 visual/camera search — App Intents semanticContentSearch schema, SemanticContentDescriptor, IntentValueQuery.
+- [passkit](passkit/SKILL.md): Apple Wallet passes + Apple Pay — PKPass/PKAddPassesViewController, PKPaymentRequest, PayWithApplePayButton, server-signed passes.
+- [firebase](firebase/SKILL.md): Google's Firebase Apple SDK — FirebaseApp.configure, Auth, Firestore, Cloud Messaging, Crashlytics; SwiftPM, async/await.
+- [realmswift](realmswift/SKILL.md): Realm object database (third-party, now community-maintained) — @Persisted, write transactions, thread confinement, migrations.
+- [carplay](carplay/SKILL.md): In-car apps — CPTemplateApplicationScene, CPInterfaceController, per-category entitlement, the allowed template set.
 
 ## Meta
 

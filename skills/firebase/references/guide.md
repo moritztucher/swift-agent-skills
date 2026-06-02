@@ -204,6 +204,8 @@ var isSignedIn: Bool {
 
 #### Auth State Listener
 
+> **Modern alternative (SDK 11+):** the closure-based `addStateDidChangeListener` below still works and is not deprecated, but the SDK now also exposes Swift `AsyncStream` APIs you can consume directly: `for await user in Auth.auth().authStateChanges { … }`. Firestore has `for try await snapshot in query.snapshots { … }`, Messaging has `Messaging.messaging().tokenUpdates`, and Realtime Database has `ref.value` / `ref.events()`. Prefer these in new `async` code; keep the closure form when you need fine-grained `ListenerRegistration` lifetime control.
+
 ```swift
 @Observable
 class AuthManager {

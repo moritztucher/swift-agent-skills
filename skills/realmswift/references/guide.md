@@ -2,6 +2,8 @@
 
 A comprehensive guide for using RealmSwift in iOS apps with SwiftUI and async/await patterns.
 
+> **Maintenance status (verified 2026-06-02).** Realm Swift is a third-party SDK (originally Realm, then MongoDB). After MongoDB wound down Atlas Device Sync, the SDK moved to **community-maintained mode** — its docs and README now live on the `community/` branch of `realm/realm-swift`. The local on-device database (this guide) still works and ships in production apps, but it no longer receives active feature investment from MongoDB, and Atlas Device Sync (the cloud sync layer) is end-of-life. **For a brand-new Apple-only app, prefer SwiftData** (Apple-native, first-party — see the `swiftdata` skill). Reach for Realm when maintaining an existing Realm app, when you need cross-platform parity (Kotlin/.NET/Dart), or for features SwiftData lacks.
+
 ---
 
 ## Table of Contents
@@ -254,6 +256,31 @@ try! realm.write {
 ---
 
 ## Queries and Filtering
+
+### Type-Safe Queries (preferred)
+
+Realm's `where` API gives compile-checked, autocompleting predicates via key paths — prefer it over the string-based `filter` for new code:
+
+```swift
+let realm = try! Realm()
+
+// Single condition
+let youngDogs = realm.objects(Dog.self).where { $0.age < 3 }
+
+// Compound conditions
+let results = realm.objects(Dog.self).where {
+    $0.age > 2 && $0.breed == "Beagle"
+}
+
+// String operators, collection counts, IN
+let matches = realm.objects(Dog.self).where {
+    $0.name.contains("max", options: .caseInsensitive)
+}
+let busyOwners = realm.objects(Person.self).where { $0.dogs.count > 2 }
+let favorites = realm.objects(Dog.self).where { $0.name.in(["Rex", "Max", "Buddy"]) }
+```
+
+The string-based `filter("...")` API below still works and is needed for `@ObservedResults`/`NSPredicate` call sites, but `where` is the modern default.
 
 ### Basic Filtering
 

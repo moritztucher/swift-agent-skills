@@ -148,7 +148,28 @@ Configure the Application Scene Manifest to support CarPlay:
 
 ### CPTemplateApplicationSceneDelegate
 
-The primary delegate that handles CarPlay connection/disconnection and lifecycle events:
+The primary delegate that handles CarPlay connection/disconnection and lifecycle events.
+
+**Navigation apps only:** because they draw map content, navigation apps receive the
+`to window:` variant of the connect/disconnect callbacks and own a `CPWindow`. All other
+categories use the interface controller exclusively and never touch a window:
+
+```swift
+// Navigation category — you get a CPWindow to draw the map into.
+func templateApplicationScene(
+    _ templateApplicationScene: CPTemplateApplicationScene,
+    didConnect interfaceController: CPInterfaceController,
+    to window: CPWindow
+) {
+    self.interfaceController = interfaceController
+    self.carWindow = window
+    window.rootViewController = MapRenderingViewController()
+    interfaceController.setRootTemplate(makeMapTemplate(), animated: true, completion: nil)
+}
+```
+
+The plain `didConnect interfaceController:` form (no window) is what every non-navigation
+category implements:
 
 ```swift
 import CarPlay
@@ -227,8 +248,8 @@ interfaceController?.dismissTemplate(animated: true) { success, error in
 | Template | Description | Root Template |
 |----------|-------------|---------------|
 | `CPTabBarTemplate` | Container with tab navigation | Yes |
-| `CPListTemplate` | Scrollable list of items | Yes |
-| `CPGridTemplate` | Grid of buttons (max 8 visible) | Yes |
+| `CPListTemplate` | Scrollable list of items (query `maximumItemCount` / `maximumSectionCount` at runtime — limits vary by vehicle) | Yes |
+| `CPGridTemplate` | Grid of buttons (max 8 visible; >4 splits into two rows) | Yes |
 | `CPMapTemplate` | Navigation map with overlays | Yes (Navigation only) |
 | `CPNowPlayingTemplate` | Audio playback controls | No |
 | `CPPointOfInterestTemplate` | Map with selectable POIs (max 12) | No |
