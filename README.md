@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`81 skills · 4 agents · 3 hooks · 11 iOS reference guides`
+`82 skills · 4 agents · 3 hooks · 11 iOS reference guides`
 
 ---
 
@@ -35,7 +35,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 81 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 82 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -77,7 +77,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 81 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 82 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -198,6 +198,7 @@ These trigger on framework and workflow keywords while you build. Each bundles a
 | `privacy-manifest` | PrivacyInfo.xcprivacy, required-reason API, App Store privacy rejection |
 | `oslog-logging` | OSLog/Logger, structured logging, signposts, MetricKit observability |
 | `universal-links` | universal links, associated domains, apple-app-site-association, deep linking |
+| `avkit-videoplayer` | video playback, VideoPlayer, AVPlayer, HLS streaming, Picture in Picture |
 
 ### Meta
 

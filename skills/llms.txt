@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 81 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 82 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -103,6 +103,7 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [privacy-manifest](privacy-manifest/SKILL.md): PrivacyInfo.xcprivacy + required-reason APIs — the ship-blocking App Store requirement, reason codes, third-party SDK manifests.
 - [oslog-logging](oslog-logging/SKILL.md): Structured logging + observability — Logger/OSLog levels and privacy redaction, OSSignposter intervals, MetricKit payloads.
 - [universal-links](universal-links/SKILL.md): Universal links + deep linking — associated domains, the AASA file + hosting rules, onOpenURL / NSUserActivity handling.
+- [avkit-videoplayer](avkit-videoplayer/SKILL.md): Video playback — SwiftUI VideoPlayer, AVPlayer/AVPlayerViewController, HLS streaming, async asset loading, Picture-in-Picture, audio session.
 
 ## Meta
 
