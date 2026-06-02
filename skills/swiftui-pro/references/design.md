@@ -23,6 +23,14 @@ Prefer to place standard fonts, sizes, colors, stack spacing, padding, rounding,
 - When using `RoundedRectangle`, the default rounding style is `.continuous` – there is no need to specify it explicitly.
 
 
+## Liquid Glass (iOS 26+)
+
+- Follow the 3 Cs: **Content first** (glass frames and elevates content, never competes with it), **Concentric** (nested elements share a center point with proportionally smaller corner radii), **Cohesive** (UI elements read as one unified system).
+- Align corner radii with the device's hardware corners; prefer `ContainerRelativeShape` so nested containers inherit proportional rounding automatically.
+- System tab bars adopt Liquid Glass automatically — avoid custom tab bars that break the effect. Use `.tabViewBottomAccessory` for content that floats above the tab bar.
+- Avoid glass-on-glass layering, colored navigation bars, "ghost glass" (glass with no clear purpose), and opaque backgrounds that fight the translucency.
+
+
 ## Ensuring designs work for everyone
 
 - Use `bold()` instead of `fontWeight(.bold)`, because using `bold()` allows the system to choose the correct weight for the current context.

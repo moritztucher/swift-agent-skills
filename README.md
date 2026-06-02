@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`55 skills · 4 agents · 3 hooks · 35 iOS reference guides`
+`55 skills · 4 agents · 3 hooks · 32 iOS reference guides`
 
 ---
 
@@ -206,9 +206,8 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 
 ---
 
-35 reference guides under `docs/ios/`, organized by domain. Many frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`); these remain as on-demand reference:
+32 reference guides under `docs/ios/`, organized by domain. Many frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
 
-- **swiftui/** — guidelines, performance, badge
 - **appkit/** — AppKit guide, AppKit Liquid Glass
 - **data/** — RealmSwift
 - **commerce/** — PassKit, Firebase

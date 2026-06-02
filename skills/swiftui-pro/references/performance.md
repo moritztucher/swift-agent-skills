@@ -13,6 +13,52 @@
 - Prefer using `task()` over `onAppear()` when doing async work, because it will be cancelled automatically when the view disappears.
 - Avoid storing escaping `@ViewBuilder` closures on views when possible; store built view results instead.
 
+
+## Why decomposition is free
+
+- Breaking up views has no inherent performance cost: views are structs, stack-allocated, and merely describe structure rather than manage rendered content.
+- Smaller views with minimal data dependencies let SwiftUI make more targeted update decisions. A view should depend only on the data it actually reads.
+
+
+## Fine-grained updates with @Observable
+
+- Prefer `@Observable` over `ObservableObject`: with `ObservableObject`, any `@Published` change re-evaluates the entire body; `@Observable` only re-evaluates views that *read* the specific changed property.
+- Property-level tracking means reading `book.title` creates a dependency on `title` alone — changes to an unread `book.isAvailable` won't trigger an update.
+- When migrating off `ObservableObject`, use `@State`, not `@StateObject`. Note `@State` initializers run on every rebuild (SwiftUI preserves the original value), so avoid side effects in the stored object's `init`.
+
+
+## Making views easy to diff
+
+- The SwiftUI update sequence is: produce a new view value → update dynamic properties → decide if `body` needs re-evaluating (compare old vs new value) → run `body` only if needed. The comparison step is where optimization pays off — easy-to-diff values let SwiftUI skip `body`.
+- Avoid passing closures to subviews: closures are neither equatable nor reference-comparable, so SwiftUI assumes they always changed and updates unnecessarily. Pass data and let the child handle the action, use `@Binding`/`Environment`, or wrap actions in an identified equatable type.
+- When refactoring away a closure isn't possible, make the view `Equatable` (implement `static func ==` with meaningful equality) and apply `.equatable()`. Recent SwiftUI often detects `Equatable` automatically, but `.equatable()` makes the behavior explicit.
+
+
+## Cheap view initialization
+
+- View initializers should only assign properties. Never start tasks, network/API calls, file I/O, or heavy computation in `init()`.
+- Defer such work to `task()`; use `task(id:)` to re-run (and auto-cancel the prior run) when a value such as a user ID changes.
+
+
+## Stable view identity
+
+- SwiftUI tracks views by structural identity (position in the hierarchy) and explicit identity (`.id()`).
+- `if`/`else` gives each branch a different structural identity: switching branches destroys one view and creates the other, losing its state and turning property changes into fade transitions. Reserve `if`/`else` for genuinely *different* content (loading vs loaded, logged in vs out).
+- Move conditions into modifiers via ternaries (`foregroundStyle(condition ? .red : .blue)`) to preserve identity and animate smoothly.
+- Use `.id()` intentionally to force recreation — to reset state or trigger a fresh animation.
+
+
+## Liquid Glass performance (iOS 26)
+
+- Glass effects add compositing passes. Avoid glass-on-glass layering and stacked materials (e.g. `.background(.ultraThinMaterial).background(.thinMaterial)`).
+- Prefer system glass (`.toolbarBackgroundVisibility(.automatic, for: .tabBar)`) over custom implementations; it's optimized. Use `.glassBackgroundEffect()` sparingly.
+- Don't animate glass blur radius frequently.
+
+
+## Debugging updates
+
+- Use `Self._printChanges()` in `body` to find unnecessary re-evaluations, and the Instruments SwiftUI View Body profiler for bottlenecks.
+
 Example:
 
 ```swift
