@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 71 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 73 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -93,6 +93,8 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [firebase](firebase/SKILL.md): Google's Firebase Apple SDK — FirebaseApp.configure, Auth, Firestore, Cloud Messaging, Crashlytics; SwiftPM, async/await.
 - [realmswift](realmswift/SKILL.md): Realm object database (third-party, now community-maintained) — @Persisted, write transactions, thread confinement, migrations.
 - [carplay](carplay/SKILL.md): In-car apps — CPTemplateApplicationScene, CPInterfaceController, per-category entitlement, the allowed template set.
+- [screen-time](screen-time/SKILL.md): Parental controls / app limiting — FamilyControls authorization + picker, ManagedSettings shields, DeviceActivity schedules/monitoring (one entitlement, opaque tokens).
+- [appkit](appkit/SKILL.md): macOS apps with AppKit — windows/views/responder chain, SwiftUI interop, and macOS 26 Liquid Glass (NSGlassEffectView).
 
 ## Meta
 

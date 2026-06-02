@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`71 skills · 4 agents · 3 hooks · 17 iOS reference guides`
+`73 skills · 4 agents · 3 hooks · 11 iOS reference guides`
 
 ---
 
@@ -34,7 +34,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 71 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 73 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -76,7 +76,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 71 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 73 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -187,6 +187,8 @@ These trigger on framework keywords while you build. Each bundles a lean decisio
 | `firebase` | Firebase, Firestore, Auth, Cloud Messaging, Crashlytics (Google SDK) |
 | `realmswift` | Realm, RealmSwift, `@Persisted`, object database (third-party) |
 | `carplay` | CarPlay, CPTemplate, in-car app, CPInterfaceController |
+| `screen-time` | Screen Time, parental controls, app limits, FamilyControls, ManagedSettings, DeviceActivity, shield |
+| `appkit` | AppKit, macOS app, NSWindow, NSView, NSGlassEffectView, macOS Liquid Glass |
 
 ### Meta
 
@@ -222,11 +224,9 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 
 ---
 
-17 reference guides under `docs/ios/`, organized by domain. Most frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
+11 reference guides under `docs/ios/`, organized by domain. Most frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
 
-- **appkit/** — AppKit guide, AppKit Liquid Glass
 - **system/** — Span/InlineArray
-- **screen-time/** — Screen Time API, DeviceActivity, FamilyControls, ManagedSettings
 - **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing
 - Plus the top-level `ios-guide.md`, `ios-coding-standards.md`, and `architecture-patterns.md` (loaded via `@import`)
 

@@ -14,6 +14,8 @@ The Screen Time API was introduced in iOS 15 and consists of three interconnecte
 | **ManagedSettings** | Applying restrictions and shields to apps |
 | **DeviceActivity** | Scheduling and monitoring usage events |
 
+> The `DeviceActivity` framework also ships the SwiftUI `DeviceActivityReport` view plus a `DeviceActivityReportExtension` — the privacy-preserving way to *display* usage data. Raw per-app usage numbers are only readable inside that extension (via `DeviceActivityResults`), never in the host app, and the report renders as a sandboxed view you embed but cannot read back. It's the read/visualize counterpart to the schedule/monitor APIs in `deviceactivity.md`. Confirmed current against Apple docs 2026-06-02.
+
 ### Architecture Diagram
 
 ```

@@ -2,6 +2,8 @@
 
 A guide for implementing Apple's Liquid Glass design language in macOS Tahoe (macOS 26) applications using AppKit and SwiftUI.
 
+> **Currency correction (2026-06-02):** An earlier version of this guide only described `NSVisualEffectView` and the `.glass` button bezel for AppKit glass. That was incomplete. macOS 26 (AppKit, June 2025) shipped **`NSGlassEffectView`** and **`NSGlassEffectContainerView`** — the direct AppKit analog of SwiftUI's `glassEffect(_:in:)` / `GlassEffectContainer`. Use those for *custom* glass surfaces; `NSVisualEffectView` is now the legacy/material API, kept for back-deployment and ordinary material backgrounds, NOT the way to add Liquid Glass to a custom view. The same release also added `NSBackgroundExtensionView`, `NSSplitViewItemAccessoryViewController`, `NSToolbarItem.Style` + `backgroundTintColor`, `prefersCompactControlSizeMetrics`, and `NSControl.ControlSize.extraLarge`. See the new "NSGlassEffectView (macOS 26)" section below. Source: Apple Developer docs, AppKit Updates June 2025.
+
 ---
 
 ## Table of Contents
@@ -273,7 +275,59 @@ func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Ident
 
 ---
 
+## NSGlassEffectView (macOS 26)
+
+This is the AppKit way to put Liquid Glass on a **custom** view — the analog of SwiftUI's `glassEffect()`. Use it instead of `NSVisualEffectView` when the goal is a floating glass surface (custom HUD, floating panel, custom control cluster), not a plain material background.
+
+### Basic Usage
+
+```swift
+import AppKit  // macOS 26+
+
+let glassView = NSGlassEffectView()
+glassView.contentView = myContentView   // your content is embedded in the glass
+// add glassView to the hierarchy as you would any NSView
+container.addSubview(glassView)
+```
+
+`NSGlassEffectView` embeds its `contentView` in a dynamic glass effect (lensing, light bending, automatic light/dark + accessibility adaptation). You do not set blur radius or material — the system renders the glass.
+
+### Optional Tint
+
+```swift
+glassView.tintColor = .systemBlue   // emphasis only — primary surfaces, not everything
+```
+
+Same discipline as SwiftUI: tint for emphasis on a primary surface only; never tint every glass piece.
+
+### Grouping: NSGlassEffectContainerView
+
+Glass cannot correctly sample other glass. When multiple glass views sit near each other, wrap them in a container so the system merges them into one continuous glass shape (the AppKit analog of `GlassEffectContainer`):
+
+```swift
+let container = NSGlassEffectContainerView()
+container.spacing = 20   // proximity within which descendant glass views merge
+
+// add multiple NSGlassEffectView instances as descendants;
+// the container merges those within `spacing` of each other.
+```
+
+### When NOT to reach for NSGlassEffectView
+
+Standard chrome (toolbar, sidebar, sheets, popovers, alerts, window controls) already adopts Liquid Glass automatically when you rebuild with the macOS 26 SDK — see "Automatic Adoption". Don't wrap those in `NSGlassEffectView`; only use it for genuinely custom floating surfaces the system doesn't style for you.
+
+### Related macOS 26 AppKit additions
+
+- `NSBackgroundExtensionView` — extends view content (e.g. imagery) under sidebars/inspectors so glass has rich color to lens.
+- `NSSplitViewItemAccessoryViewController` — top/bottom accessory views on split-view items.
+- `NSToolbarItem.Style` + `NSToolbarItem.backgroundTintColor` — per-item prominence and custom background tint on toolbar items.
+- `prefersCompactControlSizeMetrics` and `NSControl.ControlSize.extraLarge` — control metric options that pair with the new design.
+
+---
+
 ## NSVisualEffectView
+
+> **Status:** legacy/material API. Still valid for ordinary material backgrounds and for back-deploying below macOS 26, but it is **not** how you add Liquid Glass to a custom view on macOS 26 — use `NSGlassEffectView` (above) for that.
 
 ### Legacy Materials (Pre-macOS 26)
 
