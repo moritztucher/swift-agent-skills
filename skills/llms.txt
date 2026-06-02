@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 80 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 81 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -40,6 +40,7 @@
 - [swiftui-expert-skill](swiftui-expert-skill/SKILL.md): SwiftUI guidance incl. iOS 26 Liquid Glass and Instruments `.trace` analysis. From Antoine van der Lee.
 - [swift-concurrency](swift-concurrency/SKILL.md): Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration. From Antoine van der Lee.
 - [swift-testing](swift-testing/SKILL.md): Swift Testing framework — @Test/#expect/#require/@Suite, traits, parameterized + async tests, confirmation(), XCTest migration.
+- [reactivity](reactivity/SKILL.md): Combine vs Observation vs async/await — @Observable, @Bindable, withObservationTracking, Combine pipelines/operators, cancellable lifecycle, ObservableObject migration.
 - [swiftui-badge](swiftui-badge/SKILL.md): The `.badge()` modifier — counts/labels on tabs, list rows, toolbar buttons, prominence, toolbar workaround.
 - [swiftui-tabview](swiftui-tabview/SKILL.md): iOS 26 TabView — value-based Tab/TabSection, sidebarAdaptable, tabViewBottomAccessory, minimize behavior, .search tab, customization.
 - [swiftui-toolbar](swiftui-toolbar/SKILL.md): The toolbar system — ToolbarItem/Group, placements, ToolbarSpacer, iOS 26 shared-glass grouping + sharedBackgroundVisibility, role/background.
