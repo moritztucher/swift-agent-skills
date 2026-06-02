@@ -1018,20 +1018,34 @@ iOS 26's TextEditor provides automatic support for:
 
 ### AttributedTextFormattingDefinition (iOS 26)
 
+A formatting definition declares which attributes (and which values) are legal in an
+editable `AttributedString`, and is applied to a `TextEditor` via the
+`.attributedTextFormattingDefinition(_:)` modifier. Its `body` is built from
+`ValueConstraint`s, scoped to a concrete `AttributeScope`:
+
 ```swift
-// Define how text can be styled
-struct MyFormattingDefinition: AttributedTextFormattingDefinition {
-    // Define available formatting options
-    // This is a new protocol in iOS 26
+struct MyTextFormattingDefinition: AttributedTextFormattingDefinition {
+    var body: some AttributedTextFormattingDefinition<AttributeScopes.SwiftUIAttributes> {
+        // Only nil or .single underline is allowed; default to .single.
+        ValueConstraint(
+            for: \.underlineStyle,
+            values: [nil, .single],
+            default: .single)
+        MyAttributedTextValueConstraint()  // custom constraint, see below
+    }
 }
+
+// Apply it to the editor:
+TextEditor(text: $text)
+    .attributedTextFormattingDefinition(MyTextFormattingDefinition())
 ```
 
 ### AttributedTextValueConstraint (iOS 26)
 
-```swift
-// Constraints that automatically transform attributes into visual styling
-// Used for real-time pattern detection and auto-formatting
-```
+A constraint that transforms attribute values into the styling the editor allows —
+used for real-time pattern detection and auto-formatting. Conform a type to
+`AttributedTextValueConstraint`, scope it to an `AttributeScope`, and emit it from a
+formatting definition's `body` (as `MyAttributedTextValueConstraint()` above).
 
 ### WWDC 2025 Resources
 

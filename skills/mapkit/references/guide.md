@@ -946,7 +946,10 @@ if let mapItem = try await reverseGeocode(location: location) {
 
 ```swift
 func geocode(address: String) async throws -> [MKMapItem] {
-    let request = MKGeocodingRequest(address: address)
+    // init?(addressString:) — returns nil if the string is empty.
+    guard let request = MKGeocodingRequest(addressString: address) else {
+        return []
+    }
     return try await request.mapItems
 }
 

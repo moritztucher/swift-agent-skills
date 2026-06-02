@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`42 skills · 4 agents · 3 hooks · 48 iOS reference guides`
+`55 skills · 4 agents · 3 hooks · 35 iOS reference guides`
 
 ---
 
@@ -34,7 +34,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 42 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 55 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -76,7 +76,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 42 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 55 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -158,6 +158,19 @@ These trigger on framework keywords while you build. Each bundles a lean decisio
 | `tipkit` | TipKit, tips, feature discovery, `popoverTip` |
 | `swift-charts` | Swift Charts, chart, graph, data visualization, `BarMark` |
 | `coreml` | Core ML, on-device inference, `.mlmodel`, MLModel, Vision model |
+| `eventkit` | EventKit, calendar, reminders, EKEventStore |
+| `contacts` | Contacts, CNContactStore, address book, contact picker |
+| `photosui` | PhotosPicker, photo library, PHPickerViewController, PhotoKit |
+| `messageui` | MessageUI, in-app email/SMS, MFMailComposeViewController |
+| `mapkit` | MapKit, map, Marker, MapCameraPosition, MKLocalSearch, geocoding |
+| `safariservices` | SafariServices, SFSafariViewController, in-app browser |
+| `corehaptics` | Core Haptics, haptic feedback, CHHapticEngine, AHAP |
+| `avfoundation-audio` | audio playback/recording, AVAudioSession, AVAudioEngine, microphone |
+| `corespotlight` | Core Spotlight, search indexing, CSSearchableItem, deep link |
+| `attributed-string` | AttributedString, rich/styled text, AttributeContainer, Markdown |
+| `swiftui-webview` | WebView, WKWebView, WebPage, embed web content, JS bridge |
+| `translation` | Translation, translate text, TranslationSession, on-device translation |
+| `accessorysetupkit` | AccessorySetupKit, accessory pairing, ASAccessorySession |
 
 ### Meta
 
@@ -193,14 +206,14 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 
 ---
 
-48 reference guides under `docs/ios/`, organized by domain. (The most-used frameworks — StoreKit, RevenueCat, WidgetKit, ActivityKit, AppIntents, BackgroundTasks, SwiftData, Foundation Models, Liquid Glass, WatchConnectivity, UserNotifications, HealthKit, CloudKit, Core Location, Core Bluetooth, AuthenticationServices, LocalAuthentication, TipKit, Swift Charts, Core ML — have graduated into the **framework-integration skills** above; their deep guides now live in each skill's `references/`.)
+35 reference guides under `docs/ios/`, organized by domain. Many frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`); these remain as on-demand reference:
 
-- **swiftui/** — AttributedString, performance, webview
+- **swiftui/** — guidelines, performance, badge
 - **appkit/** — AppKit guide, AppKit Liquid Glass
-- **data/** — Core Spotlight, RealmSwift
+- **data/** — RealmSwift
 - **commerce/** — PassKit, Firebase
-- **system/** — MapKit, CarPlay, EventKit, Contacts, PhotosUI, MessageUI, SafariServices, Translation, AlarmKit, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, AVFoundation, Span/InlineArray
-- **hardware/** — WiFi Aware, AccessorySetupKit, CoreHaptics, EnergyKit
+- **system/** — CarPlay, AlarmKit, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, Span/InlineArray
+- **hardware/** — WiFi Aware, EnergyKit
 - **screen-time/** — Screen Time API, DeviceActivity, FamilyControls, ManagedSettings
 - **ai/** — Speech Analyzer, Visual Intelligence
 - **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing

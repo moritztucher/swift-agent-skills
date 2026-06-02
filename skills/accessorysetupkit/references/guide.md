@@ -144,7 +144,10 @@ class AccessoryManager {
 | `activate(on:eventHandler:)` | Activates the session on a dispatch queue |
 | `showPicker(for:completionHandler:)` | Presents the accessory picker |
 | `removeAccessory(_:completionHandler:)` | Removes an accessory and its bonds |
+| `renameAccessory(_:options:completionHandler:)` | Displays the system rename UI for an accessory |
 | `accessories` | Array of previously-selected accessories |
+
+> **HID accessories (iOS 18.4+):** AccessorySetupKit can discover Bluetooth LE HID devices (keyboards, mice) that advertise a *custom* service alongside the HID service. Add `bluetoothHID` to the picker item's `setupOptions` and point the `ASDiscoveryDescriptor` at the custom service, not the HID service itself.
 
 ### ASPickerDisplayItem
 

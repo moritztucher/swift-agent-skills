@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 42 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 55 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -64,6 +64,19 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [tipkit](tipkit/SKILL.md): In-app tips and feature discovery — Tip rules/events, TipView/popoverTip, display frequency, Tips.configure.
 - [swift-charts](swift-charts/SKILL.md): Data visualization — Chart marks, axes/scales, selection interactivity, scrolling, iOS 26 Chart3D.
 - [coreml](coreml/SKILL.md): On-device ML inference — MLModel loading, compute units, async prediction, Vision integration, stateful models.
+- [eventkit](eventkit/SKILL.md): Calendar and reminders — EKEventStore, iOS 17+ write-only/full-access split, events, recurrence, EventKitUI.
+- [contacts](contacts/SKILL.md): Address book — CNContactStore, keysToFetch, iOS 18 limited access + ContactAccessButton, picker, save requests.
+- [photosui](photosui/SKILL.md): Photo selection — SwiftUI PhotosPicker, PHPicker, PhotoKit authorization, limited library, transferable loading.
+- [messageui](messageui/SKILL.md): In-app mail/SMS — MFMailComposeViewController, MFMessageComposeViewController, capability checks, attachments.
+- [mapkit](mapkit/SKILL.md): Maps — SwiftUI Map, Marker/Annotation, camera position, MKLocalSearch, iOS 26 GeoToolbox geocoding.
+- [safariservices](safariservices/SKILL.md): In-app web browsing — SFSafariViewController, reader, vs ASWebAuthenticationSession for auth.
+- [corehaptics](corehaptics/SKILL.md): Custom haptics — CHHapticEngine, transient/continuous events, dynamic parameters, AHAP, capability checks.
+- [avfoundation-audio](avfoundation-audio/SKILL.md): Audio playback/recording — AVAudioSession, AVAudioPlayer/Recorder, AVAudioEngine, interruptions, background audio.
+- [corespotlight](corespotlight/SKILL.md): Search indexing — CSSearchableItem, CSSearchableIndex, continuation deep-linking, iOS 18.4 intelligence.
+- [attributed-string](attributed-string/SKILL.md): Rich text — AttributedString, AttributeContainer, Markdown, scopes, iOS 26 editable rich text.
+- [swiftui-webview](swiftui-webview/SKILL.md): Embedded web — iOS 26 SwiftUI WebView/WebPage, WKWebView wrapping, navigation, JS bridge.
+- [translation](translation/SKILL.md): Text translation — translationPresentation overlay, TranslationSession, language availability/download.
+- [accessorysetupkit](accessorysetupkit/SKILL.md): Privacy-preserving accessory pairing (iOS 18+) — ASAccessorySession, discovery descriptors, migration.
 
 ## Meta
 

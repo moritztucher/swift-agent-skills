@@ -249,7 +249,7 @@ struct RestrictedWebView: View {
 
 ### JavaScript Interaction (iOS 26)
 
-Execute JavaScript and retrieve results using `callJavaScript`:
+Execute JavaScript and retrieve results using `callJavaScript`. The full signature is `callJavaScript(_ functionBody: String, arguments: [String: Any] = [:], in frame: WebPage.FrameInfo? = nil, contentWorld: WKContentWorld? = nil) async throws -> Any?` — the string is a function *body*, so prefer passing values through `arguments:` over string interpolation, and `return` the value you want back:
 
 ```swift
 struct JavaScriptInteractionView: View {
@@ -896,4 +896,4 @@ struct WebContentView: View {
 
 ---
 
-**Note:** iOS 26 native WebView APIs are currently in beta. API details may change before the final release expected in Fall 2025.
+**Note:** The native SwiftUI `WebView`/`WebPage` APIs ship in iOS 26 (released Fall 2025). They are unavailable below iOS 26 — use the `UIViewRepresentable` + `WKWebView` path for back-deployment. Signatures verified against Apple's WebKit documentation on 2026-06-02.

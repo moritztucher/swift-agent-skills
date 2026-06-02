@@ -1058,7 +1058,12 @@ class ContactManager {
 
 ### Contact Access Picker (iOS 18+)
 
-Use the `contactAccessPicker` modifier to let users manage which contacts your app can access:
+Use the `contactAccessPicker` modifier to let users manage which contacts your app can access. There are two completion-handler shapes — pick whichever the SDK you target exposes:
+
+- Identifier-based: `completionHandler: ([String]) -> Void` — receives the identifiers of newly granted contacts. Refetch them with `predicateForContacts(withIdentifiers:)`.
+- Result-based: `completionHandler: (Result) -> Void` — switch over `.addedContacts(_)` / `.cancelled` (add `@unknown default`).
+
+Example using the identifier-based handler:
 
 ```swift
 struct SettingsView: View {
