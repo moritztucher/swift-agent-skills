@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 32 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 42 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -54,6 +54,16 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [activitykit](activitykit/SKILL.md): Live Activities and Dynamic Island — ActivityAttributes, push-token/push-to-start updates, dynamic island regions.
 - [backgroundtasks](backgroundtasks/SKILL.md): Deferred background work — BGTaskScheduler, app-refresh/processing/continued tasks, scheduling constraints.
 - [watchconnectivity](watchconnectivity/SKILL.md): iPhone↔Apple Watch sync — WCSession, messages, application context, file/userInfo transfers, activation lifecycle.
+- [usernotifications](usernotifications/SKILL.md): Local and remote notifications — authorization, content, triggers, categories/actions, APNs registration, delegate handling.
+- [healthkit](healthkit/SKILL.md): Health data — HKHealthStore authorization, sample/statistics/anchored queries, workouts, background delivery.
+- [cloudkit](cloudkit/SKILL.md): iCloud storage and sync — CKContainer/database scopes, CKRecord, queries, subscriptions, CKShare, CKSyncEngine.
+- [corelocation](corelocation/SKILL.md): User location — CLLocationManager authorization, CLLocationUpdate.liveUpdates, CLMonitor geofencing/beacons.
+- [corebluetooth](corebluetooth/SKILL.md): BLE — CBCentralManager scan/connect, services/characteristics, notify/write, peripheral role, background modes.
+- [authenticationservices](authenticationservices/SKILL.md): Sign in with Apple, passkeys, and OAuth via ASWebAuthenticationSession — credential state, associated domains.
+- [localauthentication](localauthentication/SKILL.md): Biometric auth — LAContext, Face ID/Touch ID, policy evaluation, Keychain access-control binding.
+- [tipkit](tipkit/SKILL.md): In-app tips and feature discovery — Tip rules/events, TipView/popoverTip, display frequency, Tips.configure.
+- [swift-charts](swift-charts/SKILL.md): Data visualization — Chart marks, axes/scales, selection interactivity, scrolling, iOS 26 Chart3D.
+- [coreml](coreml/SKILL.md): On-device ML inference — MLModel loading, compute units, async prediction, Vision integration, stateful models.
 
 ## Meta
 

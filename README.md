@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`32 skills · 4 agents · 3 hooks · 58 iOS reference guides`
+`42 skills · 4 agents · 3 hooks · 48 iOS reference guides`
 
 ---
 
@@ -34,7 +34,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 32 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the 70 framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 42 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -76,7 +76,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 32 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 42 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -148,6 +148,16 @@ These trigger on framework keywords while you build. Each bundles a lean decisio
 | `activitykit` | Live Activity, Dynamic Island, ActivityKit |
 | `backgroundtasks` | background refresh, BGTask, background processing |
 | `watchconnectivity` | Apple Watch, watchOS, WCSession, paired device |
+| `usernotifications` | push/local notification, UNUserNotificationCenter, APNs, badge |
+| `healthkit` | HealthKit, health data, workout, steps, heart rate |
+| `cloudkit` | CloudKit, CKRecord, iCloud sync, private database, CKShare |
+| `corelocation` | Core Location, CLLocationManager, GPS, geofencing, location permission |
+| `corebluetooth` | Core Bluetooth, BLE, CBCentralManager, peripheral, characteristic |
+| `authenticationservices` | Sign in with Apple, passkeys, ASWebAuthenticationSession, OAuth |
+| `localauthentication` | Face ID, Touch ID, biometrics, LAContext, app lock |
+| `tipkit` | TipKit, tips, feature discovery, `popoverTip` |
+| `swift-charts` | Swift Charts, chart, graph, data visualization, `BarMark` |
+| `coreml` | Core ML, on-device inference, `.mlmodel`, MLModel, Vision model |
 
 ### Meta
 
@@ -183,16 +193,16 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 
 ---
 
-59 reference guides under `docs/ios/`, organized by domain. (The most-used frameworks — StoreKit, RevenueCat, WidgetKit, ActivityKit, AppIntents, BackgroundTasks, SwiftData, Foundation Models, Liquid Glass, WatchConnectivity — have graduated into the **framework-integration skills** above; their deep guides now live in each skill's `references/`.)
+48 reference guides under `docs/ios/`, organized by domain. (The most-used frameworks — StoreKit, RevenueCat, WidgetKit, ActivityKit, AppIntents, BackgroundTasks, SwiftData, Foundation Models, Liquid Glass, WatchConnectivity, UserNotifications, HealthKit, CloudKit, Core Location, Core Bluetooth, AuthenticationServices, LocalAuthentication, TipKit, Swift Charts, Core ML — have graduated into the **framework-integration skills** above; their deep guides now live in each skill's `references/`.)
 
-- **swiftui/** — AttributedString, TipKit, Charts, performance, webview
+- **swiftui/** — AttributedString, performance, webview
 - **appkit/** — AppKit guide, AppKit Liquid Glass
-- **data/** — Core Spotlight, CloudKit, RealmSwift
+- **data/** — Core Spotlight, RealmSwift
 - **commerce/** — PassKit, Firebase
-- **system/** — UserNotifications, HealthKit, MapKit, CarPlay, AuthenticationServices, EventKit, Contacts, PhotosUI, CoreLocation, MessageUI, SafariServices, Translation, AlarmKit, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, AVFoundation, Span/InlineArray, LocalAuthentication
-- **hardware/** — CoreBluetooth, WiFi Aware, AccessorySetupKit, CoreHaptics, EnergyKit
+- **system/** — MapKit, CarPlay, EventKit, Contacts, PhotosUI, MessageUI, SafariServices, Translation, AlarmKit, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, AVFoundation, Span/InlineArray
+- **hardware/** — WiFi Aware, AccessorySetupKit, CoreHaptics, EnergyKit
 - **screen-time/** — Screen Time API, DeviceActivity, FamilyControls, ManagedSettings
-- **ai/** — CoreML, Speech Analyzer, Visual Intelligence
+- **ai/** — Speech Analyzer, Visual Intelligence
 - **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing
 
 Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@import`) and `ios-coding-standards.md` / `architecture-patterns.md` reference docs.

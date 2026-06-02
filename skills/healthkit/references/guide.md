@@ -265,7 +265,10 @@ extension HealthManager {
         healthStore.authorizationStatus(for: type)
     }
 
-    /// Check if authorization needs to be requested
+    /// Check if authorization needs to be requested.
+    /// Use `getRequestStatusForAuthorization` to decide whether to show the
+    /// permission sheet again — `authorizationStatus(for:)` only reflects
+    /// write/share status, never read status (read is privacy-opaque).
     func shouldRequestAuthorization() async -> Bool {
         do {
             let status = try await healthStore.statusForAuthorizationRequest(
@@ -878,9 +881,11 @@ extension HealthManager {
 ```
 
 **Note:** Background delivery requires:
-1. HealthKit background capability enabled
+1. HealthKit background capability enabled (`com.apple.developer.healthkit.background-delivery` entitlement) — without it, `enableBackgroundDelivery` fails with `HKError.Code.errorAuthorizationDenied`
 2. Observer query registered for the type
 3. User authorization granted
+
+`enableBackgroundDelivery(for:)` accepts `HKCharacteristicType`, `HKQuantityType`, `HKCategoryType`, or `HKWorkoutType`. **`HKCorrelationType` is not supported** for background delivery. Some types cap at `HKUpdateFrequency.hourly` regardless of what you request (e.g. `stepCount` on iOS is hourly max); the system enforces this transparently.
 
 ---
 
@@ -1346,8 +1351,9 @@ struct HealthApp: App {
 | Background Delivery | iOS 8.0 |
 | async/await APIs | iOS 15.0 |
 | Vision prescriptions | iOS 16.0 |
-| State of Mind | iOS 17.0 |
 | Sleep schedule | iOS 17.0 |
+| State of Mind (`HKStateOfMind`) | iOS 18.0 |
+| Mental-health assessments (`HKPHQ9Assessment`, `HKGAD7Assessment`) | iOS 18.0 |
 
 ---
 

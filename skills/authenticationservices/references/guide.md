@@ -848,6 +848,62 @@ struct PasskeySignInView: View {
 
 ---
 
+## ASWebAuthenticationSession (OAuth / OpenID Connect)
+
+For third-party OAuth/OIDC providers (Google, GitHub, Auth0, etc.), use `ASWebAuthenticationSession` — **not** `SFSafariViewController` or an in-app `WKWebView`. It runs in a system browser context that shares the user's logged-in cookies (unless ephemeral), shows a consent sheet, and returns control via your callback scheme. WebViews break federated login, can't autofill saved passwords/passkeys, and are routinely rejected by identity providers.
+
+### UIKit
+
+```swift
+import AuthenticationServices
+
+final class OAuthCoordinator: NSObject, ASWebAuthenticationPresentationContextProviding {
+    private var session: ASWebAuthenticationSession?
+
+    func authenticate(authURL: URL, callbackScheme: String) async throws -> URL {
+        try await withCheckedThrowingContinuation { continuation in
+            let session = ASWebAuthenticationSession(
+                url: authURL,
+                callbackURLScheme: callbackScheme   // e.g. "com.example.myapp"
+            ) { callbackURL, error in
+                if let error { continuation.resume(throwing: error); return }
+                guard let callbackURL else {
+                    continuation.resume(throwing: ASWebAuthenticationSessionError(.canceledLogin))
+                    return
+                }
+                continuation.resume(returning: callbackURL)   // contains ?code=... or #access_token=...
+            }
+            session.presentationContextProvider = self
+            session.prefersEphemeralWebBrowserSession = false  // true = no shared cookies, always fresh login
+            self.session = session
+            session.start()
+        }
+    }
+
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+            .first ?? ASPresentationAnchor()
+    }
+}
+```
+
+### SwiftUI
+
+```swift
+@Environment(\.webAuthenticationSession) private var webAuthenticationSession
+
+let callbackURL = try await webAuthenticationSession.authenticate(
+    using: authURL,
+    callbackURLScheme: "com.example.myapp",
+    preferredBrowserSession: .ephemeral   // omit for shared-cookie sessions
+)
+```
+
+The callback URL carries the OAuth `code` (PKCE flow) or token fragment. Parse it, then exchange the code on your server (never embed the client secret in the app). Generate a PKCE `code_verifier`/`code_challenge` per session and a `state` parameter to prevent CSRF/replay.
+
+---
+
 ## App Launch Credential Check
 
 Check credential state at app launch to detect revoked credentials:
@@ -1224,5 +1280,5 @@ func checkCredentialState(userID: String) async -> CredentialState {
 
 ---
 
-*Last updated: February 2026*
-*iOS versions: 13.0+ (Sign in with Apple), 16.0+ (Passkeys)*
+*Last updated: June 2026 (currency-checked against Apple AuthenticationServices docs)*
+*iOS versions: 13.0+ (Sign in with Apple), 16.0+ (Passkeys), 12.0+ (ASWebAuthenticationSession)*

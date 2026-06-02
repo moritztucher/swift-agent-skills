@@ -1658,11 +1658,9 @@ enum NotificationPriority {
 ```swift
 // Use thread identifiers to group related notifications
 content.threadIdentifier = "project-\(projectId)"
-
-// Use summary text for grouped notifications
-content.summaryArgument = senderName
-content.summaryArgumentCount = messageCount
 ```
+
+> **Deprecated:** `content.summaryArgument` and `content.summaryArgumentCount` were deprecated in iOS 15 and have no effect on current OS versions — do not use them. Grouping is driven entirely by `threadIdentifier`; the system composes the summary text automatically.
 
 ### 5. Clean Up Old Notifications
 

@@ -800,8 +800,10 @@ class SyncManager: CKSyncEngineDelegate {
 ```swift
 extension SyncManager {
     // MARK: - Handle Events from Server
+    // Note: as of the current SDK, CKSyncEngineDelegate's handleEvent and
+    // nextRecordZoneChangeBatch are `async`. Mark them async and await inside.
 
-    func handleEvent(_ event: CKSyncEngine.Event, syncEngine: CKSyncEngine) {
+    func handleEvent(_ event: CKSyncEngine.Event, syncEngine: CKSyncEngine) async {
         switch event {
         case .stateUpdate(let stateUpdate):
             saveSyncState(stateUpdate.stateSerialization)
@@ -899,10 +901,12 @@ extension SyncManager {
     func nextRecordZoneChangeBatch(
         _ context: CKSyncEngine.SendChangesContext,
         syncEngine: CKSyncEngine
-    ) -> CKSyncEngine.RecordZoneChangeBatch? {
-        let pendingChanges = syncEngine.state.pendingRecordZoneChanges
+    ) async -> CKSyncEngine.RecordZoneChangeBatch? {
+        // Scope-filter pending changes so you only send what this batch asked for.
+        let scope = context.options.scope
+        let pendingChanges = syncEngine.state.pendingRecordZoneChanges.filter { scope.contains($0) }
 
-        let batch = CKSyncEngine.RecordZoneChangeBatch(pendingChanges: pendingChanges) { recordID in
+        let batch = await CKSyncEngine.RecordZoneChangeBatch(pendingChanges: pendingChanges) { recordID in
             // Return the CKRecord for the given ID
             if let note = notes[recordID.recordName] {
                 return note.toRecord()

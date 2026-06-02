@@ -1969,6 +1969,25 @@ let (batteryData, firmwareData, serialData) = try await (battery, firmware, seri
 let maxWriteLength = peripheral.maximumWriteValueLength(for: .withResponse)
 ```
 
+> **Note:** A payload larger than the negotiated ATT MTU is silently truncated for `.withoutResponse` writes. Check `peripheral.maximumWriteValueLength(for:)` before sending and chunk accordingly.
+
+3. **Respect Flow Control for Write-Without-Response**
+
+```swift
+// .withoutResponse writes are dropped if the queue is full. Gate on
+// canSendWriteWithoutResponse; resume when peripheralIsReady(toSendWriteWithoutResponse:) fires.
+guard peripheral.canSendWriteWithoutResponse else {
+    // buffer and wait for the delegate callback
+    return
+}
+peripheral.writeValue(chunk, for: characteristic, type: .withoutResponse)
+
+// CBPeripheralDelegate
+func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
+    // flush buffered chunks here
+}
+```
+
 3. **Profile and Monitor**
 
 ```swift

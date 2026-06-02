@@ -309,9 +309,12 @@ Configure prediction behavior:
 ```swift
 let options = MLPredictionOptions()
 
-// Use CPU only for this prediction (useful for background tasks)
-options.usesCPUOnly = true
+// outputBackings: reuse client-allocated buffers for output features
+// options.outputBackings = ["output": myPixelBuffer]
 ```
+
+> **Deprecated:** `MLPredictionOptions.usesCPUOnly` is deprecated. To pin compute units, set
+> `MLModelConfiguration.computeUnits = .cpuOnly` when loading the model instead of per-prediction.
 
 ---
 
@@ -832,6 +835,10 @@ let model = try await MLModel.load(contentsOf: compiledURL)
 try FileManager.default.removeItem(at: compiledURL)
 ```
 
+> **Deprecated:** `MLModelCollection` (the old "deploy models from a cloud collection" API) is
+> deprecated — use **Background Assets** or a plain `URLSession` download, then `compileModel(at:)` +
+> `load(contentsOf:)` as above. Don't reach for `MLModelCollection.beginAccessingModelCollection`.
+
 ### Quantization Benefits
 
 Quantized models (8-bit instead of 32-bit) offer:
@@ -1231,6 +1238,46 @@ func validateModel(_ model: MLModel) -> Bool {
     // (handled by MLModel loading, but good to verify)
 
     return true
+}
+```
+
+---
+
+## Stateful Models (iOS 18+)
+
+Models that carry state between predictions (e.g. KV-cache in transformer decoders, recurrent
+generators) avoid re-passing the full history each call. Core ML manages the state buffers for you.
+
+```swift
+// Create a state object once, reuse it across the generation loop.
+let state = model.makeState()
+
+for step in 0..<maxTokens {
+    let output = try model.prediction(from: input, using: state, options: options)
+    // ...feed output back as next input; `state` accumulates the KV-cache.
+}
+```
+
+Do **not** issue a second prediction that shares the same `state` while the first is in-flight —
+behavior is undefined. One `MLState` per concurrent generation stream.
+
+---
+
+## Model Encryption (iOS 13+)
+
+Protect a bundled model's weights at rest. You generate an encryption key in Xcode (Core ML model
+editor → encrypt), and the `.mlmodelc` ships encrypted. At runtime nothing changes in your call
+site — the generated class's `load(configuration:completionHandler:)` (or
+`MLModel.load(contentsOf:configuration:)`) decrypts transparently using the key, which is fetched
+once from Apple's servers and cached. Handle `MLModelError.Code.modelDecryption` for the
+offline-first-launch failure case.
+
+```swift
+MyModel.load { result in
+    switch result {
+    case .success(let model): // use model
+    case .failure(let error): // e.g. modelDecryption when key can't be fetched
+    }
 }
 ```
 

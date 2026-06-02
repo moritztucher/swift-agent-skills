@@ -430,7 +430,59 @@ struct LocationRequestView: View {
 
 ## Continuous Location Updates
 
-### AsyncStream for Location Updates
+### CLLocationUpdate.liveUpdates() (iOS 17+, Preferred)
+
+The modern, async-native way to receive continuous updates. No delegate, no manual `AsyncStream` bridging, no `startUpdatingLocation()`/`stopUpdatingLocation()` bookkeeping — the stream starts when you iterate and stops when the `Task` is cancelled or the loop exits. Prefer this over the delegate + `AsyncStream` pattern below for all new code.
+
+```swift
+import CoreLocation
+
+@Observable
+final class LiveLocationModel {
+    var lastLocation: CLLocation?
+    var isStationary = false
+    var errorMessage: String?
+
+    /// Iterate the system-provided async stream. Drive this from a `Task`
+    /// (e.g. SwiftUI `.task {}`) so it cancels automatically.
+    func track() async {
+        do {
+            for try await update in CLLocationUpdate.liveUpdates() {
+                if update.authorizationDenied {
+                    errorMessage = "Location access denied"
+                    return
+                }
+                isStationary = update.stationary
+                if let location = update.location {
+                    lastLocation = location
+                }
+            }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
+// Usage in SwiftUI — cancellation is handled by `.task`.
+struct LiveLocationView: View {
+    @State private var model = LiveLocationModel()
+
+    var body: some View {
+        VStack {
+            if let location = model.lastLocation {
+                Text("\(location.coordinate.latitude), \(location.coordinate.longitude)")
+            }
+        }
+        .task { await model.track() }   // stops automatically when the view disappears
+    }
+}
+```
+
+`CLLocationUpdate.liveUpdates(_:)` also accepts a configuration (`.default`, `.automotiveNavigation`, `.fitness`, `.airborne`, `.otherNavigation`) to tune accuracy/power. Each `CLLocationUpdate` exposes `location`, `authorizationDenied`, `authorizationDeniedGlobally`, `authorizationRequestInProgress`, `insufficientlyInUse`, and `stationary` — branch on these rather than spinning a polling loop.
+
+### AsyncStream for Location Updates (Legacy delegate bridge)
+
+Use this only when targeting iOS < 17 or maintaining existing delegate-based code. For new iOS 17+ code, prefer `CLLocationUpdate.liveUpdates()` above.
 
 ```swift
 @Observable
@@ -681,7 +733,38 @@ func geocode(address: String) async throws -> [MKMapItem] {
 
 ## Region Monitoring (Geofencing)
 
-### Setting Up Geofences
+### CLMonitor (iOS 17+, Preferred)
+
+`CLMonitor` is an `actor` that supersedes the delegate-based `CLCircularRegion`/`CLBeaconRegion` + `startMonitoring(for:)` APIs. Conditions (`CLMonitor.CircularGeographicCondition`, `CLMonitor.BeaconIdentityCondition`) are added by identifier and events arrive through an async sequence (`monitor.events`). The monitor and its conditions persist across launches, so re-create the named monitor on launch and resume iterating its events. Prefer this for all new geofencing/beacon code.
+
+```swift
+import CoreLocation
+
+func startGeofence() async throws {
+    // A named monitor — its conditions survive app relaunch.
+    let monitor = await CLMonitor("places_monitor")
+
+    let center = CLLocationCoordinate2D(latitude: 37.3349, longitude: -122.0090)
+    let condition = CLMonitor.CircularGeographicCondition(center: center, radius: 200)
+    await monitor.add(condition, identifier: "apple_park")
+
+    // Resume on every launch by iterating the persisted events.
+    for try await event in await monitor.events {
+        switch event.state {
+        case .satisfied:   handleEntry(event.identifier)
+        case .unsatisfied: handleExit(event.identifier)
+        case .unknown:     break
+        @unknown default:  break
+        }
+    }
+}
+```
+
+`monitor.streamDiagnosticProperties()` / `event` diagnostics explain *why* events aren't arriving (authorization, accuracy, connectivity) — reach for it before assuming a logic bug. The 20-region limit and accuracy caveats below still apply.
+
+### Setting Up Geofences (Legacy delegate API)
+
+Use this only for iOS < 17 or existing code. `CLCircularRegion` + `startMonitoring(for:)` is the older path; new code should use `CLMonitor` above.
 
 ```swift
 @Observable
