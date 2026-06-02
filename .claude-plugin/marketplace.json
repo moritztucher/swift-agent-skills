@@ -1,0 +1,27 @@
+{
+  "name": "claude-code-ios-setup",
+  "owner": {
+    "name": "Moritz Tucher"
+  },
+  "description": "An opinionated, UI-first iOS development setup for Claude Code — lifecycle skills, advisor agents, and SwiftUI/Swift craft specialists.",
+  "plugins": [
+    {
+      "name": "ios-setup",
+      "source": "./",
+      "description": "Skills and agents for shipping production SwiftUI apps with Claude Code — a UI-first lifecycle (Setup → Plan → Build → Verify → Ship) plus SwiftUI/Swift craft specialists.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Moritz Tucher"
+      },
+      "homepage": "https://github.com/moritztucher/claude-code-ios-setup",
+      "license": "MIT",
+      "keywords": [
+        "ios",
+        "swiftui",
+        "swift",
+        "xcode",
+        "app-store"
+      ]
+    }
+  ]
+}

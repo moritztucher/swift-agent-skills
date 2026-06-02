@@ -1,0 +1,46 @@
+# Claude Code — iOS Setup
+
+> A curated, UI-first iOS development setup for Claude Code. 22 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+
+## Setup
+
+- [ios](ios/SKILL.md): Orchestrator — detects project state, shows a status map, routes to the next step.
+- [ios-load](ios-load/SKILL.md): Load the iOS guide into an ad-hoc chat that has no project `CLAUDE.md`.
+- [ios-init](ios-init/SKILL.md): Initialize a project from a few sentences — generates the doc set, `.gitignore`, `LICENSE`, `README`. Auto-detects new / fresh-scaffold / existing.
+
+## Plan
+
+- [ios-brief](ios-brief/SKILL.md): Build and maintain the living project brief — features split into UI + Logic/Backend, MVP vs Later. Draft-first.
+- [ios-design-brief](ios-design-brief/SKILL.md): Establish the visual design system — looks at the running app, proposes a direction, writes implementable SwiftUI specs.
+
+## Build
+
+- [ios-design-elevate](ios-design-elevate/SKILL.md): Apply the design system view by view, verifying each screen visually (build → screenshot → compare → iterate); never touches business logic.
+- [ios-build](ios-build/SKILL.md): Build the Xcode project and report results.
+- [ios-test](ios-test/SKILL.md): Run unit and UI tests.
+- [ios-automate](ios-automate/SKILL.md): iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video.
+
+## Verify
+
+- [ios-review](ios-review/SKILL.md): Thorough code review on changes or specified files.
+- [ios-audit](ios-audit/SKILL.md): Holistic project audit through PM, UX, UI, ARCH lenses.
+- [ios-design-audit](ios-design-audit/SKILL.md): Visual craft audit — screenshots the running app and judges real screens, with severity-rated findings and elevation suggestions.
+- [ios-onboarding-audit](ios-onboarding-audit/SKILL.md): Walk the real onboarding flow in the simulator (or design one) — activation psychology, permission timing, measured time-to-value.
+
+## Ship
+
+- [ios-commit](ios-commit/SKILL.md): Create a well-formed commit following project conventions.
+- [pr-to-develop](pr-to-develop/SKILL.md): Create a PR from the current branch into develop with a structured template.
+- [pr-to-main](pr-to-main/SKILL.md): Create a release PR from develop into main.
+- [ios-release-notes](ios-release-notes/SKILL.md): Summarize git commits between two version tags into a paste-ready App Store "What's New".
+
+## SwiftUI + Swift craft (model-invoked)
+
+- [swiftui-pro](swiftui-pro/SKILL.md): Comprehensive SwiftUI code review — modern APIs, performance, accessibility. From Paul Hudson (MIT).
+- [swiftui-expert-skill](swiftui-expert-skill/SKILL.md): SwiftUI guidance incl. iOS 26 Liquid Glass and Instruments `.trace` analysis. From Antoine van der Lee.
+- [swift-concurrency](swift-concurrency/SKILL.md): Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration. From Antoine van der Lee.
+
+## Meta
+
+- [ios-agents](ios-agents/SKILL.md): List all available subagents.
+- [compact-summary](compact-summary/SKILL.md): Compress the current session into a reusable context primer.

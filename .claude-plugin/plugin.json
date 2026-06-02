@@ -1,0 +1,20 @@
+{
+  "name": "ios-setup",
+  "description": "Skills and agents for shipping production SwiftUI apps with Claude Code — a UI-first lifecycle (Setup → Plan → Build → Verify → Ship) plus SwiftUI/Swift craft specialists.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Moritz Tucher"
+  },
+  "homepage": "https://github.com/moritztucher/claude-code-ios-setup",
+  "repository": "https://github.com/moritztucher/claude-code-ios-setup",
+  "license": "MIT",
+  "keywords": [
+    "ios",
+    "swiftui",
+    "swift",
+    "xcode",
+    "app-store",
+    "mvvm",
+    "ios26"
+  ]
+}
