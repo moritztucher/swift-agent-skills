@@ -1,21 +1,24 @@
-# Claude Code — iOS Setup
+# Swift Agent Skills
 
-A curated Claude Code setup for iOS developers — skills, agents, slash commands, and configuration for shipping SwiftUI apps faster.
+A curated collection of agent skills for shipping **SwiftUI** apps — skills, agents, slash commands, and configuration for Apple-platform development. **SwiftUI-first, not UIKit.** Packaged for Claude Code.
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`22 skills · 4 agents · 3 hooks · 70 iOS reference guides`
+`87 skills · 4 agents · 3 hooks · 11 iOS reference guides`
 
 ---
 
 ## What this is
 
-A working, opinionated `~/.claude/` setup focused on shipping production iOS apps with Claude Code. It encodes a light, **UI-first** workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation. Plan with a living brief, build the flow before the logic, ship.
+A working, opinionated `~/.claude/` setup focused on shipping production **SwiftUI** apps with Claude Code. It's SwiftUI-first throughout — views are SwiftUI, state is `@Observable`, navigation is `NavigationStack`; UIKit/AppKit appear only where you genuinely must bridge (a few system pickers, AppKit for macOS targets). It encodes a light, **UI-first** workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation. Plan with a living brief, build the flow before the logic, ship.
+
+It's built around the mistakes Claude makes on iOS by default — and corrects them. It won't nest a `NavigationStack` inside another `NavigationStack` and break your back button. It reaches for `@Observable` instead of `@Published` / `ObservableObject`, because it's 2026. It won't ship a tappable control without an `.accessibilityLabel`. The taste is baked into the skills, not bolted on after.
 
 It's the configuration I use day-to-day. The skills compose into one pipeline (`/ios-init` → `/ios-brief` → build features UI-first → `/ios-review` → `/ios-commit` → `/pr-to-develop`), but each one stands on its own. Not sure what to run next? Type **`/ios`** — the orchestrator detects where your project is and routes you to the right step. Drop into any iOS project and they pick up the local `CLAUDE.md` for context.
 
 ## What this isn't
 
+- Not a UIKit toolkit — it's **SwiftUI-first**; UIKit only shows up where you must bridge (MessageUI, PhotosPicker, etc.), and AppKit only for macOS
 - Not a fork of every public Claude Code skill — it's curated, not comprehensive
 - Not a framework — it's a config snapshot you copy into `~/.claude/`
 - Not a substitute for thinking about your architecture — the skills surface decisions, you still make them
@@ -25,10 +28,25 @@ It's the configuration I use day-to-day. The skills compose into one pipeline (`
 
 ## Installation
 
+Fastest path — install the skills + agents as a Claude Code plugin:
+
+```bash
+/plugin marketplace add moritztucher/swift-agent-skills
+/plugin install swift-skills@swift-agent-skills
+```
+
+These skills follow the open [Agent Skills](https://agentskills.io) format (a `SKILL.md` per skill + `references/`), so they also install into any other skills-compatible agent — Cursor, Codex, Gemini CLI, Kiro, and [others](https://agentskills.io/clients) — via the community CLI:
+
+```bash
+npx skills add moritztucher/swift-agent-skills
+```
+
+The Claude plugin path gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+
 ```bash
 # 1. Clone into a working directory
-git clone https://github.com/moritztucher/claude-code-ios-setup.git
-cd claude-code-ios-setup
+git clone https://github.com/moritztucher/swift-agent-skills.git
+cd swift-agent-skills
 
 # 2. Back up anything you already have
 [ -d ~/.claude/skills ] && mv ~/.claude/skills ~/.claude/skills.backup
@@ -65,7 +83,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 26 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 87 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -117,9 +135,81 @@ These trigger automatically while you read, write, or review SwiftUI and concurr
 
 | Skill | What it does | Source |
 |-------|--------------|--------|
-| `swiftui-pro` | Comprehensive SwiftUI code review — modern APIs, performance, accessibility | [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) (Paul Hudson, MIT) |
+| `swiftui-pro` | Comprehensive SwiftUI code review — modern APIs, performance, accessibility. Majority based on Paul Hudson's skill, with reference-guide additions (performance, Liquid Glass design, previews) by the repo author | [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) (Paul Hudson, MIT; adapted) |
+| `swiftui-badge` | The `.badge()` modifier — counts/labels on tabs, list rows, and toolbar buttons, plus prominence and the toolbar workaround | Moritz Tucher |
+| `swiftui-tabview` | iOS 26 TabView — value-based `Tab`/`TabSection`, sidebar-adaptable, bottom accessory, minimize behavior, `.search` tab, customization | Moritz Tucher |
+| `swiftui-toolbar` | The toolbar system — `ToolbarItem`/`Group`, all placements, `ToolbarSpacer`, iOS 26 shared glass + `sharedBackgroundVisibility` | Moritz Tucher |
+| `keyboard-accessory` | A view docked above the keyboard — input accessory bars and a custom IME candidate strip (matcher / strip / wiring) | Moritz Tucher |
 | `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
 | `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
+| `swift-testing` | Swift Testing — `@Test`/`#expect`/`#require`/`@Suite`, parameterized + async tests, XCTest migration | Moritz Tucher |
+| `reactivity` | Combine vs Observation vs async — `@Observable`, `@Published`, publishers, cancellable lifecycle, migration | Moritz Tucher |
+
+### Framework & engineering (model-invoked)
+
+These trigger on framework and workflow keywords while you build. Each bundles a lean decision layer — numbered dials, an anti-rationalization table, and a pre-ship verification gate — over a deep API reference in the skill's `references/`. All currency-checked against Apple/vendor docs via Context7.
+
+| Skill | Triggers on |
+|-------|-------------|
+| `storekit` | in-app purchase, IAP, subscription, StoreKit, Transaction, entitlement |
+| `revenuecat` | RevenueCat, paywall, offerings, entitlements, Purchases SDK |
+| `widgetkit` | widget, home/lock screen widget, WidgetKit, TimelineProvider, interactive widget |
+| `liquid-glass` | Liquid Glass, glass effect, `glassEffect`, iOS 26 glass material |
+| `foundation-models` | on-device AI, Apple Intelligence, Foundation Models, guided generation, `@Generable` |
+| `appintents` | Siri, Shortcuts, App Intents, AppShortcut, AppEntity |
+| `swiftdata` | SwiftData, persistence, `@Model`, `@Query`, Core Data migration |
+| `activitykit` | Live Activity, Dynamic Island, ActivityKit |
+| `backgroundtasks` | background refresh, BGTask, background processing |
+| `watchconnectivity` | Apple Watch, watchOS, WCSession, paired device |
+| `usernotifications` | push/local notification, UNUserNotificationCenter, APNs, badge |
+| `healthkit` | HealthKit, health data, workout, steps, heart rate |
+| `cloudkit` | CloudKit, CKRecord, iCloud sync, private database, CKShare |
+| `corelocation` | Core Location, CLLocationManager, GPS, geofencing, location permission |
+| `corebluetooth` | Core Bluetooth, BLE, CBCentralManager, peripheral, characteristic |
+| `authenticationservices` | Sign in with Apple, passkeys, ASWebAuthenticationSession, OAuth |
+| `localauthentication` | Face ID, Touch ID, biometrics, LAContext, app lock |
+| `tipkit` | TipKit, tips, feature discovery, `popoverTip` |
+| `swift-charts` | Swift Charts, chart, graph, data visualization, `BarMark` |
+| `coreml` | Core ML, on-device inference, `.mlmodel`, MLModel, Vision model |
+| `eventkit` | EventKit, calendar, reminders, EKEventStore |
+| `contacts` | Contacts, CNContactStore, address book, contact picker |
+| `photosui` | PhotosPicker, photo library, PHPickerViewController, PhotoKit |
+| `messageui` | MessageUI, in-app email/SMS, MFMailComposeViewController |
+| `mapkit` | MapKit, map, Marker, MapCameraPosition, MKLocalSearch, geocoding |
+| `safariservices` | SafariServices, SFSafariViewController, in-app browser |
+| `corehaptics` | Core Haptics, haptic feedback, CHHapticEngine, AHAP |
+| `avfoundation-audio` | audio playback/recording, AVAudioSession, AVAudioEngine, microphone |
+| `corespotlight` | Core Spotlight, search indexing, CSSearchableItem, deep link |
+| `attributed-string` | AttributedString, rich/styled text, AttributeContainer, Markdown |
+| `swiftui-webview` | WebView, WKWebView, WebPage, embed web content, JS bridge |
+| `translation` | Translation, translate text, TranslationSession, on-device translation |
+| `accessorysetupkit` | AccessorySetupKit, accessory pairing, ASAccessorySession |
+| `alarmkit` | AlarmKit, alarm, timer, scheduled alert (iOS 26) |
+| `paperkit` | PaperKit, drawing, markup canvas, annotation (iOS 26) |
+| `gamesave` | GameSave, cloud game-save sync, GameSaveSyncedDirectory (iOS 26) |
+| `relevancekit` | RelevanceKit, content relevance, widget surfacing (iOS 26) |
+| `permissionkit` | PermissionKit, parental/guardian approval, communication permission (iOS 26) |
+| `declared-age-range` | Declared Age Range, privacy-preserving age verification (iOS 26) |
+| `identity-document-services` | mobile ID, digital ID / mdoc presentment (iOS 26) |
+| `energykit` | EnergyKit, clean-energy / grid-aware scheduling (iOS 26) |
+| `wifiaware` | Wi-Fi Aware, peer-to-peer device-to-device connections (iOS 26) |
+| `speech-analyzer` | speech to text, transcription, SpeechAnalyzer, SpeechTranscriber (iOS 26) |
+| `visual-intelligence` | Visual Intelligence, visual/camera search, semantic content (iOS 26) |
+| `passkit` | PassKit, Apple Wallet pass, PKPass, Apple Pay, PKPaymentRequest |
+| `firebase` | Firebase, Firestore, Auth, Cloud Messaging, Crashlytics (Google SDK) |
+| `realmswift` | Realm, RealmSwift, `@Persisted`, object database (third-party) |
+| `carplay` | CarPlay, CPTemplate, in-car app, CPInterfaceController |
+| `screen-time` | Screen Time, parental controls, app limits, FamilyControls, ManagedSettings, DeviceActivity, shield |
+| `appkit` | AppKit, macOS app, NSWindow, NSView, NSGlassEffectView, macOS Liquid Glass |
+| `privacy-manifest` | PrivacyInfo.xcprivacy, required-reason API, App Store privacy rejection |
+| `oslog-logging` | OSLog/Logger, structured logging, signposts, MetricKit observability |
+| `universal-links` | universal links, associated domains, apple-app-site-association, deep linking |
+| `avkit-videoplayer` | video playback, VideoPlayer, AVPlayer, HLS streaming, Picture in Picture |
+| `pencilkit` | PencilKit, PKCanvasView, drawing, Apple Pencil, ink, PKDrawing |
+| `core-motion` | Core Motion, accelerometer, gyroscope, device motion, pedometer, step count |
+| `core-nfc` | Core NFC, NFC tag read/write, NFCNDEFReaderSession, NFCTagReaderSession |
+| `controls-controlwidget` | Control Center / Lock Screen control, ControlWidget, Action Button (iOS 18) |
+| `app-store-submission` | archive/export/upload, `xcodebuild exportArchive`, TestFlight, code signing, review rejection |
 
 ### Meta
 
@@ -155,19 +245,11 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 
 ---
 
-## iOS framework guides
+11 reference guides under `docs/ios/`, organized by domain. Most frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
 
-70 reference guides under `docs/ios/`, organized by domain:
-
-- **swiftui/** — Liquid Glass adoption, AttributedString, TipKit, Charts, performance, webview, design craft patterns
-- **appkit/** — AppKit guide, AppKit Liquid Glass
-- **data/** — SwiftData, Core Spotlight, CloudKit, RealmSwift
-- **commerce/** — StoreKit, RevenueCat (incl. iOS 26 paywall fix), PassKit, Firebase
-- **system/** — WidgetKit, ActivityKit, AppIntents, AlarmKit, BackgroundTasks, UserNotifications, HealthKit, MapKit, CarPlay, AuthenticationServices, EventKit, Contacts, PhotosUI, CoreLocation, MessageUI, SafariServices, Translation, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, AlarmKit, AVFoundation, Span/InlineArray, LocalAuthentication
-- **hardware/** — CoreBluetooth, WiFi Aware, AccessorySetupKit, CoreHaptics, WatchConnectivity, EnergyKit
-- **screen-time/** — Screen Time API, DeviceActivity, FamilyControls, ManagedSettings
-- **ai/** — Foundation Models, CoreML, Speech Analyzer, Visual Intelligence
+- **system/** — Span/InlineArray
 - **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing
+- Plus the top-level `ios-guide.md`, `ios-coding-standards.md`, and `architecture-patterns.md` (loaded via `@import`)
 
 Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@import`) and `ios-coding-standards.md` / `architecture-patterns.md` reference docs.
 
@@ -223,4 +305,4 @@ MIT — see [LICENSE](LICENSE).
 
 ---
 
-By [Moritz Tucher](https://github.com/moritztucher) · iOS developer building for the App Store with AI-native workflows. Connect on [LinkedIn](https://www.linkedin.com/in/moritz-tucher/).
+By [Moritz Tucher](https://github.com/moritztucher) · ~3 years shipping production iOS apps to the App Store, now building AI-native iOS workflows. Connect on [LinkedIn](https://www.linkedin.com/in/moritz-tucher/).

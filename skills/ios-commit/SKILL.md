@@ -19,7 +19,7 @@ Create a well-formatted git commit following project conventions.
 
 3. Run `git diff --staged` to analyze staged changes
 
-4. Check for git prefix in project's CLAUDE.md (e.g., "P66", "APP")
+4. Check for git prefix in project's CLAUDE.md (e.g., "APP", "IOS")
 
 5. Generate commit message:
    - If prefix exists: `[PREFIX-XXX] type: description`

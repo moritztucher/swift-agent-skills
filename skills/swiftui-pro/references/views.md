@@ -10,7 +10,7 @@
 - Unless a full-screen editing experience is required, prefer using `TextField` with `axis: .vertical` to using `TextEditor`, because it allows placeholder text. If a specific minimum height is required for `TextField`, use something like `lineLimit(5...)`.
 - If a button action can be provided directly as an `action` parameter, do so. For example: `Button("Label", systemImage: "plus", action: myAction)` is preferred over `Button("Label", systemImage: "plus") { action() }`.
 - When rendering SwiftUI views to images, strongly prefer `ImageRenderer` over `UIGraphicsImageRenderer`.
-- `#Preview` should be used for previews, not the legacy `PreviewProvider` protocol.
+- `#Preview` should be used for previews, not the legacy `PreviewProvider` protocol. Provide previews for views where practical, using realistic sample data and multiple configurations (e.g. different data states, light and dark mode).
 - When using `TabView(selection:)`, use a binding to a property that stores an enum rather than an integer or string. For example, `Tab("Home", systemImage: "house", value: .home)` is better than `Tab("Home", systemImage: "house", value: 0)`.
 - Strongly prefer to avoid breaking up view bodies using computed properties or methods that return `some View`, even if `@ViewBuilder` is used. Extract them into separate `View` structs instead, placing each into its own file. (Yes, this is repeated, but it’s so important it needs to be mentioned twice.)
 
@@ -34,3 +34,6 @@ Button("Animate Me") {
     }
 }
 ```
+
+- For animations that cycle through a discrete set of states, use `PhaseAnimator([.start, .middle, .end]) { phase in ... }` rather than orchestrating state and delays by hand.
+- For complex multi-track animations (independent timelines per property), use `KeyframeAnimator(initialValue:) { values in ... } keyframes: { ... }` with a `KeyframeTrack(\.scale)` per animated property, mixing `SpringKeyframe`/`LinearKeyframe`.

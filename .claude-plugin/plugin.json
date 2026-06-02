@@ -1,0 +1,20 @@
+{
+  "name": "swift-skills",
+  "description": "Skills and agents for shipping production SwiftUI apps — a UI-first lifecycle (Setup → Plan → Build → Verify → Ship) plus SwiftUI/Swift craft and Apple-framework specialists.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Moritz Tucher"
+  },
+  "homepage": "https://github.com/moritztucher/swift-agent-skills",
+  "repository": "https://github.com/moritztucher/swift-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "ios",
+    "swiftui",
+    "swift",
+    "xcode",
+    "app-store",
+    "mvvm",
+    "ios26"
+  ]
+}

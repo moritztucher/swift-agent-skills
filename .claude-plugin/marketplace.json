@@ -1,0 +1,27 @@
+{
+  "name": "swift-agent-skills",
+  "owner": {
+    "name": "Moritz Tucher"
+  },
+  "description": "An opinionated, SwiftUI-first collection of agent skills for Apple-platform development — lifecycle skills, advisor agents, and SwiftUI/Swift craft specialists.",
+  "plugins": [
+    {
+      "name": "swift-skills",
+      "source": "./",
+      "description": "Skills and agents for shipping production SwiftUI apps — a UI-first lifecycle (Setup → Plan → Build → Verify → Ship) plus SwiftUI/Swift craft and Apple-framework specialists.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Moritz Tucher"
+      },
+      "homepage": "https://github.com/moritztucher/swift-agent-skills",
+      "license": "MIT",
+      "keywords": [
+        "ios",
+        "swiftui",
+        "swift",
+        "xcode",
+        "app-store"
+      ]
+    }
+  ]
+}

@@ -34,7 +34,7 @@ Elevate an app's visual craft by rewriting the visual layer of its Views to matc
 ## Flow
 
 ### Phase 0 — Context & reconciliation
-1. Read `CLAUDE.md`, `ARCHITECTURE.md`, `docs/DESIGN-SYSTEM.md` (levers, palette+roles, type scale, vocabulary, indicators, motion), `docs/DESIGN-AUDIT.md` if present, and `~/.claude/docs/ios/swiftui/design-craft-patterns.md` (technique benchmark).
+1. Read `CLAUDE.md`, `ARCHITECTURE.md`, `docs/DESIGN-SYSTEM.md` (levers, palette+roles, type scale, vocabulary, indicators, motion), `docs/DESIGN-AUDIT.md` if present, and `~/.claude/skills/ios-design-brief/references/design-craft-patterns.md` (technique benchmark).
 2. **Reconcile infrastructure:** scan for existing design packages, theme/token files, and color assets. Build a conflict table (token · system spec · existing value · action). Never let two color systems coexist — that's a top cause of invisible rendering. Decide override strategy with the user.
 3. **Enforce color scheme:** if the system specifies dark or light, ensure the root view sets `.preferredColorScheme(.dark/.light)`. Materials, system colors, and vibrancy depend on it — a dark-spec app running light renders invisible gray-on-gray.
 

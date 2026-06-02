@@ -7,3 +7,4 @@
 - If SwiftLint is configured, it should return no warnings or errors.
 - If the project uses Localizable.xcstrings, prefer to add user-facing strings using symbol keys (e.g. “helloWorld”) in the string catalog with `extractionState` set to "manual", accessing them via generated symbols such as `Text(.helloWorld)`. Offer to translate new keys into all languages supported by the project.
 - If the Xcode MCP is configured, prefer its tools over generic alternatives. For example, `RenderPreview` is able to capture images of rendered SwiftUI previews for examination, and `DocumentationSearch` can search Apple’s documentation for latest usage instructions.
+- Keep dependencies to a minimum and only add well-maintained, trusted packages. Document why each dependency is necessary. (Do not introduce third-party frameworks without asking the user first.)

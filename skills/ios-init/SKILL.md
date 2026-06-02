@@ -55,7 +55,7 @@ Ask with AskUserQuestion — but **skip any item the blurb already answered** (c
 - **Database:** SwiftData ⭐ / RealmSwift / CoreData / None
 - **Distribution:** Open source / Commercial (proprietary) — *(usually from the blurb)*
 - **Audience:** B2C / B2B / Internal — *(usually from the blurb)*
-- **Git Prefix:** text input (e.g. P66, APP)
+- **Git Prefix:** text input (e.g. APP, IOS)
 - **Bundle ID:** text input (e.g. com.company.appname)
 
 ### A2 — Technical Architecture Brainstorm
@@ -81,8 +81,6 @@ Core/
 Features/     .gitkeep
 ViewComponents/ .gitkeep
 Resources/    .gitkeep
-bip/                    # Build-in-public trail — see CLAUDE.md → Build in Public
-  BUILD-LOG.md
 ```
 
 For a **Fresh scaffold**, create only the folders that don't already exist; never move or rename the files Xcode generated.
@@ -137,7 +135,7 @@ Existing path: **do NOT scaffold folders** — document the existing structure i
 Generate-if-missing for repo files; **never silently overwrite** an existing `README.md`, `LICENSE`, or `.gitignore` — diff and ask.
 
 ### CLAUDE.md (project root)
-First line is the iOS guide import: `@~/.claude/docs/ios/ios-guide.md`. Then `## Role` (senior iOS engineer framing), `## View Inventory` (read VIEW-INVENTORY.md before new UI), and `## Build in Public` (postable-step capture into `bip/`) — keep the wording from the templates. Then project config: name, bundle ID, **platforms**, deployment targets, git prefix, database, and a **`## Technical Decisions`** section with every resolved/detected choice. Mark unresolved **TBD**. Existing path: note "Generated from existing codebase scan." If CLAUDE.md exists, diff + merge (ensure the import, `## Role`, `## View Inventory` are present).
+First line is the iOS guide import: `@~/.claude/docs/ios/ios-guide.md`. Then `## Role` (senior iOS engineer framing) and `## View Inventory` (read VIEW-INVENTORY.md before new UI). Then project config: name, bundle ID, **platforms**, deployment targets, git prefix, database, and a **`## Technical Decisions`** section with every resolved/detected choice. Mark unresolved **TBD**. Existing path: note "Generated from existing codebase scan." If CLAUDE.md exists, diff + merge (ensure the import, `## Role`, `## View Inventory` are present).
 
 ### .claude/memory.md
 Template `project-memory-template.md`. Pre-fill Decisions (`- [YYYY-MM-DD] Area: Choice — rationale`). Existing path: label "Observed from existing codebase."
@@ -176,10 +174,10 @@ Carthage/Build/
 # Secrets / local config
 *.xcconfig.local
 .env
-# Claude / local docs trail (keep bip/ if you commit it)
+# Claude / local docs trail
 .claude/memory.md   # keep or remove per the user's preference
 ```
-Ask whether to track or ignore `.claude/memory.md` and `bip/` rather than guessing.
+Ask whether to track or ignore `.claude/memory.md` rather than guessing.
 
 ### LICENSE  *(new, conditional)*
 - **Open source:** ask which license (MIT ⭐ / Apache-2.0 / GPL-3.0 / BSD-3-Clause / other) and write the full standard text, filling the current year and copyright holder (from git config `user.name`, confirm). Add a matching License section to README.
