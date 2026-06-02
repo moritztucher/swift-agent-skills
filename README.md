@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`76 skills · 4 agents · 3 hooks · 11 iOS reference guides`
+`80 skills · 4 agents · 3 hooks · 11 iOS reference guides`
 
 ---
 
@@ -35,7 +35,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 76 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 80 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -77,7 +77,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 76 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 80 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -136,10 +136,11 @@ These trigger automatically while you read, write, or review SwiftUI and concurr
 | `keyboard-accessory` | A view docked above the keyboard — input accessory bars and a custom IME candidate strip (matcher / strip / wiring) | Moritz Tucher |
 | `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
 | `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
+| `swift-testing` | Swift Testing — `@Test`/`#expect`/`#require`/`@Suite`, parameterized + async tests, XCTest migration | Moritz Tucher |
 
-### Framework integration (model-invoked)
+### Framework & engineering (model-invoked)
 
-These trigger on framework keywords while you build. Each bundles a lean decision layer — numbered dials, an anti-rationalization table, and a pre-ship verification gate — over a deep API reference in the skill's `references/`. All currency-checked against Apple/vendor docs via Context7.
+These trigger on framework and workflow keywords while you build. Each bundles a lean decision layer — numbered dials, an anti-rationalization table, and a pre-ship verification gate — over a deep API reference in the skill's `references/`. All currency-checked against Apple/vendor docs via Context7.
 
 | Skill | Triggers on |
 |-------|-------------|
@@ -193,6 +194,9 @@ These trigger on framework keywords while you build. Each bundles a lean decisio
 | `carplay` | CarPlay, CPTemplate, in-car app, CPInterfaceController |
 | `screen-time` | Screen Time, parental controls, app limits, FamilyControls, ManagedSettings, DeviceActivity, shield |
 | `appkit` | AppKit, macOS app, NSWindow, NSView, NSGlassEffectView, macOS Liquid Glass |
+| `privacy-manifest` | PrivacyInfo.xcprivacy, required-reason API, App Store privacy rejection |
+| `oslog-logging` | OSLog/Logger, structured logging, signposts, MetricKit observability |
+| `universal-links` | universal links, associated domains, apple-app-site-association, deep linking |
 
 ### Meta
 
