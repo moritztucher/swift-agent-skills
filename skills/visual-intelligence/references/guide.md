@@ -77,10 +77,11 @@ Apple provides multiple frameworks for visual intelligence and computer vision:
 ### Imports
 
 ```swift
-import Vision          // Core computer vision
-import VisionKit       // High-level UI (ImageAnalyzer, DataScanner)
-import CoreML          // Custom ML models
-import AppIntents      // Visual Intelligence integration (iOS 26+)
+import Vision             // Core computer vision
+import VisionKit          // High-level UI (ImageAnalyzer, DataScanner)
+import CoreML             // Custom ML models
+import AppIntents         // Integration plumbing for Visual Intelligence (iOS 26+)
+import VisualIntelligence // SemanticContentDescriptor + result types (iOS 26+)
 ```
 
 ---
@@ -723,144 +724,78 @@ let scanner = DataScannerViewController(
 
 ## Visual Intelligence Framework (iOS 26+)
 
-iOS 26 introduces system-level Visual Intelligence that allows users to search and analyze content on their screen. Apps can integrate with this feature through App Intents.
+iOS 26 introduces system-level Visual Intelligence. The user enters it from the Camera Control (or the equivalent system entry point), points the camera at something (or shares a screenshot/photo), and the system surfaces results — including results your app supplies. Your app participates through **App Intents** (the `VisualIntelligence` framework supplies the data types; the integration plumbing lives in `AppIntents`).
 
-### App Intents Integration
+> Verified against Apple's official docs (Context7 `/websites/developer_apple`, checked 2026-06-02): `VisualIntelligence` and `AppIntents/integrating-your-app-with-visual-intelligence`. The earlier draft of this section was wrong on every key API — corrected below.
 
-Enable your app's content to appear in Visual Intelligence search results:
+The system hands your app a **`SemanticContentDescriptor`** (a struct describing the captured scene — screenshot, camera frame, or photo). You read its `pixelBuffer` (a `CVReadOnlyPixelBuffer`), run your own matching (Core ML, an embedding lookup, a server call), and return your app's entities. There are two pieces:
 
-```swift
-import AppIntents
+1. An **`@AppIntent(schema: .visualIntelligence.semanticContentSearch)`** intent whose single `@Parameter` is a `SemanticContentDescriptor`. This is the schema-conforming entry the system invokes.
+2. An **`IntentValueQuery`** whose `values(for:)` takes the `SemanticContentDescriptor` and returns your result entities. This is what actually produces the grid of results Visual Intelligence shows.
 
-// Define a searchable entity
-struct ProductEntity: AppEntity {
-    static var typeDisplayRepresentation: TypeDisplayRepresentation {
-        TypeDisplayRepresentation(name: "Product")
-    }
-
-    static var defaultQuery = ProductQuery()
-
-    var id: String
-    var name: String
-    var description: String
-    var imageURL: URL?
-
-    var displayRepresentation: DisplayRepresentation {
-        DisplayRepresentation(
-            title: "\(name)",
-            subtitle: "\(description)",
-            image: imageURL.map { .init(url: $0) }
-        )
-    }
-}
-
-// Define search query
-struct ProductQuery: EntityQuery {
-    func entities(for identifiers: [String]) async throws -> [ProductEntity] {
-        // Fetch products by IDs
-        return ProductDatabase.fetch(ids: identifiers)
-    }
-
-    func suggestedEntities() async throws -> [ProductEntity] {
-        // Return suggested products
-        return ProductDatabase.featured()
-    }
-}
-```
-
-#### Semantic Content Search Intent
+### The semanticContentSearch intent
 
 ```swift
 import AppIntents
+import VisualIntelligence
 
+// `schema:` is `.visualIntelligence.semanticContentSearch`, NOT `.semanticContentSearch`.
+// The parameter is a `SemanticContentDescriptor`, NOT a `String`.
 @available(iOS 26.0, *)
-struct VisualSearchIntent: AppIntent {
-    static var title: LocalizedStringResource = "Search Products"
-    static var description = IntentDescription("Search products using visual intelligence")
-
-    // Use semanticContentSearch schema for Visual Intelligence
-    @AppIntent(schema: .semanticContentSearch)
-    var semanticContent: String
+@AppIntent(schema: .visualIntelligence.semanticContentSearch)
+struct SemanticContentSearchIntent: AppIntent {
+    @Parameter var semanticContent: SemanticContentDescriptor
 
     func perform() async throws -> some IntentResult {
-        // Process search from Visual Intelligence
-        let results = await ProductDatabase.search(query: semanticContent)
-
-        // Navigate to search results in app
-        await NavigationManager.shared.showSearchResults(results)
-
+        // The system drives the results UI via the IntentValueQuery below.
+        // `perform()` returns `.result()`; you do not navigate from here.
         return .result()
     }
 }
 ```
 
-#### Onscreen Entity Support
-
-Allow Visual Intelligence to understand content visible in your app:
+### The IntentValueQuery — where results come from
 
 ```swift
 import AppIntents
-import UIKit
+import VisualIntelligence
+import CoreVideo
 
-class ProductViewController: UIViewController {
-    var product: Product!
+// Multiple entity types? Wrap them in an @UnionValue enum.
+@available(iOS 26.0, *)
+@UnionValue
+enum VisualSearchResult {
+    case landmark(LandmarkEntity)
+    case collection(CollectionEntity)
+}
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+@available(iOS 26.0, *)
+struct LandmarkIntentValueQuery: IntentValueQuery {
+    @Dependency var modelData: ModelData
 
-        // Associate entity with visible content
-        let activity = NSUserActivity(activityType: "com.app.viewProduct")
-        activity.title = product.name
-        activity.userInfo = ["productID": product.id]
-
-        // Enable Visual Intelligence recognition
-        if #available(iOS 26.0, *) {
-            activity.targetContentIdentifier = product.id
-            activity.persistentIdentifier = product.id
+    // Input is the SemanticContentDescriptor the system captured.
+    func values(for input: SemanticContentDescriptor) async throws -> [VisualSearchResult] {
+        guard let pixelBuffer: CVReadOnlyPixelBuffer = input.pixelBuffer else {
+            return []
         }
-
-        view.window?.windowScene?.userActivity = activity
+        // Run YOUR matching against the captured frame — Core ML, embeddings, server.
+        return try await modelData.search(matching: pixelBuffer)
     }
 }
 ```
 
-### On-Screen Visual Search
+The entities you return (`LandmarkEntity`, `CollectionEntity`, …) are ordinary `AppEntity` types with a `displayRepresentation` (title/subtitle/image) — that's what renders in the Visual Intelligence results grid. Define them and their `EntityQuery` the usual App Intents way.
 
-iOS 26 allows users to search on-screen content by pressing and holding the Home Indicator or Camera Control button. Apps can integrate by:
+### Onscreen content (a different feature — Visual Intelligence on what's *on screen*)
 
-1. **Implementing App Intents with semantic content search schema**
-2. **Associating NSUserActivity with visible content**
-3. **Providing entity queries for Visual Intelligence**
+To let the system reason about content your app is *currently displaying*, associate an `NSUserActivity` with the visible entity using the SwiftUI `.userActivity(_:element:)` modifier and `activity.appEntityIdentifier`. (The older `targetContentIdentifier` / `persistentIdentifier` approach is not the App-Intents-entity path.)
 
 ```swift
-import AppIntents
-
-@available(iOS 26.0, *)
-struct ImageSearchIntent: AppIntent {
-    static var title: LocalizedStringResource = "Search by Image"
-
-    @Parameter(title: "Image")
-    var searchImage: IntentFile?
-
-    @AppIntent(schema: .semanticContentSearch)
-    var semanticContent: String
-
-    func perform() async throws -> some IntentResult & ReturnsValue<[ProductEntity]> {
-        // Process visual search
-        let results: [ProductEntity]
-
-        if let imageData = searchImage?.data,
-           let image = UIImage(data: imageData) {
-            // Analyze image for product matching
-            results = await ProductMatcher.match(image: image)
-        } else {
-            // Fall back to text search
-            results = await ProductDatabase.search(query: semanticContent)
-        }
-
-        return .result(value: results)
+MediaView(asset: asset)
+    .userActivity("com.example.app.ViewingPhoto", element: asset.entity) { asset, activity in
+        activity.title = "Viewing a photo"
+        activity.appEntityIdentifier = EntityIdentifier(for: asset)
     }
-}
 ```
 
 ---

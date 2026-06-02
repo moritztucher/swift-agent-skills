@@ -286,16 +286,43 @@ func createTranscriber(locale: Locale) -> any SpeechModule {
 
 SpeechAnalyzer supports multiple audio input methods.
 
+### Two ways to drive analysis: structured vs autonomous
+
+Apple gives you two families of methods, and the distinction matters:
+
+- **Structured (preferred):** `analyzeSequence(_:)` and `analyzeSequence(from:)`
+  return when the input is fully consumed (`async throws -> CMTime?`, the last
+  sample time). You `await` them inside your own task — back-pressure and
+  cancellation flow naturally through structured concurrency. Apple's docs say
+  you "usually should" use these.
+- **Autonomous:** `start(inputSequence:)` and
+  `start(inputAudioFile:finishAfterFile:)` return *immediately* and let the
+  analyzer pull audio on its own internal task. Use this when you want the
+  analyzer to run independently while you feed buffers from elsewhere (e.g. a
+  live mic tap). End it with `finalizeAndFinishThroughEndOfInput()`.
+
+Don't mix the two on one session. Pick autonomous for live mic streaming, structured for "transcribe this file and give me the result."
+
 ### File-Based Input
+
+`inputAudioFile` takes an **`AVAudioFile`**, not a `URL` — open the file first.
 
 ```swift
 let analyzer = SpeechAnalyzer(modules: [transcriber])
+let audioFile = try AVAudioFile(forReading: audioFileURL)
 
-// Transcribe entire file
-try await analyzer.start(inputAudioFile: audioFileURL, finishAfterFile: true)
+// Structured (preferred): returns when the file is fully read
+let lastSample = try await analyzer.analyzeSequence(from: audioFile)
+if let lastSample {
+    try await analyzer.finalizeAndFinish(through: lastSample)
+}
 
-// Or allow continuing with more input after file
-try await analyzer.start(inputAudioFile: audioFileURL, finishAfterFile: false)
+// Autonomous: returns immediately, analyzer reads the file on its own task
+try await analyzer.start(inputAudioFile: audioFile, finishAfterFile: true)
+
+// finishAfterFile: false → analyzer waits for more files/buffers on the same
+// timeline (next audio is assumed to follow immediately after this file)
+try await analyzer.start(inputAudioFile: audioFile, finishAfterFile: false)
 ```
 
 ### Streaming Input (AsyncSequence)
@@ -632,7 +659,14 @@ SpeechAnalyzer requires language-specific models to be downloaded to the device.
 // Get all supported locales
 let supported = await SpeechTranscriber.supportedLocales
 
-// Check if specific locale is supported
+// Preferred: let the framework resolve the closest supported locale.
+// Returns nil if the language isn't supported at all.
+guard let locale = await SpeechTranscriber.supportedLocale(equivalentTo: .current) else {
+    throw SpeechAnalyzerError.localeNotSupported
+}
+let transcriber = SpeechTranscriber(locale: locale, preset: .offlineTranscription)
+
+// Manual check (avoid — prefer supportedLocale(equivalentTo:) above)
 func isLocaleSupported(_ locale: Locale) async -> Bool {
     let supported = await SpeechTranscriber.supportedLocales
     return supported.contains {
@@ -677,12 +711,38 @@ func ensureModelAvailable(for transcriber: SpeechTranscriber, locale: Locale) as
 }
 ```
 
+### Locale Reservations (AssetInventory)
+
+Installed models are a shared, system-managed resource. The system can reclaim a
+language model when other apps need space — so installing a model is **not** a
+permanent guarantee that it stays installed. To keep a locale's model resident for
+your app, **reserve** it. Each app has a hard cap on reservations
+(`AssetInventory.maximumReservedLocales`); exceeding it throws.
+
+```swift
+// Reserve a locale so its model stays installed for your app.
+// assetInstallationRequest(supporting:) reserves automatically, but you can
+// reserve explicitly (e.g. to pin a non-current language ahead of time).
+let didReserve = try await AssetInventory.reserve(locale: locale)
+
+// Inspect current reservations and the cap.
+let reserved = AssetInventory.reservedLocales            // [Locale]
+let cap = AssetInventory.maximumReservedLocales          // Int
+
+// Free a slot when a language is no longer needed (system removes assets later).
+await AssetInventory.release(reservedLocale: locale)
+
+// Check whether the system already has what a set of modules needs.
+let status = await AssetInventory.status(forModules: [transcriber])
+```
+
 ### Model Management Notes
 
 - Models are stored in a system-wide asset catalog (not in your app bundle)
 - Zero impact on your app's download size
 - Apple automatically updates models with system updates
 - Models are shared across all apps using SpeechAnalyzer
+- Installation isn't permanent — the system may reclaim an unreserved model. Reserve locales you depend on, and respect `maximumReservedLocales`.
 
 ---
 
@@ -1115,14 +1175,16 @@ let converter = BufferConverter(targetFormat: format)
 ### SpeechAnalyzer Methods
 
 ```swift
-// Start with audio file
-try await analyzer.start(inputAudioFile: url, finishAfterFile: true)
+// --- Structured (preferred): await until input is consumed, returns CMTime? ---
+let last = try await analyzer.analyzeSequence(asyncSequence)
+let last = try await analyzer.analyzeSequence(from: avAudioFile)
+if let last { try await analyzer.finalizeAndFinish(through: last) }
+else { try analyzer.cancelAndFinishNow() }
 
-// Start with stream
+// --- Autonomous: returns immediately, analyzer runs its own task ---
 try await analyzer.start(inputSequence: asyncSequence)
-
-// Finalize session
-await analyzer.finalizeAndFinishThroughEndOfInput()
+try await analyzer.start(inputAudioFile: avAudioFile, finishAfterFile: true)
+await analyzer.finalizeAndFinishThroughEndOfInput()   // end autonomous session
 
 // Get best audio format
 let format = await SpeechAnalyzer.bestAvailableAudioFormat(compatibleWith: modules)

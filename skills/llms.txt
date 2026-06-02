@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 65 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 67 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -87,6 +87,8 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [identity-document-services](identity-document-services/SKILL.md): iOS 26 mobile-ID/mdoc presentment — provider + web-presentment, ISO 18013.
 - [energykit](energykit/SKILL.md): iOS 26 clean-energy/grid-aware scheduling — ElectricityGuidance, load events, shift vs reduce.
 - [wifiaware](wifiaware/SKILL.md): iOS 26 peer-to-peer Wi-Fi Aware — publish/subscribe services, paired-device connections, performance modes.
+- [speech-analyzer](speech-analyzer/SKILL.md): iOS 26 on-device transcription — SpeechAnalyzer/SpeechTranscriber, asset reservation, file vs live, volatile results.
+- [visual-intelligence](visual-intelligence/SKILL.md): iOS 26 visual/camera search — App Intents semanticContentSearch schema, SemanticContentDescriptor, IntentValueQuery.
 
 ## Meta
 
