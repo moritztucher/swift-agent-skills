@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 64 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 65 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -39,6 +39,7 @@
 - [swiftui-pro](swiftui-pro/SKILL.md): Comprehensive SwiftUI code review — modern APIs, performance, accessibility. From Paul Hudson (MIT).
 - [swiftui-expert-skill](swiftui-expert-skill/SKILL.md): SwiftUI guidance incl. iOS 26 Liquid Glass and Instruments `.trace` analysis. From Antoine van der Lee.
 - [swift-concurrency](swift-concurrency/SKILL.md): Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration. From Antoine van der Lee.
+- [swiftui-badge](swiftui-badge/SKILL.md): The `.badge()` modifier — counts/labels on tabs, list rows, toolbar buttons, prominence, toolbar workaround.
 
 ## Framework integration (model-invoked)
 

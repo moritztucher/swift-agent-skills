@@ -15,12 +15,6 @@
 - Strongly prefer to avoid breaking up view bodies using computed properties or methods that return `some View`, even if `@ViewBuilder` is used. Extract them into separate `View` structs instead, placing each into its own file. (Yes, this is repeated, but it’s so important it needs to be mentioned twice.)
 
 
-## Badges
-
-- Use `.badge(_:)` for notification counts on tab items, list rows, and toolbar buttons (toolbar support is undocumented but works on iOS 26). A badge of `0` hides automatically.
-- `.badgeProminence(.decreased)` gives accent-colored (rather than red) badges on list rows and tabs. It does *not* affect toolbar button badges — they stay red. For an accent-colored toolbar badge, use a manual `overlay(alignment: .topTrailing)` with a `Text` count instead.
-
-
 ## Animating views
 
 - Strongly prefer to use the `@Animatable` macro over creating `animatableData` manually – the macro automatically adds conformance to the `Animatable` protocol and creates the correct `animatableData` property. If some properties should not or cannot be animated (e.g. Booleans, integers, etc), mark them `@AnimatableIgnored`.
