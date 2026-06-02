@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`73 skills · 4 agents · 3 hooks · 11 iOS reference guides`
+`76 skills · 4 agents · 3 hooks · 11 iOS reference guides`
 
 ---
 
@@ -35,7 +35,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 73 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 76 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -77,7 +77,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 73 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 76 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -131,6 +131,9 @@ These trigger automatically while you read, write, or review SwiftUI and concurr
 |-------|--------------|--------|
 | `swiftui-pro` | Comprehensive SwiftUI code review — modern APIs, performance, accessibility. Majority based on Paul Hudson's skill, with reference-guide additions (performance, Liquid Glass design, previews) by the repo author | [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) (Paul Hudson, MIT; adapted) |
 | `swiftui-badge` | The `.badge()` modifier — counts/labels on tabs, list rows, and toolbar buttons, plus prominence and the toolbar workaround | Moritz Tucher |
+| `swiftui-tabview` | iOS 26 TabView — value-based `Tab`/`TabSection`, sidebar-adaptable, bottom accessory, minimize behavior, `.search` tab, customization | Moritz Tucher |
+| `swiftui-toolbar` | The toolbar system — `ToolbarItem`/`Group`, all placements, `ToolbarSpacer`, iOS 26 shared glass + `sharedBackgroundVisibility` | Moritz Tucher |
+| `keyboard-accessory` | A view docked above the keyboard — input accessory bars and a custom IME candidate strip (matcher / strip / wiring) | Moritz Tucher |
 | `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
 | `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
 
