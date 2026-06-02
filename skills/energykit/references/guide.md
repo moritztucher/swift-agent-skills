@@ -18,8 +18,10 @@ EnergyKit is Apple's new framework introduced at WWDC 2025 that provides grid el
 ### Target Use Cases
 
 EnergyKit is currently designed for:
-- **EV Charging Apps**: Shift charging to cleaner/cheaper electricity periods
-- **Smart Thermostat Apps**: Reduce HVAC usage during peak/dirty energy periods
+- **EV Charging Apps**: Shift charging to cleaner/cheaper electricity periods — report usage via `ElectricVehicleLoadEvent`.
+- **Smart Thermostat Apps**: Reduce HVAC usage during peak/dirty energy periods — report usage via `ElectricHVACLoadEvent` (the HVAC counterpart to `ElectricVehicleLoadEvent`; same submission pattern via `EnergyVenue.submitEvents`).
+
+> EnergyKit is for residential, behind-the-meter use only (household devices, appliances, EV charging) — not commercial or industrial applications.
 
 ---
 
@@ -148,7 +150,10 @@ func streamGuidance(
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `guidanceToken` | `String` | Unique token identifying the guidance instance |
+| `guidanceToken` | `UUID` | Unique token identifying the guidance instance; pass it into the load event you create while following this guidance |
+| `energyVenueID` | `UUID` | Identifier for the venue the guidance applies to |
+| `interval` | `DateInterval` | Time range the guidance covers |
+| `values` | `[ElectricityGuidance.Value]` | Weighted values per time interval describing when to shift/reduce |
 
 ---
 
@@ -193,7 +198,7 @@ func createChargingMeasurement(
 | Property | Type | Description |
 |----------|------|-------------|
 | `stateOfCharge` | `Int` | Battery charge percentage (0-100) |
-| `direction` | `EnergyDirection` | `.imported` for charging |
+| `direction` | `ElectricityFlowDirection` | `.imported` for charging |
 | `power` | `Measurement<UnitPower>` | Current power in milliwatts |
 | `energy` | `Measurement<UnitEnergy>` | Cumulative energy in milliwatt-hours |
 
@@ -353,7 +358,7 @@ func createInsightsQuery(for date: Date) -> ElectricityInsightQuery {
 | `options` | `InsightOptions` | Type of data to retrieve |
 | `range` | `DateInterval` | Time period for insights |
 | `granularity` | `Granularity` | Data granularity (e.g., `.daily`) |
-| `flowDirection` | `EnergyDirection` | `.imported` for consumption |
+| `flowDirection` | `ElectricityFlowDirection` | `.imported` for consumption |
 
 #### Fetching Insights
 

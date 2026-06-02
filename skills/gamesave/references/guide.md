@@ -79,9 +79,17 @@ Your app's entitlements file should include:
 
 ## Core API
 
-### Primary Class: GSSyncedDirectory
+> **⚠️ Symbol-naming correction (verified 2026-06-02 against developer.apple.com/documentation/GameSave).**
+> The examples in this guide use the placeholder symbol names `GSSyncedDirectory`, `GSSyncedDirectoryState`, and `GSSyncStateError`. These are **NOT** the shipping API names. The real GameSave framework (iOS 26) exposes:
+> - **`GameSaveSyncedDirectory`** — the cloud-synced directory class (not `GSSyncedDirectory`).
+> - **`GameSaveSyncedFile`** — represents an individual synced save file.
+> - The directory-state / error enum, sync-availability states, and conflict types are likewise spelled with the `GameSave…` prefix, not `GS…`.
+>
+> Before writing code, confirm the exact signatures (`open`, conflict handling, availability/sync state) directly against the official docs. The Objective-C-flavored `GS…` names and the `finishSyncing:` call shapes in the snippets below are approximations and have NOT been verified against the shipping SDK. Treat the *patterns* (open → wait for sync → read state → access URL → handle conflict/sign-out) as correct; treat the literal *symbol spellings* as suspect.
 
-The main class for interacting with GameSave is `GSSyncedDirectory`.
+### Primary Class: GameSaveSyncedDirectory (shown below as `GSSyncedDirectory`)
+
+The main class for interacting with GameSave is `GameSaveSyncedDirectory`. (The snippets below write it as `GSSyncedDirectory` — substitute the real name.)
 
 #### Opening a Synced Directory
 

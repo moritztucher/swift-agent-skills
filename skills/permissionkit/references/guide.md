@@ -8,6 +8,12 @@ PermissionKit is Apple's new framework introduced in iOS 26, iPadOS 26, and macO
 
 **Import:** `import PermissionKit`
 
+> **API verification note (Context7, 2026-06-02 — official `/documentation/PermissionKit`):**
+> The official docs confirm `CommunicationLimits`, `CommunicationHandle`, `CommunicationTopic`, and that asking experiences are **only available using iMessage**. Two names in earlier drafts of this guide were wrong and are corrected throughout:
+> - The topic protocol is **`QuestionTopic`**, not `Topic`.
+> - **`PermissionQuestion` is a `class`**, not a `struct`.
+> Apple also documents **`PermissionResponse`** (the original question + chosen answer) and **`PermissionChoice`**. The `updates` AsyncSequence element type used in this guide (`CommunicationLimitsUpdate`), the `CommunicationLimits.current` singleton spelling, `knownHandles(in:)`, `CommunicationLimitsButton`, and the `CommunicationAction` cases were **not** surfaced by Context7 at check time — treat those exact spellings as unverified and confirm against Xcode 26 headers before relying on them.
+
 ---
 
 ## Table of Contents
@@ -100,7 +106,7 @@ func knownHandles(in handles: Set<CommunicationHandle>) async -> Set<Communicati
 Presents the permission request flow in UIKit.
 
 ```swift
-func ask<T: Topic>(_ question: PermissionQuestion<T>, in viewController: UIViewController) async throws
+func ask<T: QuestionTopic>(_ question: PermissionQuestion<T>, in viewController: UIViewController) async throws
 ```
 
 **`ask(_:in:)` (AppKit)**
@@ -108,7 +114,7 @@ func ask<T: Topic>(_ question: PermissionQuestion<T>, in viewController: UIViewC
 Presents the permission request flow in AppKit.
 
 ```swift
-func ask<T: Topic>(_ question: PermissionQuestion<T>, in window: NSWindow) async throws
+func ask<T: QuestionTopic>(_ question: PermissionQuestion<T>, in window: NSWindow) async throws
 ```
 
 #### Properties
@@ -238,7 +244,8 @@ topic.actions = [.message, .call]  // Specify allowed communication types
 Encapsulates a complete permission request.
 
 ```swift
-struct PermissionQuestion<T: Topic> {
+// NOTE: PermissionQuestion is a class (confirmed via Context7), generic over QuestionTopic.
+class PermissionQuestion<T: QuestionTopic> {
     // Initialize with handles only (minimal)
     init(handles: [CommunicationHandle])
 
@@ -267,7 +274,7 @@ var detailedQuestion = PermissionQuestion(communicationTopic: topic)
 A SwiftUI button that triggers the permission request flow.
 
 ```swift
-struct CommunicationLimitsButton<Question: Topic, Label: View>: View {
+struct CommunicationLimitsButton<Question: QuestionTopic, Label: View>: View {
     init(question: PermissionQuestion<Question>, @ViewBuilder label: () -> Label)
 }
 ```
@@ -279,7 +286,7 @@ struct CommunicationLimitsButton<Question: Topic, Label: View>: View {
 Used for requesting parental consent when your app undergoes significant changes (required for Texas law compliance).
 
 ```swift
-struct SignificantAppUpdateTopic: Topic {
+struct SignificantAppUpdateTopic: QuestionTopic {
     // Use this topic type when your app's age rating or functionality significantly changes
 }
 ```

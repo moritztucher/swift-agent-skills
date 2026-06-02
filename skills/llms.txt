@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 55 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 64 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -77,6 +77,15 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [swiftui-webview](swiftui-webview/SKILL.md): Embedded web — iOS 26 SwiftUI WebView/WebPage, WKWebView wrapping, navigation, JS bridge.
 - [translation](translation/SKILL.md): Text translation — translationPresentation overlay, TranslationSession, language availability/download.
 - [accessorysetupkit](accessorysetupkit/SKILL.md): Privacy-preserving accessory pairing (iOS 18+) — ASAccessorySession, discovery descriptors, migration.
+- [alarmkit](alarmkit/SKILL.md): iOS 26 alarms/timers that break through silent/Focus — AlarmManager, presentations, Live Activity countdown.
+- [paperkit](paperkit/SKILL.md): iOS 26 drawing/markup canvas on PencilKit — PaperMarkup, markup toolbar, feature sets.
+- [gamesave](gamesave/SKILL.md): iOS 26 cloud game-save sync — GameSaveSyncedDirectory/File, conflict handling.
+- [relevancekit](relevancekit/SKILL.md): iOS 26 on-device relevance signals for widget/content surfacing — WidgetRelevance, RelevantContext.
+- [permissionkit](permissionkit/SKILL.md): iOS 26 communication/guardian permission flows (iMessage) — QuestionTopic, CommunicationLimits.
+- [declared-age-range](declared-age-range/SKILL.md): iOS 26 privacy-preserving age-range sharing — AgeRangeService, age gates, protective fallback.
+- [identity-document-services](identity-document-services/SKILL.md): iOS 26 mobile-ID/mdoc presentment — provider + web-presentment, ISO 18013.
+- [energykit](energykit/SKILL.md): iOS 26 clean-energy/grid-aware scheduling — ElectricityGuidance, load events, shift vs reduce.
+- [wifiaware](wifiaware/SKILL.md): iOS 26 peer-to-peer Wi-Fi Aware — publish/subscribe services, paired-device connections, performance modes.
 
 ## Meta
 

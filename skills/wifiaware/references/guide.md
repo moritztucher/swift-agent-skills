@@ -49,18 +49,22 @@ Wi-Fi Aware integrates with several Apple frameworks:
 
 ### 1. Add the Entitlement
 
-Add the Wi-Fi Aware entitlement to your app's entitlements file:
+Add the Wi-Fi Aware entitlement to your app's entitlements file. The value is an **array of role strings** (`Publish`, `Subscribe`), not a boolean — declare only the roles your app uses:
 
 ```xml
 <key>com.apple.developer.wifi-aware</key>
-<true/>
+<array>
+    <string>Publish</string>
+    <string>Subscribe</string>
+</array>
 ```
 
 > **Note**: You must request this entitlement from Apple. Provisioning profile errors will occur without proper approval.
+> **Verified 2026-06-02** against Apple's [Building peer-to-peer apps](https://developer.apple.com/documentation/WiFiAware/Building-peer-to-peer-apps). An older boolean `<true/>` form is wrong and will not provision.
 
 ### 2. Configure Info.plist
 
-Declare your services in Info.plist using the `WiFiAwareServices` key:
+Declare your services in Info.plist using the `WiFiAwareServices` key. Each role (`Publishable` / `Subscribable`) is keyed to an **empty `<dict/>`** — presence enables the role, absence disables it. Do **not** use boolean `<true/>`/`<false/>` values (verified 2026-06-02 against Apple's [Adopting Wi-Fi Aware](https://developer.apple.com/documentation/WiFiAware/Adopting-Wi-Fi-Aware)):
 
 ```xml
 <key>WiFiAwareServices</key>
@@ -68,16 +72,15 @@ Declare your services in Info.plist using the `WiFiAwareServices` key:
     <key>_file-service._tcp</key>
     <dict>
         <key>Publishable</key>
-        <true/>
+        <dict/>
         <key>Subscribable</key>
-        <true/>
+        <dict/>
     </dict>
     <key>_stream-service._udp</key>
     <dict>
-        <key>Publishable</key>
-        <false/>
+        <!-- Subscribe-only: omit the Publishable key entirely -->
         <key>Subscribable</key>
-        <true/>
+        <dict/>
     </dict>
 </dict>
 ```
@@ -147,20 +150,20 @@ extension WASubscribableService {
 
 ### WAPairedDevice
 
-Manage paired devices:
+Manage paired devices.
+
+> **API shape — verified 2026-06-02** against Apple's [Building peer-to-peer apps](https://developer.apple.com/documentation/WiFiAware/Building-peer-to-peer-apps): `WAPairedDevice.allDevices` is an **async-sequence property** (no parentheses) whose elements are a **dictionary** keyed by device ID. Use `Array(deviceList.values)` to get `[WAPairedDevice]`. The `WAPairedDevice.allDevices()` *method* form (and the `pairingInfo?.pairingName / vendorName / modelName` accessors used in later examples) are **not confirmed** by current Apple docs — the confirmed device-name accessor is `device.name`. Treat the examples below as illustrative and verify member names against live Apple docs / Xcode autocomplete before shipping.
 
 ```swift
 import WiFiAware
 
-// MARK: - Fetch All Paired Devices
+// MARK: - Fetch All Paired Devices (verified shape)
 
 func fetchPairedDevices() async throws -> [WAPairedDevice] {
-    var devices: [WAPairedDevice] = []
-    for try await deviceList in WAPairedDevice.allDevices() {
-        devices = deviceList
-        break // Get initial snapshot
+    for try await deviceList in WAPairedDevice.allDevices {
+        return Array(deviceList.values) // initial snapshot
     }
-    return devices
+    return []
 }
 
 // MARK: - Fetch Filtered Devices

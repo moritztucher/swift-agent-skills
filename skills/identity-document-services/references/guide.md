@@ -32,10 +32,13 @@ import IdentityDocumentServices
 ```
 
 **Key Types:**
-- `IdentityDocumentProviderRegistrationStore` - Manages document registrations with iOS
-- `MobileDocumentRegistration` - Represents a registered mobile document
-- `IdentityDocumentRegistration` - Protocol defining identity document registration
-- `ISO18013MobileDocumentRequestContext` - Context provided during verification requests
+- `IdentityDocumentProvider` - Protocol your extension's principal type conforms to (`performRegistrationUpdates()` + `var body: some IdentityDocumentRequestScene`)
+- `IdentityDocumentProviderRegistrationStore` - **`actor`** that notifies the system which documents the app has available for presentment
+- `MobileDocumentRegistration` - A registered mobile document
+- `IdentityDocumentRegistration` - Protocol defining an identity document registration
+- `ISO18013MobileDocumentRequestScene` - Scene type that hosts the per-request UI (one request → one scene)
+- `ISO18013MobileDocumentRequestContext` - Context the system hands each request scene (lives in IdentityDocumentServicesUI)
+- `ISO18013MobileDocumentResponse` - The value you return from `sendResponse`, wrapping the encrypted response data
 
 ### IdentityDocumentServicesUI
 
@@ -57,40 +60,37 @@ Document registration links your app's stored identity documents with the iOS sy
 
 The central store for managing document registrations.
 
+`IdentityDocumentProviderRegistrationStore` is an **`actor`** — every access is `await`-ed and isolated. `MobileDocumentRegistration` is initialized with all its values up front; there is no mutable `authorityKeyIdentifiers` property to set afterward. Trusted authorities are passed as `supportedAuthorityKeyIdentifiers: [Data]` (raw key-identifier bytes), not `[String]`.
+
 ```swift
 import IdentityDocumentServices
 
-// Initialize the registration store
-let registrationStore = IdentityDocumentProviderRegistrationStore()
+let store = IdentityDocumentProviderRegistrationStore()
 
-// Create a mobile document registration
-let registration = MobileDocumentRegistration(
-    mobileDocumentType: "org.iso.18013.5.1.mDL",  // ISO 18013-5 standard type
-    documentIdentifier: "unique-document-id-12345"
-)
-
-// Specify trusted certificate authorities
-// These determine which websites can request this document
-registration.authorityKeyIdentifiers = [
-    "authority-key-id-from-certificate-1",
-    "authority-key-id-from-certificate-2"
-]
-
-// Register the document with iOS
 do {
-    try await registrationStore.addRegistration(registration)
+    let storedDocument = /* a document from your app's storage */
+
+    let registration = MobileDocumentRegistration(
+        mobileDocumentType: "org.iso.18013.5.1.mDL",        // ISO 18013-5 standard type
+        supportedAuthorityKeyIdentifiers: [Data([0x01, 0x02, 0x03])], // raw AKI bytes from trusted reader CAs
+        documentIdentifier: storedDocument.identifier,
+        invalidationDate: storedDocument.invalidationDate    // when this registration should expire
+    )
+
+    try await store.addRegistration(registration)
 } catch {
-    print("Failed to register document: \(error)")
+    // Handle the error.
 }
 ```
 
-### Key Methods
+### Key API
 
-| Method | Description |
+| Member | Description |
 |--------|-------------|
-| `addRegistration(_:)` | Register an mdoc with iOS |
-| `removeRegistration(documentIdentifier:)` | Remove a registration when document is deleted |
-| `registrations` | Query currently stored registrations |
+| `addRegistration(_:)` | Register an mdoc with the system (`async throws`) |
+| `registrations` | `async throws` — query currently stored registrations to reconcile against your app's storage |
+
+> The `supportedAuthorityKeyIdentifiers` you pass at registration are what gate visibility: only requests signed by one of those reader CAs surface your app in the selection sheet.
 
 ### Mobile Document Types
 
@@ -106,11 +106,14 @@ Common document types following ISO 18013-5 standard:
 Authority key identifiers restrict which websites can request your documents:
 
 ```swift
-// Only apps with registrations matching the request's certificate authority
-// will appear in the selection UI
-registration.authorityKeyIdentifiers = [
-    "key-id-from-trusted-ca"  // From the certificate's Authority Key Identifier extension
-]
+// Only apps whose registration lists the request's reader CA appear in the selection UI.
+// Pass the raw Authority Key Identifier bytes at registration time:
+let registration = MobileDocumentRegistration(
+    mobileDocumentType: "org.iso.18013.5.1.mDL",
+    supportedAuthorityKeyIdentifiers: [Data(/* AKI bytes from a trusted reader CA */)],
+    documentIdentifier: documentID,
+    invalidationDate: invalidationDate
+)
 ```
 
 If a request comes from a website not signed by one of the trusted certificate authorities, your app will be hidden from the selection sheet.
@@ -155,60 +158,39 @@ Add the mobile document provider entitlement to your app:
 
 ### Extension Principal Class
 
+The principal type conforms to `IdentityDocumentProvider`. It provides two things: `performRegistrationUpdates()` to reconcile registrations, and a `body` of type `some IdentityDocumentRequestScene` — **not** `some Scene`. You do **not** use `WindowGroup`; you use `ISO18013MobileDocumentRequestScene`, whose builder closure hands you one `ISO18013MobileDocumentRequestContext` per incoming request.
+
 ```swift
 import IdentityDocumentServices
 import IdentityDocumentServicesUI
 import SwiftUI
 
-struct IdentityDocumentProviderExtension: IdentityDocumentProvider {
+@main
+struct DocumentProviderExtension: IdentityDocumentProvider {
 
     // MARK: - Registration Updates
 
-    /// Called when the system needs updated registrations
+    /// The system calls this when it needs your registrations reconciled.
     func performRegistrationUpdates() async {
-        let registrationStore = IdentityDocumentProviderRegistrationStore()
+        let store = IdentityDocumentProviderRegistrationStore()
+        do {
+            let storedRegistrations = try await store.registrations
 
-        // Fetch all documents from your app's storage
-        let localDocuments = await fetchDocumentsFromStorage()
-
-        for document in localDocuments {
-            let registration = MobileDocumentRegistration(
-                mobileDocumentType: document.type,
-                documentIdentifier: document.id
-            )
-            registration.authorityKeyIdentifiers = document.trustedAuthorities
-
-            do {
-                try await registrationStore.addRegistration(registration)
-            } catch {
-                print("Failed to register document \(document.id): \(error)")
-            }
+            // Diff `storedRegistrations` against your app's documents,
+            // then `addRegistration` for any that aren't registered yet.
+            _ = storedRegistrations
+        } catch {
+            // Handle the error.
         }
     }
 
-    // MARK: - Authorization UI
+    // MARK: - Per-request UI
 
-    @MainActor
-    var body: some Scene {
-        WindowGroup {
-            RequestAuthorizationView(context: requestContext)
+    var body: some IdentityDocumentRequestScene {
+        ISO18013MobileDocumentRequestScene { context in
+            RequestAuthorizationView(context: context)
         }
     }
-
-    // Context provided by the system
-    var requestContext: ISO18013MobileDocumentRequestContext
-
-    private func fetchDocumentsFromStorage() async -> [LocalDocument] {
-        // Implementation to fetch from your app's storage
-        return []
-    }
-}
-
-// Helper type for local document storage
-struct LocalDocument {
-    let id: String
-    let type: String
-    let trustedAuthorities: [String]
 }
 ```
 
@@ -218,20 +200,12 @@ struct LocalDocument {
 
 ### ISO18013MobileDocumentRequestContext
 
-The context provided by the system when handling a verification request.
+The context the system hands the request scene's builder closure (declared in `IdentityDocumentServicesUI`). Its shape is system-owned — treat the members below as the contract, not a literal struct definition:
 
-```swift
-struct ISO18013MobileDocumentRequestContext {
-    /// The partial request (parsed, signature-validated by iOS)
-    var request: PartialRequest
+- `context.request` — the system-parsed `ISO18013MobileDocumentRequest` (doc type, requested namespaces/elements, requesting origin). Use it to drive the consent UI.
+- `try await context.sendResponse { rawRequest in ... return ISO18013MobileDocumentResponse(responseData:) }` — an **`async throws`** call. The closure receives the full raw request and must return an `ISO18013MobileDocumentResponse` wrapping your built+encrypted bytes.
 
-    /// Send the encrypted response back to the requesting website
-    func sendResponse(_ handler: @escaping (Data) async throws -> Data) async
-
-    /// Cancel the verification request
-    func cancel()
-}
-```
+`sendResponse` is the only path that hands data back. There is no separate "send the `Data`" callback signature — you return an `ISO18013MobileDocumentResponse`. To decline, simply do not call `sendResponse` (dismiss the scene / let the user back out); throwing from the closure or letting the scene close without a response ends the request without sharing anything.
 
 ### Building the Authorization View
 
@@ -281,61 +255,72 @@ struct RequestAuthorizationView: View {
         }
         .padding()
         .alert("Error", isPresented: $showError) {
-            Button("OK") { context.cancel() }
+            Button("OK") { dismiss() }
         } message: {
             Text(errorMessage)
         }
     }
 
+    @Environment(\.dismiss) private var dismiss
+
     // MARK: - Actions
 
     private func acceptVerification() {
         Task {
-            await context.sendResponse { rawRequest in
-                // Receive the full ISO 18013 Device Request
+            do {
+                try await context.sendResponse { rawRequest in
+                    // `rawRequest` is the full ISO 18013 device request.
 
-                // Step 1: Validate request consistency
-                try validateRequest(rawRequest, against: context.request)
+                    // 1. Confirm the raw request matches the system-parsed request.
+                    try await validateConsistency(request: context.request, rawRequest: rawRequest)
 
-                // Step 2: Validate the request signature
-                try validateSignature(in: rawRequest)
+                    // 2. Validate the request's reader signature against trusted CAs.
+                    try await validateRawRequest(rawRequest: rawRequest)
 
-                // Step 3: Build and encrypt the response
-                let response = try buildAndEncryptResponse(for: rawRequest)
+                    // 3. Build + encrypt the response with only approved elements.
+                    let responseData = try await buildAndEncryptResponse(rawRequest: rawRequest)
 
-                return response
+                    return ISO18013MobileDocumentResponse(responseData: responseData)
+                }
+                dismiss()
+            } catch {
+                errorMessage = error.localizedDescription
+                showError = true
             }
         }
     }
 
     private func declineVerification() {
-        context.cancel()
+        // Declining = end the request without calling `sendResponse`.
+        dismiss()
     }
 
     // MARK: - Validation Methods
 
-    private func validateRequest(_ rawRequest: Data, against partialRequest: PartialRequest) throws {
-        // Ensure the raw request matches the pre-validated partial request
-        // This prevents tampering between initial parsing and final processing
+    private func validateConsistency(request: ISO18013MobileDocumentRequest, rawRequest: IdentityDocumentWebPresentmentRawRequest) async throws {
+        // Ensure the raw request matches the system-parsed request —
+        // prevents tampering between initial parsing and final processing.
     }
 
-    private func validateSignature(in rawRequest: Data) throws {
-        // Validate the cryptographic signature using trusted certificate authorities
-        // Follow ISO 18013-5 validation procedures
+    private func validateRawRequest(rawRequest: IdentityDocumentWebPresentmentRawRequest) async throws {
+        // Validate the reader signature / certificate chain (ISO 18013-5).
+        // `IdentityDocumentWebPresentmentRawRequestValidator` provides helpers here.
     }
 
-    private func buildAndEncryptResponse(for rawRequest: Data) throws -> Data {
-        // Build the mdoc response with only the requested/approved elements
-        // Encrypt using the recipient's public key from the request
-        // Follow ISO 18013-7 response format
+    private func buildAndEncryptResponse(rawRequest: IdentityDocumentWebPresentmentRawRequest) async throws -> Data {
+        // Build the mdoc response with only the requested/approved elements,
+        // encrypt to the recipient public key (HPKE), per ISO 18013-7.
         return Data()
     }
 }
 
 // MARK: - Request Info View
 
+// `request` is the system-parsed `ISO18013MobileDocumentRequest`. The exact
+// accessor names (origin, requested elements) are owned by the SDK — read them
+// off `context.request` and present them; the shape below is illustrative.
 struct RequestInfoView: View {
-    let request: PartialRequest
+    let request: ISO18013MobileDocumentRequest
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -534,13 +519,13 @@ function buildMdocRequest() {
    |
 8. User selects document provider app
    |
-9. App extension receives ISO18013MobileDocumentRequestContext
+9. App extension's ISO18013MobileDocumentRequestScene gets an ISO18013MobileDocumentRequestContext
    |
 10. App displays authorization UI (RequestAuthorizationView)
     |
 11. User approves sharing
     |
-12. App receives full Device Request via sendResponse callback
+12. App calls context.sendResponse { rawRequest in ... } and receives the full Device Request
     |
 13. App validates request signature and consistency
     |
@@ -572,44 +557,44 @@ The website's server must:
 ### Document Registration
 
 ```swift
-// DO: Register documents immediately after provisioning
-func onDocumentProvisioned(_ document: Document) async {
-    let store = IdentityDocumentProviderRegistrationStore()
+// DO: Register documents after provisioning, with full init values
+func onDocumentProvisioned(_ document: Document) async throws {
+    let store = IdentityDocumentProviderRegistrationStore()   // actor
     let registration = MobileDocumentRegistration(
         mobileDocumentType: document.type,
-        documentIdentifier: document.id
+        supportedAuthorityKeyIdentifiers: document.trustedReaderAKIs, // [Data]
+        documentIdentifier: document.id,
+        invalidationDate: document.invalidationDate
     )
     try await store.addRegistration(registration)
 }
 
-// DO: Remove registrations when documents are deleted
-func onDocumentDeleted(_ documentId: String) async {
-    let store = IdentityDocumentProviderRegistrationStore()
-    try await store.removeRegistration(documentIdentifier: documentId)
-}
-
-// DO: Implement performRegistrationUpdates for sync
+// DO: Implement performRegistrationUpdates to reconcile on demand
 func performRegistrationUpdates() async {
-    // Reconcile local storage with system registrations
+    let store = IdentityDocumentProviderRegistrationStore()
+    do {
+        let stored = try await store.registrations
+        // Diff `stored` against your app's documents; addRegistration for new ones.
+        _ = stored
+    } catch {
+        // Handle the error.
+    }
 }
 ```
 
 ### Request Validation
 
 ```swift
-// ALWAYS: Validate partial request against full request
-func validateRequest(_ rawRequest: Data, against partialRequest: PartialRequest) throws {
-    // Ensure consistency to prevent tampering
-    guard rawRequestMatchesPartial(rawRequest, partialRequest) else {
-        throw ValidationError.requestMismatch
-    }
+// ALWAYS: Validate the raw request against the system-parsed request
+func validateConsistency(request: ISO18013MobileDocumentRequest,
+                         rawRequest: IdentityDocumentWebPresentmentRawRequest) async throws {
+    // Ensure consistency to prevent tampering between parse and process.
 }
 
 // ALWAYS: Validate signatures using trusted certificate authorities
-func validateSignature(in rawRequest: Data) throws {
-    // Follow ISO 18013-5 certificate chain validation
-    // Check certificate revocation status
-    // Verify signature algorithms are acceptable
+func validateRawRequest(rawRequest: IdentityDocumentWebPresentmentRawRequest) async throws {
+    // Use IdentityDocumentWebPresentmentRawRequestValidator.
+    // Follow ISO 18013-5 certificate chain validation, revocation, algorithm checks.
 }
 ```
 
@@ -622,8 +607,8 @@ RequestInfoView(request: context.request)
 // DO: Show the requesting website's identity
 Text("Requested by: \(request.websiteOrigin)")
 
-// DO: Allow users to decline
-Button("Decline") { context.cancel() }
+// DO: Allow users to decline — end the request WITHOUT calling sendResponse
+Button("Decline") { dismiss() }
 
 // DO: Indicate retention intent
 if request.retentionIntent {
@@ -689,17 +674,16 @@ enum IdentityDocumentError: LocalizedError {
 func acceptVerification() {
     Task {
         do {
-            await context.sendResponse { rawRequest in
-                try validateRequest(rawRequest, against: context.request)
-                try validateSignature(in: rawRequest)
-                return try buildAndEncryptResponse(for: rawRequest)
+            try await context.sendResponse { rawRequest in
+                try await validateConsistency(request: context.request, rawRequest: rawRequest)
+                try await validateRawRequest(rawRequest: rawRequest)
+                let data = try await buildAndEncryptResponse(rawRequest: rawRequest)
+                return ISO18013MobileDocumentResponse(responseData: data)
             }
+            dismiss()
         } catch {
-            // Handle error appropriately
-            await MainActor.run {
-                showError = true
-                errorMessage = error.localizedDescription
-            }
+            errorMessage = error.localizedDescription
+            showError = true
         }
     }
 }
@@ -777,4 +761,4 @@ let testAuthorities = [] // Production authorities
 
 ---
 
-*Last updated: February 2026*
+*Last updated: 2026-06-02. API surface verified against Apple Developer docs (IdentityDocumentServices / IdentityDocumentServicesUI) via Context7.*

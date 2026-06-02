@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`55 skills · 4 agents · 3 hooks · 32 iOS reference guides`
+`64 skills · 4 agents · 3 hooks · 23 iOS reference guides`
 
 ---
 
@@ -34,7 +34,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 55 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 64 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -76,7 +76,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 55 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 64 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -171,6 +171,15 @@ These trigger on framework keywords while you build. Each bundles a lean decisio
 | `swiftui-webview` | WebView, WKWebView, WebPage, embed web content, JS bridge |
 | `translation` | Translation, translate text, TranslationSession, on-device translation |
 | `accessorysetupkit` | AccessorySetupKit, accessory pairing, ASAccessorySession |
+| `alarmkit` | AlarmKit, alarm, timer, scheduled alert (iOS 26) |
+| `paperkit` | PaperKit, drawing, markup canvas, annotation (iOS 26) |
+| `gamesave` | GameSave, cloud game-save sync, GameSaveSyncedDirectory (iOS 26) |
+| `relevancekit` | RelevanceKit, content relevance, widget surfacing (iOS 26) |
+| `permissionkit` | PermissionKit, parental/guardian approval, communication permission (iOS 26) |
+| `declared-age-range` | Declared Age Range, privacy-preserving age verification (iOS 26) |
+| `identity-document-services` | mobile ID, digital ID / mdoc presentment (iOS 26) |
+| `energykit` | EnergyKit, clean-energy / grid-aware scheduling (iOS 26) |
+| `wifiaware` | Wi-Fi Aware, peer-to-peer device-to-device connections (iOS 26) |
 
 ### Meta
 
@@ -206,13 +215,12 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 
 ---
 
-32 reference guides under `docs/ios/`, organized by domain. Many frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
+23 reference guides under `docs/ios/`, organized by domain. Many frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
 
 - **appkit/** — AppKit guide, AppKit Liquid Glass
 - **data/** — RealmSwift
 - **commerce/** — PassKit, Firebase
-- **system/** — CarPlay, AlarmKit, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, Span/InlineArray
-- **hardware/** — WiFi Aware, EnergyKit
+- **system/** — CarPlay, Span/InlineArray
 - **screen-time/** — Screen Time API, DeviceActivity, FamilyControls, ManagedSettings
 - **ai/** — Speech Analyzer, Visual Intelligence
 - **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing

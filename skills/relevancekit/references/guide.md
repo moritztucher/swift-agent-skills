@@ -2,6 +2,76 @@
 
 A comprehensive guide for using Apple's RelevanceKit framework to make widgets contextually relevant in the Smart Stack on watchOS and iOS.
 
+> **Currency note (verified 2026-06-02 against official Apple docs via Context7 `/websites/developer_apple`).**
+> RelevanceKit is a thin, new framework (iOS/watchOS 26.0+) and its public API differs from earlier speculative drafts. The corrected, verified API surface is:
+> - The provider's relevance method returns **`WidgetRelevance<Intent>`**, not `[WidgetRelevanceAttributes]`.
+> - The attribute type is **`WidgetRelevanceAttribute`** (singular), built with **`configuration:` + a single `context:`** — there is no `relevantContexts:` array and no `score:` parameter.
+> - `RelevantContext` factories are: `date(_:)`, `date(_:kind:)`, `date(interval:kind:)`, `date(range:kind:)`, `date(from:to:)`, `location(_ region: CLRegion)`, `location(inferred:)`, `fitness(_:)`, `sleep(_:)`. There is no `RelevantContext.all([...])`, no `location(coordinate, radius:)`, no `.sleepSchedule`/`.fitness` properties.
+> - `RelevanceEntriesProvider` requirements: `relevance() async -> WidgetRelevance<Intent>`, `entry(configuration:context:) async throws -> Entry`, `placeholder(context:) -> Entry`. There is **no** `snapshot(...)` requirement on this provider.
+> - You do **not** write `import RelevanceKit`; importing `AppIntents` pulls it in implicitly.
+> - For timeline-based widgets, donate `RelevantIntent`s via `RelevantIntentManager.shared.updateRelevantIntents(_:)`.
+>
+> The verified examples below this banner are correct; older example bodies further down predate this verification — trust the banner and the verified examples over any conflicting older code.
+
+## Verified examples (authoritative)
+
+```swift
+import SwiftUI
+import WidgetKit
+import AppIntents   // implicitly imports RelevanceKit — no `import RelevanceKit` needed
+
+@available(watchOS 26, iOS 26, *)
+struct EmojiRangerWidget: Widget {
+    var body: some WidgetConfiguration {
+        RelevanceConfiguration(
+            kind: EmojiRanger.kind,
+            provider: EmojiRangerRelevanceProvider()
+        ) { entry in
+            EmojiRangerWidgetView(entry: entry)
+        }
+        .configurationDisplayName("Emoji Ranger")
+        .description("Healing status")
+    }
+}
+
+@available(watchOS 26, iOS 26, *)
+struct EmojiRangerRelevanceProvider: RelevanceEntriesProvider {
+    // Return WidgetRelevance<Intent> — NOT an array of attributes.
+    func relevance() async -> WidgetRelevance<EmojiRangerConfigurationIntent> {
+        let updates = await fetchHealingUpdates()
+        let attributes = updates.map { update in
+            // Single `context:` (not `relevantContexts:`), no `score:`.
+            WidgetRelevanceAttribute(
+                configuration: EmojiRangerConfigurationIntent(update: update),
+                context: .date(exact: update.date, kind: .scheduled)
+            )
+        }
+        return WidgetRelevance(attributes)
+    }
+
+    func entry(
+        configuration: EmojiRangerConfigurationIntent,
+        context: Context
+    ) async throws -> EmojiRangerEntry {
+        if context.isPreview { return .preview }
+        return EmojiRangerEntry(update: configuration.update)
+    }
+
+    func placeholder(context: Context) -> EmojiRangerEntry { .placeholder }
+}
+```
+
+Donating relevant intents for a timeline-based widget:
+
+```swift
+let intent = RelevantIntent(
+    configuredIntent,
+    widgetKind: EmojiRanger.kind,
+    relevance: .date(from: hero.injuryDate, to: hero.fullHealthDate)
+)
+try await RelevantIntentManager.shared.updateRelevantIntents([intent])
+```
+
 ---
 
 ## Table of Contents

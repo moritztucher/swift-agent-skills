@@ -4,6 +4,24 @@ A comprehensive guide to Apple's AlarmKit framework introduced in iOS 26, enabli
 
 ---
 
+> **API currency note (verified 2026-06-02 against Apple's official AlarmKit docs via Context7, `/websites/developer_apple_alarmkit`).** The API churned across the iOS 26 betas. Two patterns in the examples below reflect an earlier shape — read these corrections first, then treat the rest of the guide as current:
+>
+> 1. **`AlarmPresentation.Alert` no longer takes `stopButton` in its initializer.** The form `AlarmPresentation.Alert(title:stopButton:secondaryButton:secondaryButtonBehavior:)` is **deprecated (iOS 26.0–26.1)**. The current initializer is `AlarmPresentation.Alert(title:secondaryButton:secondaryButtonBehavior:)` — the **system supplies the stop button automatically**. `stopButton` survives only as a settable property (`var stopButton: AlarmButton { get set }`) if you need to customize it. Every code block below that passes `stopButton:` into the `Alert(...)` initializer is using the deprecated form; drop that argument (and optionally set `.stopButton` afterward).
+> 2. **`AlarmConfiguration` takes both `stopIntent` and `secondaryIntent`** (each `(any LiveActivityIntent)?`), not just `secondaryIntent`. For app-launching custom buttons, attach a `stopIntent` (and a `secondaryIntent` for `.custom` behavior) — both must conform to `LiveActivityIntent`, not plain `AppIntent`. The current countdown initializer is:
+>     ```swift
+>     init(countdownDuration: Alarm.CountdownDuration? = nil,
+>          schedule: Alarm.Schedule? = nil,
+>          attributes: AlarmAttributes<Metadata>,
+>          stopIntent: (any LiveActivityIntent)? = nil,
+>          secondaryIntent: (any LiveActivityIntent)? = nil,
+>          sound: AlertConfiguration.AlertSound = .default)
+>     ```
+>     Static `.alarm(schedule:attributes:stopIntent:secondaryIntent:sound:)` and `.timer(duration:attributes:stopIntent:secondaryIntent:sound:)` convenience factories also exist.
+>
+> Everything else — `AlarmManager.shared`, `requestAuthorization()`, `authorizationState`/`authorizationUpdates`, `schedule(id:configuration:)`, `cancel/stop/pause/resume/countdown(id:)`, `AlarmButton(text:textColor:systemImageName:)`, `AlarmPresentation(alert:countdown:paused:)`, `Countdown(title:pauseButton:)`, `Paused(title:resumeButton:)`, `secondaryButtonBehavior` `.countdown`/`.custom`, and the `NSAlarmKitUsageDescription` Info.plist key — is confirmed current.
+
+---
+
 ## Table of Contents
 
 1. [Overview](#overview)
@@ -687,6 +705,8 @@ func startCountdown(id: UUID) async throws {
 ## Custom Actions with App Intents
 
 AlarmKit integrates with App Intents for custom button actions.
+
+> **Currency:** intents attached to an alarm must conform to **`LiveActivityIntent`** (not just `AppIntent`), and they are passed as `stopIntent:` / `secondaryIntent:` on `AlarmConfiguration`. The `OpenTimerIntent` example below should declare `struct OpenTimerIntent: LiveActivityIntent`.
 
 ### Create a Custom Intent
 
