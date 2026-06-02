@@ -12,6 +12,8 @@ By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](
 
 A working, opinionated `~/.claude/` setup focused on shipping production iOS apps with Claude Code. It encodes a light, **UI-first** workflow across five phases — **Setup → Plan → Build → Verify → Ship** — alongside specialist skills for SwiftUI craft, design audits, onboarding, and simulator automation. Plan with a living brief, build the flow before the logic, ship.
 
+It's built around the mistakes Claude makes on iOS by default — and corrects them. It won't nest a `NavigationStack` inside another `NavigationStack` and break your back button. It reaches for `@Observable` instead of `@Published` / `ObservableObject`, because it's 2026. It won't ship a tappable control without an `.accessibilityLabel`. The taste is baked into the skills, not bolted on after.
+
 It's the configuration I use day-to-day. The skills compose into one pipeline (`/ios-init` → `/ios-brief` → build features UI-first → `/ios-review` → `/ios-commit` → `/pr-to-develop`), but each one stands on its own. Not sure what to run next? Type **`/ios`** — the orchestrator detects where your project is and routes you to the right step. Drop into any iOS project and they pick up the local `CLAUDE.md` for context.
 
 ## What this isn't
@@ -24,6 +26,15 @@ It's the configuration I use day-to-day. The skills compose into one pipeline (`
 ---
 
 ## Installation
+
+Fastest path — install the skills + agents as a Claude Code plugin:
+
+```bash
+/plugin marketplace add moritztucher/claude-code-ios-setup
+/plugin install ios-setup@claude-code-ios-setup
+```
+
+That gives you the 22 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the 70 framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -65,7 +76,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 26 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 22 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -223,4 +234,4 @@ MIT — see [LICENSE](LICENSE).
 
 ---
 
-By [Moritz Tucher](https://github.com/moritztucher) · iOS developer building for the App Store with AI-native workflows. Connect on [LinkedIn](https://www.linkedin.com/in/moritz-tucher/).
+By [Moritz Tucher](https://github.com/moritztucher) · ~3 years shipping production iOS apps to the App Store, now building AI-native iOS workflows. Connect on [LinkedIn](https://www.linkedin.com/in/moritz-tucher/).

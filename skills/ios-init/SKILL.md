@@ -55,7 +55,7 @@ Ask with AskUserQuestion — but **skip any item the blurb already answered** (c
 - **Database:** SwiftData ⭐ / RealmSwift / CoreData / None
 - **Distribution:** Open source / Commercial (proprietary) — *(usually from the blurb)*
 - **Audience:** B2C / B2B / Internal — *(usually from the blurb)*
-- **Git Prefix:** text input (e.g. P66, APP)
+- **Git Prefix:** text input (e.g. APP, IOS)
 - **Bundle ID:** text input (e.g. com.company.appname)
 
 ### A2 — Technical Architecture Brainstorm

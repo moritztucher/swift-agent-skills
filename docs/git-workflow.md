@@ -8,9 +8,9 @@ Replace `[PREFIX]` with project-specific prefix:
 
 | Type | Pattern | Example |
 |------|---------|---------|
-| Feature | `feature/[PREFIX]-999-brief-description` | `feature/P66-123-user-authentication` |
+| Feature | `feature/[PREFIX]-999-brief-description` | `feature/APP-123-user-authentication` |
 | Bugfix | `bugfix/[PREFIX]-999-brief-description` | `bugfix/APP-456-login-crash` |
-| Prototype | `prototype/[PREFIX]-999-brief-description` | `prototype/P66-789-experimental-animation` |
+| Prototype | `prototype/[PREFIX]-999-brief-description` | `prototype/APP-789-experimental-animation` |
 
 ## Prototype Branches
 
@@ -56,7 +56,7 @@ Each worktree can have its own Claude session for isolation.
 
 **Examples:**
 ```
-P66-123: feat: Add user authentication with biometrics
+APP-123: feat: Add user authentication with biometrics
 APP-456: fix: Resolve navigation coordinator memory leak
 ```
 
