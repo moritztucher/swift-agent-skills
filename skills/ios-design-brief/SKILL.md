@@ -35,7 +35,7 @@ If the app doesn't build yet or has no UI (greenfield), skip the loop and design
 ### 1. Gather context
 - Read `docs/PROJECT-BRIEF.md` (personality, audience, features, any visual hints). If absent, ask the user for a one-line personality brief in chat, or suggest `/ios-brief` first.
 - Read `CLAUDE.md` for tech context.
-- Read the lever reference: `~/.claude/docs/ios/swiftui/design-craft-patterns.md` (the 6 levers + concrete techniques — use it for vocabulary, not as a style to copy).
+- Read the lever reference: `~/.claude/skills/ios-design-brief/references/design-craft-patterns.md` (the 6 levers + concrete techniques — use it for vocabulary, not as a style to copy).
 - **Scan existing design infrastructure:** design packages (`import DesignSystem`, etc.), theme/token files (`Theme.swift`, `Colors.swift`, `DesignTokens.swift`), color assets in `*.xcassets`, hardcoded colors in Views, and whether `.preferredColorScheme()` is set. Record these for the doc's `## Existing Design Infrastructure` section — the elevate skill must reconcile them.
 
 ### 2. See the current state

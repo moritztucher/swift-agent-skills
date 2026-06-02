@@ -35,7 +35,7 @@ If the app can't be built/run, say so, fall back to a code-only read, and mark t
 
 ### 1. Scope & context
 - Argument → that feature/path; none → whole app. Glob `*View.swift` in scope + shared `ViewComponents/`. If >20 Views, prioritize main screens, navigation entry points, and the most visually complex.
-- Read `CLAUDE.md`, `ARCHITECTURE.md`, `docs/DESIGN-SYSTEM.md` (if present — audit adherence to it), and `~/.claude/docs/ios/swiftui/design-craft-patterns.md` (the lever framework + concrete technique benchmark).
+- Read `CLAUDE.md`, `ARCHITECTURE.md`, `docs/DESIGN-SYSTEM.md` (if present — audit adherence to it), and `~/.claude/skills/ios-design-brief/references/design-craft-patterns.md` (the lever framework + concrete technique benchmark).
 
 ### 2. Capture & read the screens
 Run the Visual Loop on the in-scope screens. For each screen, pair the screenshot with its code to note: color usage (hardcoded/asset/system), typography (sizes/weights/`design:`), spacing rhythm, motion, hierarchy signals, custom vs default indicators, and delight moments.

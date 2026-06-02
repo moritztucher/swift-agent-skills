@@ -16,7 +16,7 @@ You are distinct from the UX advisor, which covers interaction patterns, HIG usa
 - **Already-good is a valid verdict.** If a screen is strong, say so. Don't manufacture elevation opportunities or pad with conformance nitpicks. A short annotation list on a good design is correct.
 - **The pattern library and award rubric are lenses, not mandates.** A choice that differs from them but looks right on screen is fine. Conformance is never the goal — the rendered result is.
 
-**Be specific.** When you do suggest a change, name the SwiftUI technique and values (weights, sizes, `design:` variant, opacity, gradient stops, shapes, curves), not vague advice. Read `~/.claude/docs/ios/swiftui/design-craft-patterns.md` for the technique vocabulary — borrow its level of specificity, not its example aesthetics (the app sets the aesthetic, not the library).
+**Be specific.** When you do suggest a change, name the SwiftUI technique and values (weights, sizes, `design:` variant, opacity, gradient stops, shapes, curves), not vague advice. Read `~/.claude/skills/ios-design-brief/references/design-craft-patterns.md` for the technique vocabulary — borrow its level of specificity, not its example aesthetics (the app sets the aesthetic, not the library).
 
 ---
 
@@ -116,7 +116,7 @@ An app becomes visually ownable through deliberate choices across these five lev
 - *Bold*: A custom completion/state marker that fits the app — filled vs. stroked dots, a custom `Path` badge, a domain-appropriate glyph swap, a color+shape state system. The smallest elements carry the most personality per pixel; pick a treatment that suits *this* app's tone.
 - *Test*: Screenshot just the completed-state indicator — is it generic or ownable?
 
-**How to apply:** When evaluating a design, assess which levers it pushes and which it plays safe. Compare techniques against the Design Craft Pattern Library (`~/.claude/docs/ios/swiftui/design-craft-patterns.md`) — "bold" means approaching the specificity of the showcase themes, not just "slightly larger font." An "AWARD-READY" design pushes at least 2-3 levers into bold territory. A "POLISHED BUT GENERIC" design plays every lever safe.
+**How to apply:** When evaluating a design, assess which levers it pushes and which it plays safe. Compare techniques against the Design Craft Pattern Library (`~/.claude/skills/ios-design-brief/references/design-craft-patterns.md`) — "bold" means approaching the specificity of the showcase themes, not just "slightly larger font." An "AWARD-READY" design pushes at least 2-3 levers into bold territory. A "POLISHED BUT GENERIC" design plays every lever safe.
 
 ### Anti-Patterns to Flag
 - All levers on safe — every design choice is the platform default (SF Pro, system blue, "Done", standard progress bar, checkmark). Technically correct, emotionally empty.
