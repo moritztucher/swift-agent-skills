@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 82 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 87 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -104,6 +104,11 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [oslog-logging](oslog-logging/SKILL.md): Structured logging + observability — Logger/OSLog levels and privacy redaction, OSSignposter intervals, MetricKit payloads.
 - [universal-links](universal-links/SKILL.md): Universal links + deep linking — associated domains, the AASA file + hosting rules, onOpenURL / NSUserActivity handling.
 - [avkit-videoplayer](avkit-videoplayer/SKILL.md): Video playback — SwiftUI VideoPlayer, AVPlayer/AVPlayerViewController, HLS streaming, async asset loading, Picture-in-Picture, audio session.
+- [pencilkit](pencilkit/SKILL.md): Freehand drawing — PKCanvasView, PKDrawing persistence, PKToolPicker, drawing policy, SwiftUI wrapping (vs paperkit's markup layer).
+- [core-motion](core-motion/SKILL.md): Motion sensors — CMMotionManager device motion, pedometer, headphone motion, altimeter; shared instance, intervals, NSMotionUsageDescription.
+- [core-nfc](core-nfc/SKILL.md): NFC — NFCNDEFReaderSession read/write, NFCTagReaderSession (ISO7816/MiFare/FeliCa), entitlement + Info.plist, background tags.
+- [controls-controlwidget](controls-controlwidget/SKILL.md): iOS 18 Controls — ControlWidget for Control Center / Lock Screen / Action Button, button vs toggle, ControlValueProvider + SetValueIntent.
+- [app-store-submission](app-store-submission/SKILL.md): Ship pipeline — xcodebuild archive/exportArchive, signing, App Store Connect API key upload, TestFlight, rejection checklist.
 
 ## Meta
 
