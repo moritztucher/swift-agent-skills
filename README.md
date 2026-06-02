@@ -1,6 +1,6 @@
-# Claude Code — iOS Setup
+# Swift Agent Skills
 
-A curated Claude Code setup for iOS developers — skills, agents, slash commands, and configuration for shipping SwiftUI apps faster. **SwiftUI-first, not UIKit.**
+A curated collection of agent skills for shipping **SwiftUI** apps — skills, agents, slash commands, and configuration for Apple-platform development. **SwiftUI-first, not UIKit.** Packaged for Claude Code.
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
@@ -31,16 +31,16 @@ It's the configuration I use day-to-day. The skills compose into one pipeline (`
 Fastest path — install the skills + agents as a Claude Code plugin:
 
 ```bash
-/plugin marketplace add moritztucher/claude-code-ios-setup
-/plugin install ios-setup@claude-code-ios-setup
+/plugin marketplace add moritztucher/swift-agent-skills
+/plugin install swift-skills@swift-agent-skills
 ```
 
 That gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
-git clone https://github.com/moritztucher/claude-code-ios-setup.git
-cd claude-code-ios-setup
+git clone https://github.com/moritztucher/swift-agent-skills.git
+cd swift-agent-skills
 
 # 2. Back up anything you already have
 [ -d ~/.claude/skills ] && mv ~/.claude/skills ~/.claude/skills.backup

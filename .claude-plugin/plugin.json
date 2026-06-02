@@ -1,12 +1,12 @@
 {
-  "name": "ios-setup",
-  "description": "Skills and agents for shipping production SwiftUI apps with Claude Code — a UI-first lifecycle (Setup → Plan → Build → Verify → Ship) plus SwiftUI/Swift craft specialists.",
+  "name": "swift-skills",
+  "description": "Skills and agents for shipping production SwiftUI apps — a UI-first lifecycle (Setup → Plan → Build → Verify → Ship) plus SwiftUI/Swift craft and Apple-framework specialists.",
   "version": "0.1.0",
   "author": {
     "name": "Moritz Tucher"
   },
-  "homepage": "https://github.com/moritztucher/claude-code-ios-setup",
-  "repository": "https://github.com/moritztucher/claude-code-ios-setup",
+  "homepage": "https://github.com/moritztucher/swift-agent-skills",
+  "repository": "https://github.com/moritztucher/swift-agent-skills",
   "license": "MIT",
   "keywords": [
     "ios",
