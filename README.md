@@ -4,7 +4,7 @@ A curated Claude Code setup for iOS developers — skills, agents, slash command
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`22 skills · 4 agents · 3 hooks · 70 iOS reference guides`
+`32 skills · 4 agents · 3 hooks · 59 iOS reference guides`
 
 ---
 
@@ -34,7 +34,7 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install ios-setup@claude-code-ios-setup
 ```
 
-That gives you the 22 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the 70 framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+That gives you the 32 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the 70 framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
@@ -76,7 +76,7 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 ## Skills
 
-The 22 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 32 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -132,6 +132,23 @@ These trigger automatically while you read, write, or review SwiftUI and concurr
 | `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
 | `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
 
+### Framework integration (model-invoked)
+
+These trigger on framework keywords while you build. Each bundles a lean decision layer — numbered dials, an anti-rationalization table, and a pre-ship verification gate — over a deep API reference in the skill's `references/`. All currency-checked against Apple/vendor docs via Context7.
+
+| Skill | Triggers on |
+|-------|-------------|
+| `storekit` | in-app purchase, IAP, subscription, StoreKit, Transaction, entitlement |
+| `revenuecat` | RevenueCat, paywall, offerings, entitlements, Purchases SDK |
+| `widgetkit` | widget, home/lock screen widget, WidgetKit, TimelineProvider, interactive widget |
+| `liquid-glass` | Liquid Glass, glass effect, `glassEffect`, iOS 26 glass material |
+| `foundation-models` | on-device AI, Apple Intelligence, Foundation Models, guided generation, `@Generable` |
+| `appintents` | Siri, Shortcuts, App Intents, AppShortcut, AppEntity |
+| `swiftdata` | SwiftData, persistence, `@Model`, `@Query`, Core Data migration |
+| `activitykit` | Live Activity, Dynamic Island, ActivityKit |
+| `backgroundtasks` | background refresh, BGTask, background processing |
+| `watchconnectivity` | Apple Watch, watchOS, WCSession, paired device |
+
 ### Meta
 
 | Skill | What it does |
@@ -166,18 +183,16 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 
 ---
 
-## iOS framework guides
+59 reference guides under `docs/ios/`, organized by domain. (The most-used frameworks — StoreKit, RevenueCat, WidgetKit, ActivityKit, AppIntents, BackgroundTasks, SwiftData, Foundation Models, Liquid Glass, WatchConnectivity — have graduated into the **framework-integration skills** above; their deep guides now live in each skill's `references/`.)
 
-70 reference guides under `docs/ios/`, organized by domain:
-
-- **swiftui/** — Liquid Glass adoption, AttributedString, TipKit, Charts, performance, webview, design craft patterns
+- **swiftui/** — AttributedString, TipKit, Charts, performance, webview, design craft patterns
 - **appkit/** — AppKit guide, AppKit Liquid Glass
-- **data/** — SwiftData, Core Spotlight, CloudKit, RealmSwift
-- **commerce/** — StoreKit, RevenueCat (incl. iOS 26 paywall fix), PassKit, Firebase
-- **system/** — WidgetKit, ActivityKit, AppIntents, AlarmKit, BackgroundTasks, UserNotifications, HealthKit, MapKit, CarPlay, AuthenticationServices, EventKit, Contacts, PhotosUI, CoreLocation, MessageUI, SafariServices, Translation, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, AlarmKit, AVFoundation, Span/InlineArray, LocalAuthentication
-- **hardware/** — CoreBluetooth, WiFi Aware, AccessorySetupKit, CoreHaptics, WatchConnectivity, EnergyKit
+- **data/** — Core Spotlight, CloudKit, RealmSwift
+- **commerce/** — PassKit, Firebase
+- **system/** — UserNotifications, HealthKit, MapKit, CarPlay, AuthenticationServices, EventKit, Contacts, PhotosUI, CoreLocation, MessageUI, SafariServices, Translation, AlarmKit, RelevanceKit, PermissionKit, IdentityDocumentServices, DeclaredAgeRange, GameSave, PaperKit, AVFoundation, Span/InlineArray, LocalAuthentication
+- **hardware/** — CoreBluetooth, WiFi Aware, AccessorySetupKit, CoreHaptics, EnergyKit
 - **screen-time/** — Screen Time API, DeviceActivity, FamilyControls, ManagedSettings
-- **ai/** — Foundation Models, CoreML, Speech Analyzer, Visual Intelligence
+- **ai/** — CoreML, Speech Analyzer, Visual Intelligence
 - **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing
 
 Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@import`) and `ios-coding-standards.md` / `architecture-patterns.md` reference docs.

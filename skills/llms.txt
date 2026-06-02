@@ -1,6 +1,6 @@
 # Claude Code — iOS Setup
 
-> A curated, UI-first iOS development setup for Claude Code. 22 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
+> A curated, UI-first iOS development setup for Claude Code. 32 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/claude-code-ios-setup` then `/plugin install ios-setup@claude-code-ios-setup`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -39,6 +39,21 @@
 - [swiftui-pro](swiftui-pro/SKILL.md): Comprehensive SwiftUI code review — modern APIs, performance, accessibility. From Paul Hudson (MIT).
 - [swiftui-expert-skill](swiftui-expert-skill/SKILL.md): SwiftUI guidance incl. iOS 26 Liquid Glass and Instruments `.trace` analysis. From Antoine van der Lee.
 - [swift-concurrency](swift-concurrency/SKILL.md): Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration. From Antoine van der Lee.
+
+## Framework integration (model-invoked)
+
+Lean decision layer (numbered dials + anti-rationalization table + verification gate) over a deep API reference in each skill's `references/`. Currency-checked against Apple/vendor docs via Context7.
+
+- [storekit](storekit/SKILL.md): In-app purchases and subscriptions with StoreKit 2 — products, purchase flow, transaction verification, entitlements, restore, testing.
+- [revenuecat](revenuecat/SKILL.md): IAP, subscriptions, and paywalls via RevenueCat — Purchases SDK, offerings, CustomerInfo entitlements, RevenueCatUI.
+- [widgetkit](widgetkit/SKILL.md): Home/lock screen and Control Center widgets — TimelineProvider, configuration, interactive widgets, update strategies.
+- [liquid-glass](liquid-glass/SKILL.md): iOS 26 Liquid Glass in SwiftUI — glassEffect, GlassEffectContainer, glass button styles, batching, fallbacks.
+- [foundation-models](foundation-models/SKILL.md): Apple's on-device LLM — LanguageModelSession, @Generable guided generation, tool calling, streaming, availability.
+- [appintents](appintents/SKILL.md): Siri, Shortcuts, and Spotlight — AppIntent, AppShortcut, AppEntity/EntityQuery, dialog/snippet output.
+- [swiftdata](swiftdata/SKILL.md): Persistence with SwiftData — @Model, @Query, #Predicate, relationships, concurrency, versioned migrations.
+- [activitykit](activitykit/SKILL.md): Live Activities and Dynamic Island — ActivityAttributes, push-token/push-to-start updates, dynamic island regions.
+- [backgroundtasks](backgroundtasks/SKILL.md): Deferred background work — BGTaskScheduler, app-refresh/processing/continued tasks, scheduling constraints.
+- [watchconnectivity](watchconnectivity/SKILL.md): iPhone↔Apple Watch sync — WCSession, messages, application context, file/userInfo transfers, activation lifecycle.
 
 ## Meta
 

@@ -666,27 +666,30 @@ func createSession(for user: User) -> LanguageModelSession {
 ### Error Types
 
 ```swift
+// Every GenerationError case carries a `Context` (a diagnostic struct with a
+// `debugDescription`); `refusal` additionally carries a `Refusal` value.
 do {
     let response = try await session.respond(to: prompt)
-} catch LanguageModelSession.GenerationError.guardrailViolation {
+} catch LanguageModelSession.GenerationError.guardrailViolation(let context) {
     // Content violates safety guidelines
-    print("Request contains inappropriate content")
+    print("Request contains inappropriate content: \(context.debugDescription)")
 
-} catch LanguageModelSession.GenerationError.exceededContextWindowSize {
+} catch LanguageModelSession.GenerationError.exceededContextWindowSize(let context) {
     // Conversation too long
-    print("Context window exceeded - start new session")
+    print("Context window exceeded - start new session: \(context.debugDescription)")
 
-} catch LanguageModelSession.GenerationError.rateLimited(let retryAfter) {
-    // Too many requests
-    print("Rate limited. Retry after: \(retryAfter)")
+} catch LanguageModelSession.GenerationError.rateLimited(let context) {
+    // Too many requests — the case carries a Context, not a retry interval
+    print("Rate limited: \(context.debugDescription)")
 
-} catch LanguageModelSession.GenerationError.refusal(let reason, let message) {
-    // Model refused to generate
-    print("Refused: \(message)")
+} catch LanguageModelSession.GenerationError.refusal(let refusal, _) {
+    // Model refused to generate. `refusal.explanation` is `async throws` and
+    // returns a Response<String> you can await for a human-readable reason.
+    print("Model refused the request: \(refusal)")
 
-} catch LanguageModelSession.GenerationError.assetsUnavailable {
+} catch LanguageModelSession.GenerationError.assetsUnavailable(let context) {
     // Model assets deleted or Apple Intelligence disabled during use
-    print("Model assets unavailable - retry later")
+    print("Model assets unavailable - retry later: \(context.debugDescription)")
 
 } catch {
     print("Unknown error: \(error)")
@@ -699,8 +702,8 @@ do {
 enum FoundationModelsError: LocalizedError {
     case guardrailViolation
     case contextExceeded
-    case rateLimited(TimeInterval)
-    case refused(String)
+    case rateLimited
+    case refused
     case unavailable
     case unknown(Error)
 
@@ -710,10 +713,10 @@ enum FoundationModelsError: LocalizedError {
             return "This request cannot be processed due to content guidelines."
         case .contextExceeded:
             return "The conversation is too long. Please start a new chat."
-        case .rateLimited(let seconds):
-            return "Please wait \(Int(seconds)) seconds before trying again."
-        case .refused(let message):
-            return message
+        case .rateLimited:
+            return "You're sending requests too quickly. Please wait a moment and try again."
+        case .refused:
+            return "The model declined to answer this request."
         case .unavailable:
             return "AI features are not available on this device."
         case .unknown(let error):
@@ -721,6 +724,8 @@ enum FoundationModelsError: LocalizedError {
         }
     }
 
+    // GenerationError cases all carry a `Context`; map by case, ignoring it here.
+    // For `refusal`, await `refusal.explanation` separately if you need the reason.
     static func from(_ error: Error) -> FoundationModelsError {
         if let genError = error as? LanguageModelSession.GenerationError {
             switch genError {
@@ -728,10 +733,10 @@ enum FoundationModelsError: LocalizedError {
                 return .guardrailViolation
             case .exceededContextWindowSize:
                 return .contextExceeded
-            case .rateLimited(let retry):
-                return .rateLimited(retry)
-            case .refusal(_, let message):
-                return .refused(message)
+            case .rateLimited:
+                return .rateLimited
+            case .refusal:
+                return .refused
             default:
                 return .unknown(error)
             }
