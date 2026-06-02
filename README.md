@@ -35,7 +35,13 @@ Fastest path — install the skills + agents as a Claude Code plugin:
 /plugin install swift-skills@swift-agent-skills
 ```
 
-That gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+These skills follow the open [Agent Skills](https://agentskills.io) format (a `SKILL.md` per skill + `references/`), so they also install into any other skills-compatible agent — Cursor, Codex, Gemini CLI, Kiro, and [others](https://agentskills.io/clients) — via the community CLI:
+
+```bash
+npx skills add moritztucher/swift-agent-skills
+```
+
+The Claude plugin path gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
 
 ```bash
 # 1. Clone into a working directory
