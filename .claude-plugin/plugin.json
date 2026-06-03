@@ -1,7 +1,7 @@
 {
   "name": "swift-skills",
   "description": "Skills and agents for shipping production SwiftUI apps — a UI-first lifecycle (Setup → Plan → Build → Verify → Ship) plus SwiftUI/Swift craft and Apple-framework specialists.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Moritz Tucher"
   },
