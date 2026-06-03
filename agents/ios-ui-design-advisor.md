@@ -51,7 +51,7 @@ You are distinct from the UX advisor, which covers interaction patterns, HIG usa
 - **Size as primary signal** — dramatic scale differences (not subtle ones) create clear hierarchy.
 - **Layer multiple contrast dimensions** — combine value (light/dark), size, weight, density, and motion to separate levels.
 - **Accent color for single primary action** — one highlighted button per view. Secondary actions use lower-contrast treatments.
-- **Depth through materials not drop shadows** — use `.ultraThinMaterial`, `.regularMaterial` for layering. Drop shadows are a last resort.
+- **Depth through materials and Liquid Glass, not drop shadows** — on iOS 26 the system depth idiom is Liquid Glass: `.glassEffect(_:in:)` (and `.buttonStyle(.glass)`) for floating/control surfaces, grouped in a `GlassEffectContainer` when several glass elements coexist or morph. Use `.ultraThinMaterial` / `.regularMaterial` for broader layering. Drop shadows are a last resort. Judge glass on screen — it's background-dependent and can wash out over light or busy content.
 
 ### Visibility & Perceptibility
 - **Minimum border visibility** — borders must be >= 2pt width AND >= 0.6 opacity to register as intentional design elements. Thinner/lighter borders are invisible noise.
