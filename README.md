@@ -41,7 +41,13 @@ These skills follow the open [Agent Skills](https://agentskills.io) format (a `S
 npx skills add moritztucher/swift-agent-skills
 ```
 
-The Claude plugin path gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+The Claude plugin path gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
+
+```bash
+npx swift-agent-skills
+```
+
+It never overwrites an existing `CLAUDE.md`, `settings.json`, or `statusline-command.sh`; run with `--dry-run` to preview, or `--yes` to skip the prompt. Prefer to do it by hand? The equivalent manual steps:
 
 ```bash
 # 1. Clone into a working directory

@@ -1,0 +1,41 @@
+{
+  "name": "swift-agent-skills",
+  "version": "0.1.1",
+  "description": "Currency-checked agent skills for shipping SwiftUI apps — full setup installer for ~/.claude (skills, agents, framework reference guides, hooks, example settings).",
+  "bin": {
+    "swift-agent-skills": "bin/install.mjs"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "agents",
+    "docs",
+    "hooks",
+    "settings",
+    "CLAUDE.md",
+    "statusline-command.sh",
+    "README.md",
+    "LICENSE"
+  ],
+  "homepage": "https://github.com/moritztucher/swift-agent-skills",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moritztucher/swift-agent-skills.git"
+  },
+  "author": {
+    "name": "Moritz Tucher"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ios",
+    "swiftui",
+    "swift",
+    "xcode",
+    "claude-code",
+    "agent-skills"
+  ]
+}
