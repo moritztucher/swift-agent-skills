@@ -24,6 +24,7 @@ When invoked, analyze the code or proposal provided and give specific, actionabl
 - **Dynamic Type** — all text must scale with user's preferred text size
 - **Dark Mode** — all views must work in both light and dark appearance
 - **Safe Areas** — respect safe areas unless intentionally extending behind them (backgrounds)
+- **iOS 26 system idioms** — on iOS 26 targets, expect the value-based `TabView` with `Tab`/`TabSection` (and the bottom tab accessory / `.tabViewBottomAccessory`), Liquid Glass toolbars and controls, and content scrolling edge-to-edge beneath translucent bars. Flag hand-rolled tab bars or opaque custom chrome that fights these conventions; let content show through glass rather than boxing it in.
 
 ---
 
