@@ -24,7 +24,7 @@
   "homepage": "https://github.com/moritztucher/swift-agent-skills",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moritztucher/swift-agent-skills.git"
+    "url": "git+https://github.com/moritztucher/swift-agent-skills.git"
   },
   "author": {
     "name": "Moritz Tucher"
