@@ -9,6 +9,7 @@ Goal: make the setup usable by non-Claude agents (Codex, Kiro CLI, Cursor, Gemin
 - **Advisors:** ship in both forms — Claude subagents in `agents/` and portable skills (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`).
 - **Fan-out skills degrade gracefully:** `ios-audit`, `ios-design-audit`, `ios-onboarding-audit`, `ios-design-elevate` spawn advisors on Claude Code and carry a documented no-subagent fallback (run the lens skills inline) everywhere else. `ios-agents` documents both worlds. (`ios-review` turned out to have no fan-out — nothing to degrade.)
 - **Lint hook:** `hooks/pre-commit.swiftlint` is a tool-agnostic git pre-commit variant of `swiftlint-autofix.sh`.
+- **Kiro CLI caveat documented:** Kiro's automatic skill activation is best-effort — one-shot description matching with no enforcement, diluting at 91 skills, and custom Kiro agents don't auto-load skills at all (they need explicit `skill://` resources). The README's "Non-Claude users" section documents the two mitigations: explicit `/skill-name` invocation, and an always-on `.kiro/steering/skill-router.md` rule telling Kiro to check the skill catalog before implementing framework features.
 
 ## Done
 
@@ -18,6 +19,7 @@ Goal: make the setup usable by non-Claude agents (Codex, Kiro CLI, Cursor, Gemin
 - [x] **Tier 2** — 4 advisor agents re-authored as skills (both forms shipped).
 - [x] **Tier 2** — graceful degradation in the fan-out skills (spawn if subagents available, else apply the lens skills inline).
 - [x] **Tier 3** — `swiftlint-autofix` shipped as a tool-agnostic git pre-commit hook (`hooks/pre-commit.swiftlint`); installer chmods it.
+- [x] **Follow-up** — Kiro CLI auto-activation caveat + mitigations (slash invocation, `skill-router` steering rule) documented in the README's "Non-Claude users" section.
 
 ## Remaining
 

@@ -101,6 +101,22 @@ What you get, and what's Claude-enhanced:
 - **The fan-out skills degrade gracefully** — `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`, `/ios-review`, `/ios-design-elevate`, `/ios-agents` spawn parallel advisor subagents on Claude Code; on agents without subagent support they run the same advisor passes inline. Same findings, sequential instead of parallel.
 - **Hooks:** `swiftlint-autofix` is also available as a standard git pre-commit hook (`hooks/pre-commit.swiftlint`) — see [Hooks](#hooks). `notify-done.sh` and the `settings.json` wiring are Claude-specific.
 
+**Kiro CLI caveat — auto-activation is not at parity.** The skill descriptions are already written as trigger lists, but Kiro's automatic skill loading is best-effort: it matches your request against skill descriptions once, with nothing forcing the model to act on a match, and with 91 skills in the catalog relevance dilutes. Also, only Kiro's *default* agent auto-loads skills at all — custom agents must list each skill explicitly as a `skill://` resource. Two mitigations:
+
+1. **Invoke skills explicitly** when it matters: `/activitykit`, `/ios-review`, etc. Treat auto-activation as a convenience, not a guarantee.
+2. **Add a router steering rule** so Kiro checks the catalog before writing framework code. Save as `.kiro/steering/skill-router.md`:
+
+   ```markdown
+   ---
+   inclusion: always
+   ---
+
+   Before implementing or reviewing any iOS framework feature (Live Activities,
+   widgets, HealthKit, StoreKit, App Intents, …), check the installed skills for
+   a matching specialist and load it first. Prefer a loaded skill over answering
+   from memory.
+   ```
+
 ---
 
 ## Skills
