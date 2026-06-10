@@ -263,17 +263,6 @@ For detailed guidelines, read these when needed:
 
 ---
 
-## Framework Guides
+## Framework Skills
 
-Organized by domain in `~/.claude/docs/ios/`. Read the relevant guide before implementing unfamiliar frameworks.
-
-| Category | Path | Guides |
-|----------|------|--------|
-| SwiftUI | `docs/ios/swiftui/` | swiftui-guidelines, swiftui-performance, swiftui-badge, swiftui-webview, LiquidGlass, swift-charts, attributed-string, tipkit, design-craft-patterns |
-| AppKit | `docs/ios/appkit/` | appkit, appkit-liquid-glass |
-| Data & Persistence | `docs/ios/data/` | swiftdata, realmswift, cloudkit, corespotlight |
-| Commerce | `docs/ios/commerce/` | storekit, revenuecat, revenuecat-paywall-fix, firebase, passkit |
-| AI & ML | `docs/ios/ai/` | coreml, foundation-models, visual-intelligence, speech-analyzer |
-| Screen Time | `docs/ios/screen-time/` | screen-time-api, familycontrols, managedsettings, deviceactivity |
-| Hardware | `docs/ios/hardware/` | corebluetooth, accessorysetupkit, wifiaware, corehaptics, energykit, watchconnectivity |
-| System | `docs/ios/system/` | activitykit, widgetkit, appintents, healthkit, auth, localauthentication, corelocation, mapkit, avfoundation, photosui, contacts, eventkit, notifications, carplay, translation, and more |
+The deep framework guidance lives in the installed skill catalog, not in docs. Before implementing or reviewing any Apple framework feature (Live Activities, widgets, HealthKit, StoreKit, App Intents, …), check the catalog for a matching specialist skill and load it before writing code — prefer a loaded skill over answering from memory. Skill names are framework-literal (`healthkit`, `storekit`, `widgetkit`, …); if no name matches the user's phrasing, scan for the feature ("lock screen tracking" → `activitykit`, "Sign in with Apple" → `authenticationservices`).

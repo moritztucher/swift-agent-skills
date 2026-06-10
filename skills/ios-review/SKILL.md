@@ -24,9 +24,9 @@ For directories, glob for `*.swift` files and read the architecturally significa
 ### Step 2 — Load Rules
 
 Read the project's architectural rules from these sources (skip any that don't exist):
-1. `CLAUDE.md` — project-specific tech decisions and rules
+1. `CLAUDE.md` — project-specific tech decisions and rules (the `@import`-ed iOS guide carries the global rules)
 2. `ARCHITECTURE.md` — architecture overview and patterns
-3. The global rules are already loaded from `~/.claude/rules/ios/`
+3. `AGENTS.md` at the project root, if present (non-Claude setups carry the house rules there)
 
 ### Step 3 — Review Across Categories
 

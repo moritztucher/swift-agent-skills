@@ -207,21 +207,21 @@ Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR,
 
 ### D2 — Context7 & Framework Guide Hints
 1. **Context7** (`resolve-library-id` → `query-docs`): current setup docs for each chosen/detected 3rd-party service; note recommended version + critical steps in the ADR References. Existing path: flag outdated deps.
-2. **Framework guide hints** for each technology with a matching guide:
-   | Decision | Guide |
+2. **Framework skill hints** for each technology with a matching specialist skill in the catalog:
+   | Decision | Skill |
    |----------|-------|
-   | SwiftData | `docs/ios/data/swiftdata.md` |
-   | RealmSwift | `docs/ios/data/realmswift.md` |
-   | CloudKit sync | `docs/ios/data/cloudkit.md` |
-   | Apple Sign-In | `docs/ios/system/auth.md` |
-   | Firebase Auth | `docs/ios/commerce/firebase.md` |
-   | Biometrics | `docs/ios/system/localauthentication.md` |
-   | RevenueCat | `docs/ios/commerce/revenuecat.md` |
-   | Push notifications | `docs/ios/system/notifications.md` |
-   | WidgetKit | `docs/ios/system/widgetkit.md` |
-   | CoreLocation | `docs/ios/system/corelocation.md` |
-   | HealthKit | `docs/ios/system/healthkit.md` |
-   List only guides matching actual choices. For macOS/visionOS/etc., also point to `docs/ios/appkit/` and the relevant platform guides.
+   | SwiftData | `swiftdata` |
+   | RealmSwift | `realmswift` |
+   | CloudKit sync | `cloudkit` |
+   | Apple Sign-In | `authenticationservices` |
+   | Firebase Auth | `firebase` |
+   | Biometrics | `localauthentication` |
+   | RevenueCat | `revenuecat` |
+   | Push notifications | `usernotifications` |
+   | WidgetKit | `widgetkit` |
+   | CoreLocation | `corelocation` |
+   | HealthKit | `healthkit` |
+   List only skills matching actual choices (and only ones present in the installed catalog). For macOS targets, point to the `appkit` skill.
 
 ### D3 — Wrap Up & Handoff
 - List everything created/updated (incl. `.gitignore`, `LICENSE`, `README.md`); note skipped (already existed). Existing path: list tech-debt items.

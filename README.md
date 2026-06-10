@@ -4,7 +4,7 @@ Currency-checked agent skills for shipping **SwiftUI** apps — a SwiftUI-first 
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`91 skills · 4 agents · 4 hooks · 11 iOS reference guides`
+`91 skills · 4 agents · 4 hooks · 3 iOS reference guides`
 
 ---
 
@@ -303,13 +303,10 @@ chmod +x /path/to/project/.git/hooks/pre-commit
 
 ---
 
-11 reference guides under `docs/ios/`, organized by domain. Most frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
+3 reference guides under `docs/ios/`. All framework depth lives in the **framework-integration skills** above (each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; what remains is the house-rules layer:
 
-- **system/** — Span/InlineArray
-- **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing
-- Plus the top-level `ios-guide.md`, `ios-coding-standards.md`, and `architecture-patterns.md` (loaded via `@import`)
-
-Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@import`) and `ios-coding-standards.md` / `architecture-patterns.md` reference docs.
+- `ios-guide.md` — the consolidated entry point a project loads via `@import`
+- `ios-coding-standards.md` and `architecture-patterns.md` — the standards and architecture references it links
 
 ---
 
