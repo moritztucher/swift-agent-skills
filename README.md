@@ -269,7 +269,7 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 |------|------|--------------|-------------|
 | `swiftlint-autofix.sh` | After every Edit/Write to a `.swift` file | Runs `swiftlint lint --fix` quietly | ✅ |
 | `notify-done.sh` | When Claude stops | macOS notification with the Glass sound | ✅ |
-| `definition-of-done.sh` | On stop (if wired) | Builds the Xcode project, runs tests, checks SwiftLint — blocks completion if any fails | ⬜️ opt-in |
+| `definition-of-done.sh` | On stop (if wired) | Builds the Xcode project and checks SwiftLint — blocks completion if either fails (tests stay in CI) | ⬜️ opt-in |
 
 **Portable variant:** `pre-commit.swiftlint` is a tool-agnostic **git pre-commit hook** with the same lint-fix behavior — it runs `swiftlint --fix` on staged Swift files and re-stages them, so non-Claude users (or anyone who prefers commit-time fixing) get the same result without Claude's hook system. Install per project:
 
