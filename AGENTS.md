@@ -33,13 +33,11 @@ Act as a senior iOS engineer. Question requirements that conflict with platform 
 
 ---
 
-## View Inventory (per project)
+## Component Reuse
 
-Every iOS project maintains a `VIEW-INVENTORY.md` at the project root.
+Before implementing any new View, ViewModifier, ButtonStyle, or shared UI component, search the codebase (`ViewComponents/`, the feature's `ViewComponents/`) for an existing match — reuse or extend it rather than inventing a parallel one.
 
-- **Before implementing any new View, ViewModifier, ButtonStyle, or shared UI component:** read `VIEW-INVENTORY.md` first. If a matching component exists, reuse or extend it.
-- **When adding a shared component:** add an inventory entry in the same change.
-- **When renaming or deleting a component:** update the inventory in the same diff.
+Projects may optionally keep a `VIEW-INVENTORY.md` index at the root. If the project has one, check it first and update it in the same diff that adds, renames, or removes a shared component.
 
 ---
 

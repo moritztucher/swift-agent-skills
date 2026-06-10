@@ -317,11 +317,9 @@ chmod +x /path/to/project/.git/hooks/pre-commit
 - `project-brief-template.md`
 - `architecture-template.md`
 - `adr-template.md`
-- `backlog-template.md`
 - `changelog-template.md`
 - `design-system-template.md`
-- `view-inventory-template.md`
-- `project-memory-template.md`
+- `view-inventory-template.md` (optional — projects opt in via `/ios-init`)
 
 ---
 

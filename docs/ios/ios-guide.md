@@ -10,15 +10,11 @@ Load this guide for iOS work only. Project CLAUDE.md files in iOS projects pull 
 
 ---
 
-## View Inventory (per project)
+## Component Reuse
 
-Every iOS project maintains a `VIEW-INVENTORY.md` at the project root.
+Before implementing any new View, ViewModifier, ButtonStyle, or shared UI component, search the codebase (`ViewComponents/`, the feature's `ViewComponents/`) for an existing match — reuse or extend it rather than inventing a parallel one.
 
-- **Before implementing any new View, ViewModifier, ButtonStyle, or shared UI component:** read `VIEW-INVENTORY.md` first. If a matching component already exists, reuse or extend it rather than inventing a parallel one.
-- **When adding a new shared component:** add an entry to `VIEW-INVENTORY.md` in the same turn that introduces the file.
-- **When renaming or deleting a component:** update the inventory in the same diff.
-
-`/ios-init` scaffolds an empty inventory for a new project, or scans the codebase and pre-fills it for an existing one (it auto-detects which).
+Projects may optionally keep a `VIEW-INVENTORY.md` index at the root (`/ios-init` offers to scaffold one). If the project has one, treat it as authoritative: check it first, and update it in the same diff that adds, renames, or removes a shared component.
 
 ---
 
@@ -220,7 +216,7 @@ Detects **new** / **fresh Xcode scaffold** / **existing** codebase and adapts. T
 
 **Adopt path (existing):** scan the codebase, present findings, fill only undetectable gaps; document the existing structure instead of scaffolding.
 
-Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md` (diagram tailored to the actual decisions), `docs/decisions/ADR-0001`, `CHANGELOG.md`, `VIEW-INVENTORY.md`, `.gitignore`, `LICENSE` (when applicable), `README.md`, folder structure (new/fresh only), and optionally `Backlog.md`. Repo files are generated-if-missing — never silently overwritten. Finishes by writing `docs/.ios-init-decisions.json` and handing off to `/ios-brief`.
+Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md` (diagram tailored to the actual decisions), `docs/decisions/ADR-0001`, `CHANGELOG.md`, `.gitignore`, `LICENSE` (when applicable), `README.md`, folder structure (new/fresh only), and optionally `VIEW-INVENTORY.md` and `Backlog.md`. Repo files are generated-if-missing — never silently overwritten. Finishes by writing `docs/.ios-init-decisions.json` and handing off to `/ios-brief`.
 
 ---
 
@@ -253,13 +249,11 @@ For detailed guidelines, read these when needed:
 
 | Template | Location |
 |----------|----------|
-| Project Memory | `~/.claude/docs/templates/project-memory-template.md` |
 | Architecture | `~/.claude/docs/templates/architecture-template.md` |
 | ADR | `~/.claude/docs/templates/adr-template.md` |
 | Changelog | `~/.claude/docs/templates/changelog-template.md` |
-| Backlog | `~/.claude/docs/templates/backlog-template.md` |
 | Design System | `~/.claude/docs/templates/design-system-template.md` |
-| View Inventory | `~/.claude/docs/templates/view-inventory-template.md` |
+| View Inventory (optional) | `~/.claude/docs/templates/view-inventory-template.md` |
 
 ---
 

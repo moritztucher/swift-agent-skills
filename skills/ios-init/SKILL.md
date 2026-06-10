@@ -135,10 +135,10 @@ Existing path: **do NOT scaffold folders** — document the existing structure i
 Generate-if-missing for repo files; **never silently overwrite** an existing `README.md`, `LICENSE`, or `.gitignore` — diff and ask.
 
 ### CLAUDE.md (project root)
-First line is the iOS guide import: `@~/.claude/docs/ios/ios-guide.md`. Then `## Role` (senior iOS engineer framing) and `## View Inventory` (read VIEW-INVENTORY.md before new UI). Then project config: name, bundle ID, **platforms**, deployment targets, git prefix, database, and a **`## Technical Decisions`** section with every resolved/detected choice. Mark unresolved **TBD**. Existing path: note "Generated from existing codebase scan." If CLAUDE.md exists, diff + merge (ensure the import, `## Role`, `## View Inventory` are present).
+First line is the iOS guide import: `@~/.claude/docs/ios/ios-guide.md`. Then `## Role` (senior iOS engineer framing). Then project config: name, bundle ID, **platforms**, deployment targets, git prefix, database, and a **`## Technical Decisions`** section with every resolved/detected choice. Mark unresolved **TBD**. Existing path: note "Generated from existing codebase scan." If CLAUDE.md exists, diff + merge (ensure the import and `## Role` are present).
 
 ### .claude/memory.md
-Template `project-memory-template.md`. Pre-fill Decisions (`- [YYYY-MM-DD] Area: Choice — rationale`). Existing path: label "Observed from existing codebase."
+Sections: `## Decisions` (`- [YYYY-MM-DD] Area: Choice — rationale`), `## Preferences`, `## Common Issues`. Pre-fill Decisions from the resolved choices. Existing path: label "Observed from existing codebase."
 
 ### ARCHITECTURE.md — tailored, not boilerplate
 Template `architecture-template.md`, but **render the diagram and sections from the actual decisions** rather than copying the generic layers:
@@ -192,8 +192,8 @@ Generate from the blurb + decisions (generate-if-missing; diff-and-merge if pres
 - **Getting started** — clone, open the `.xcodeproj`/`.xcworkspace`, build & run; any setup steps for chosen services.
 - **License** — the chosen license (or "Proprietary").
 
-### VIEW-INVENTORY.md (project root)
-Copy `view-inventory-template.md`, replace `{{ProjectName}}` / `{{YYYY-MM-DD}}`. New/Fresh: keep example rows as illustrations. Existing: delete examples, populate from the B1 scan; merge if it exists.
+### VIEW-INVENTORY.md (optional)
+Ask if wanted — default is **skip**; searching the codebase covers component discovery. If wanted: copy `view-inventory-template.md`, replace `{{ProjectName}}` / `{{YYYY-MM-DD}}`. Existing: delete examples, populate from the B1 scan; merge if it exists.
 
 ### Backlog.md (optional)
 Ask if wanted. New/Fresh: seed from decisions (folder structure + coordinator; NetworkService if networking; auth flow + Keychain + biometrics if auth; DB models if database; sync/offline tasks; one task per integration). Existing: seed from observed gaps (`// TODO:`s, missing tests, missing `PrivacyInfo.xcprivacy`, SwiftLint setup, `@ObservableObject`→`@Observable`, `NavigationView`→`NavigationStack`).
@@ -203,7 +203,7 @@ Ask if wanted. New/Fresh: seed from decisions (folder structure + coordinator; N
 ## Section D — Validate, Hint, Hand Off (both paths)
 
 ### D1 — Validation
-Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR, Backlog ↔ decisions, memory has an entry per decision, README/LICENSE reflect the chosen distribution. Fix silently unless ambiguous.
+Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR, Backlog ↔ decisions (if a Backlog.md was created), memory has an entry per decision, README/LICENSE reflect the chosen distribution. Fix silently unless ambiguous.
 
 ### D2 — Context7 & Framework Guide Hints
 1. **Context7** (`resolve-library-id` → `query-docs`): current setup docs for each chosen/detected 3rd-party service; note recommended version + critical steps in the ADR References. Existing path: flag outdated deps.
@@ -259,9 +259,7 @@ Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR,
 
 | Template | Path |
 |----------|------|
-| Project Memory | `~/.claude/docs/templates/project-memory-template.md` |
 | Architecture | `~/.claude/docs/templates/architecture-template.md` |
 | ADR | `~/.claude/docs/templates/adr-template.md` |
 | Changelog | `~/.claude/docs/templates/changelog-template.md` |
-| Backlog | `~/.claude/docs/templates/backlog-template.md` |
-| View Inventory | `~/.claude/docs/templates/view-inventory-template.md` |
+| View Inventory (optional) | `~/.claude/docs/templates/view-inventory-template.md` |
