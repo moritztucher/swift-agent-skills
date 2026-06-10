@@ -1,6 +1,6 @@
 # Swift Agent Skills
 
-> A curated, SwiftUI-first collection of agent skills for Apple-platform development, packaged for Claude Code. 87 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/swift-agent-skills` then `/plugin install swift-skills@swift-agent-skills`, or copy into `~/.claude/`.
+> A curated, SwiftUI-first collection of agent skills for Apple-platform development, packaged for Claude Code. 91 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/swift-agent-skills` then `/plugin install swift-skills@swift-agent-skills`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -26,6 +26,13 @@
 - [ios-audit](ios-audit/SKILL.md): Holistic project audit through PM, UX, UI, ARCH lenses.
 - [ios-design-audit](ios-design-audit/SKILL.md): Visual craft audit — screenshots the running app and judges real screens, with severity-rated findings and elevation suggestions.
 - [ios-onboarding-audit](ios-onboarding-audit/SKILL.md): Walk the real onboarding flow in the simulator (or design one) — activation psychology, permission timing, measured time-to-value.
+
+### Advisor lenses (portable forms of the Claude subagents)
+
+- [ios-ux-advisor](ios-ux-advisor/SKILL.md): UX advisory lens — HIG compliance, accessibility, interaction patterns, component choices.
+- [ios-ui-design-advisor](ios-ui-design-advisor/SKILL.md): Visual design craft lens — color, typography, whitespace, motion, hierarchy, emotional design.
+- [ios-onboarding-advisor](ios-onboarding-advisor/SKILL.md): Onboarding strategy lens — activation, permission timing, progressive disclosure, time-to-value.
+- [context7-docs-writer](context7-docs-writer/SKILL.md): Write project-specific framework integration docs and troubleshooting notes, verified against current library documentation.
 
 ## Ship
 

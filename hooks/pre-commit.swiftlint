@@ -1,0 +1,26 @@
+#!/bin/bash
+# Tool-agnostic git pre-commit hook: swiftlint --fix on staged Swift files.
+# Works with any editor or agent — the portable counterpart of the Claude
+# Code hook swiftlint-autofix.sh (which fixes on every Edit/Write instead).
+#
+# Install into a project:
+#   cp hooks/pre-commit.swiftlint /path/to/project/.git/hooks/pre-commit
+#   chmod +x /path/to/project/.git/hooks/pre-commit
+# (or append its body to an existing pre-commit hook)
+
+set -euo pipefail
+
+command -v swiftlint >/dev/null 2>&1 || exit 0
+
+# Staged, non-deleted Swift files only
+STAGED_SWIFT=$(git diff --cached --name-only --diff-filter=ACMR -- '*.swift')
+[ -z "$STAGED_SWIFT" ] && exit 0
+
+while IFS= read -r file; do
+    [ -f "$file" ] || continue
+    swiftlint lint --fix --path "$file" --quiet 2>/dev/null || true
+    # Re-stage so the fixes land in this commit
+    git add -- "$file"
+done <<< "$STAGED_SWIFT"
+
+exit 0

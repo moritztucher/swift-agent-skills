@@ -23,6 +23,17 @@ Present the following agent reference to the user:
 | **Bash** | Command execution, git operations, terminal tasks |
 | **general-purpose** | Complex multi-step tasks, research, code search |
 
+### This bundle's advisors
+
+| Agent | Use Case |
+|-------|----------|
+| **ios-ux-advisor** | UX patterns, HIG compliance, component choices, interaction flow |
+| **ios-ui-design-advisor** | Visual craft — color, typography, motion, hierarchy, emotional design |
+| **ios-onboarding-advisor** | Onboarding strategy — activation, permission timing, progressive disclosure |
+| **context7-docs-writer** | Project-specific framework integration docs via Context7 |
+
+> **Portability:** these four advisors also ship as plain skills (`skills/ios-ux-advisor/`, `skills/ios-ui-design-advisor/`, `skills/ios-onboarding-advisor/`, `skills/context7-docs-writer/`). On clients without a Task tool / subagent support, invoke or read the skill and apply the lens inline — the built-in agents above are Claude Code–specific.
+
 ### Explore Agent
 
 Fast codebase exploration. Use for:

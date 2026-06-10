@@ -3,7 +3,7 @@
 // Copies skills, agents, docs, hooks, and example settings into ~/.claude/,
 // backing up anything already there. Mirrors the manual block in the README.
 //
-//   npx swift-agent-skills                  (once published to npm)
+//   npx swift-agent-skills                       (published on npm)
 //   npx github:moritztucher/swift-agent-skills   (runs straight from the repo)
 //
 // Flags:
@@ -88,7 +88,7 @@ function chmodExec(...paths) {
   for (const p of paths) {
     if (!existsSync(p)) continue;
     if (statSync(p).isDirectory()) {
-      for (const f of readdirSync(p)) if (f.endsWith(".sh")) chmodExec(join(p, f));
+      for (const f of readdirSync(p)) if (f.endsWith(".sh") || f.startsWith("pre-commit")) chmodExec(join(p, f));
     } else if (!DRY) {
       chmodSync(p, 0o755);
     }
