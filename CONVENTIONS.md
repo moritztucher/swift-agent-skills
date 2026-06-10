@@ -37,7 +37,7 @@ Every skill or guide is verified against **Context7 + the live Apple/vendor docs
 
 ## Registries to keep in sync
 
-When adding/removing a skill, update in the same change: the README badge count + the relevant table, and `skills/llms.txt` (count + entry). The link count in `llms.txt` should always equal the number of skill directories.
+When adding/removing a skill, update in the same change: the README badge count + the relevant table, `skills/llms.txt` (count + entry), and the `skillOverrides` block in `settings/settings.json.example` (plus the name-only/full-description counts in the README's context-budget section). The link count in `llms.txt` should always equal the number of skill directories.
 
 ## Advisors exist in two forms
 

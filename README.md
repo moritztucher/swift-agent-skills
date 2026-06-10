@@ -18,7 +18,7 @@ It's the configuration I use day-to-day. The skills compose into one pipeline (`
 
 ## What this isn't
 
-- Not a UIKit toolkit — it's **SwiftUI-first**; UIKit only shows up where you must bridge (MessageUI, PhotosPicker, etc.), and AppKit only for macOS
+- Not a UIKit toolkit — it's **SwiftUI-first**; UIKit only shows up where you must bridge (the occasional system picker or sheet)
 - Not a fork of every public Claude Code skill — it's curated, not comprehensive
 - Not a framework — it's a config snapshot you copy into `~/.claude/`
 - Not a substitute for thinking about your architecture — the skills surface decisions, you still make them
@@ -296,7 +296,7 @@ chmod +x /path/to/project/.git/hooks/pre-commit
 
 The setup splits into three layers:
 
-1. **Skills** are slash-commands the user invokes (`/ios-init`, `/ios-brief`, etc.), grouped by lifecycle phase (Setup → Plan → Build → Verify → Ship). Each is a `SKILL.md` with frontmatter and instructions. `/ios` is the orchestrator that reads project state and routes to the right phase. Some skills carry evals (`evals/evals.json`) for measuring trigger accuracy.
+1. **Skills** are slash-commands the user invokes (`/ios-init`, `/ios-brief`, etc.), grouped by lifecycle phase (Setup → Plan → Build → Verify → Ship). Each is a `SKILL.md` with frontmatter and instructions. `/ios` is the orchestrator that reads project state and routes to the right phase.
 2. **Agents** are specialists Claude spawns via the Task tool. They have a narrower scope and toolset than the main thread. Skills like `/ios-design-audit` and `/ios-onboarding-audit` spawn the design and onboarding advisors for parallel analysis.
 3. **Docs + templates** are the reference layer. The iOS guide loads via `@~/.claude/docs/ios/ios-guide.md` in a project's `CLAUDE.md`. Framework guides are read on demand. Templates feed `/ios-init` and `/ios-brief`.
 

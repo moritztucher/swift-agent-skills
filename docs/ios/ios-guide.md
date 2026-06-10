@@ -234,13 +234,13 @@ Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md` (diagram tailor
 
 ## Reference Docs
 
-For detailed guidelines, read these when needed:
+The rules above are the single source of truth; these docs carry the expanded examples and formats — read when needed:
 
 | Topic | Doc |
 |-------|-----|
-| Coding standards, testing, security | `~/.claude/docs/ios/ios-coding-standards.md` |
+| Code-organization, error-handling, testing examples | `~/.claude/docs/ios/ios-coding-standards.md` |
 | Git workflow, commits, PRs, Issues | `~/.claude/docs/git-workflow.md` |
-| Architecture, DI, project structure, ADRs | `~/.claude/docs/ios/architecture-patterns.md` |
+| DI/networking/state examples, detailed project structure, ADR & changelog formats | `~/.claude/docs/ios/architecture-patterns.md` |
 
 ---
 
