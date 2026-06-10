@@ -1,6 +1,6 @@
 # Swift Agent Skills
 
-> A curated, SwiftUI-first collection of agent skills for Apple-platform development, packaged for Claude Code. 91 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/swift-agent-skills` then `/plugin install swift-skills@swift-agent-skills`, or copy into `~/.claude/`.
+> A curated, SwiftUI-first collection of agent skills for Apple-platform development, packaged for Claude Code. 88 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/swift-agent-skills` then `/plugin install swift-skills@swift-agent-skills`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -16,14 +16,12 @@
 ## Build
 
 - [ios-design-elevate](ios-design-elevate/SKILL.md): Apply the design system view by view, verifying each screen visually (build → screenshot → compare → iterate); never touches business logic.
-- [ios-build](ios-build/SKILL.md): Build the Xcode project and report results.
-- [ios-test](ios-test/SKILL.md): Run unit and UI tests.
 - [ios-automate](ios-automate/SKILL.md): iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video.
 
 ## Verify
 
 - [ios-review](ios-review/SKILL.md): Thorough code review on changes or specified files.
-- [ios-audit](ios-audit/SKILL.md): Holistic project audit through PM, UX, UI, ARCH lenses.
+- [ios-audit](ios-audit/SKILL.md): Holistic project audit through PM, UX, ARCH lenses (code evidence; visual craft → ios-design-audit).
 - [ios-design-audit](ios-design-audit/SKILL.md): Visual craft audit — screenshots the running app and judges real screens, with severity-rated findings and elevation suggestions.
 - [ios-onboarding-audit](ios-onboarding-audit/SKILL.md): Walk the real onboarding flow in the simulator (or design one) — activation psychology, permission timing, measured time-to-value.
 
@@ -119,5 +117,4 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 
 ## Meta
 
-- [ios-agents](ios-agents/SKILL.md): List all available subagents.
 - [compact-summary](compact-summary/SKILL.md): Compress the current session into a reusable context primer.

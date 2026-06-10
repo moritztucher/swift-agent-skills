@@ -186,7 +186,7 @@ The build philosophy is **UI-first**: get the app's flow feeling good with the U
 | Plan | `/ios-design-brief` | Establish project-wide visual design system through Q&A | docs/DESIGN-SYSTEM.md |
 | Build | *(write code)* | Build the next MVP feature UI-first, then layer in logic & backend | Production code |
 | Build | `/ios-design-elevate` | Rewrite visual layer to match design system — theme, levers, consistency | Elevated Views + theme layer |
-| Build | `/ios-build`, `/ios-test`, `/ios-automate` | Build the project, run tests, drive the simulator | Build/test results |
+| Build | `xcodebuild` + `/ios-automate` | Build the project, run tests, drive the simulator | Build/test results |
 | Verify | `/ios-review` | Severity-rated code review (CRITICAL/HIGH/MEDIUM/LOW) | review-{file}.md |
 | Verify | `/ios-audit` | Four-lens audit (PM/UX/UI/ARCH) of project or feature | docs/AUDIT-REPORT.md |
 | Verify | `/ios-design-audit` | Audit visual craft against pattern library benchmarks | docs/DESIGN-AUDIT.md |

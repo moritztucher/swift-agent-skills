@@ -4,7 +4,7 @@ Currency-checked agent skills for shipping **SwiftUI** apps — a SwiftUI-first 
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`91 skills · 4 agents · 4 hooks · 3 iOS reference guides`
+`88 skills · 4 agents · 4 hooks · 3 iOS reference guides`
 
 ---
 
@@ -41,7 +41,7 @@ These skills follow the open [Agent Skills](https://agentskills.io) format (a `S
 npx skills add moritztucher/swift-agent-skills
 ```
 
-The Claude plugin path gives you the 91 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
+The Claude plugin path gives you the 88 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
 
 ```bash
 npx swift-agent-skills
@@ -79,7 +79,7 @@ chmod +x ~/.claude/statusline-command.sh
 
 ### Skill context budget (Claude Code)
 
-Claude Code lists every skill's name + description in context, but caps the listing at ~1% of the context window (`skillListingBudgetFraction`, default `0.01`) — with 91 skills that budget overflows, and descriptions of less-used skills get silently dropped (names stay). Rather than raising the budget and paying ~10k tokens in every session, `settings.json.example` ships a curated `skillOverrides` block:
+Claude Code lists every skill's name + description in context, but caps the listing at ~1% of the context window (`skillListingBudgetFraction`, default `0.01`) — with 88 skills that budget overflows, and descriptions of less-used skills get silently dropped (names stay). Rather than raising the budget and paying ~10k tokens in every session, `settings.json.example` ships a curated `skillOverrides` block:
 
 - **~69 skills are deliberately `"name-only"`** — their names are framework-literal triggers (`healthkit`, `storekit`, `widgetkit`, the explicitly-invoked `/ios-*` workflow skills, …), so the description adds little at listing time. They still auto-trigger on framework mentions and load their full content on invocation.
 - **22 skills keep full descriptions** — the ones whose triggers are indirect: "Live Activity" → `activitykit`, "glass effect / iOS 26 design language" → `liquid-glass`, "Sign in with Apple" / "passkeys" → `authenticationservices`, "Face ID" → `localauthentication`, "Apple Pay" → `passkit`, "Siri/Shortcuts" → `appintents`, "OCR / Live Text" → `visual-intelligence`, plus the routing/disambiguation skills (`storekit` vs `revenuecat`, `cloudkit` vs `swiftdata`, `reactivity`, `controls-controlwidget`, `permissionkit`, …). These now fit comfortably inside the default budget.
@@ -104,13 +104,13 @@ npx skills add moritztucher/swift-agent-skills
 
 What you get, and what's Claude-enhanced:
 
-- **All 91 skills work everywhere** — they're plain `SKILL.md` + `references/` in the open Agent Skills format, including the `/ios-*` workflow and every framework specialist.
+- **All 88 skills work everywhere** — they're plain `SKILL.md` + `references/` in the open Agent Skills format, including the `/ios-*` workflow and every framework specialist.
 - **House rules:** Claude Code loads them via `@import`; on other agents, copy [`AGENTS.md`](AGENTS.md) from this repo into your iOS project root — it carries the same stack, architecture, style, security, and testing rules in the agent-neutral `AGENTS.md` convention.
 - **Advisor guidance** (UX, UI design, onboarding, docs-writing) ships in both forms: as Claude subagents in `agents/` and as portable skills (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`) that any client can invoke.
-- **The fan-out skills degrade gracefully** — `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`, `/ios-review`, `/ios-design-elevate`, `/ios-agents` spawn parallel advisor subagents on Claude Code; on agents without subagent support they run the same advisor passes inline. Same findings, sequential instead of parallel.
+- **The fan-out skills degrade gracefully** — `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`, `/ios-design-elevate` spawn parallel advisor subagents on Claude Code; on agents without subagent support they run the same advisor passes inline. Same findings, sequential instead of parallel.
 - **Hooks:** `swiftlint-autofix` is also available as a standard git pre-commit hook (`hooks/pre-commit.swiftlint`) — see [Hooks](#hooks). `notify-done.sh` and the `settings.json` wiring are Claude-specific.
 
-**Kiro CLI caveat — auto-activation is not at parity.** The skill descriptions are already written as trigger lists, but Kiro's automatic skill loading is best-effort: it matches your request against skill descriptions once, with nothing forcing the model to act on a match, and with 91 skills in the catalog relevance dilutes. Also, only Kiro's *default* agent auto-loads skills at all — custom agents must list each skill explicitly as a `skill://` resource. Two mitigations:
+**Kiro CLI caveat — auto-activation is not at parity.** The skill descriptions are already written as trigger lists, but Kiro's automatic skill loading is best-effort: it matches your request against skill descriptions once, with nothing forcing the model to act on a match, and with 88 skills in the catalog relevance dilutes. Also, only Kiro's *default* agent auto-loads skills at all — custom agents must list each skill explicitly as a `skill://` resource. Two mitigations:
 
 1. **Invoke skills explicitly** when it matters: `/activitykit`, `/ios-review`, etc. Treat auto-activation as a convenience, not a guarantee.
 2. **Add a router steering rule** so Kiro checks the catalog before writing framework code. Save as `.kiro/steering/skill-router.md`:
@@ -130,7 +130,7 @@ What you get, and what's Claude-enhanced:
 
 ## Skills
 
-The 91 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 88 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -154,16 +154,16 @@ Then **build features UI-first** — write the UI layer so the flow feels good, 
 | Skill | What it does |
 |-------|--------------|
 | `/ios-design-elevate` | Apply the design system view by view, verifying each screen visually (build → screenshot → compare → iterate); never touches business logic |
-| `/ios-build` | Build the Xcode project and report results |
-| `/ios-test` | Run unit and UI tests |
 | `/ios-automate` | iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video |
+
+Building and testing run through `xcodebuild` directly — no wrapper skill needed.
 
 ### Verify
 
 | Skill | What it does |
 |-------|--------------|
 | `/ios-review` | Thorough code review on changes or specified files |
-| `/ios-audit` | Holistic project audit through PM, UX, UI, ARCH lenses |
+| `/ios-audit` | Holistic project audit through PM, UX, ARCH lenses (code evidence; visual craft → `/ios-design-audit`) |
 | `/ios-design-audit` | Visual craft audit — screenshots the running app and judges the real screens — with severity-rated findings + elevation suggestions |
 | `/ios-onboarding-audit` | Walk the real onboarding flow in the simulator (or design one from scratch) — activation psychology, permission timing, measured time-to-value |
 
@@ -262,7 +262,6 @@ These trigger on framework and workflow keywords while you build. Each bundles a
 
 | Skill | What it does |
 |-------|--------------|
-| `/ios-agents` | List all available subagents |
 | `/compact-summary` | Compress the current session into a reusable context primer for the next chat |
 
 ---
