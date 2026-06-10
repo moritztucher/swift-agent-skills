@@ -1,2 +1,5 @@
 # Local planning / audit snapshots — not for the repo
 AUDIT-*.md
+
+# macOS
+.DS_Store
