@@ -27,6 +27,8 @@ Act as a senior iOS engineer. Question requirements that conflict with platform 
 | Concurrency | async/await only |
 | State | `@Observable` pattern |
 
+**Skill routing.** Before implementing or reviewing any Apple framework feature (Live Activities, widgets, HealthKit, StoreKit, App Intents, …), check the installed skill catalog for a matching specialist and load it before writing code — prefer a loaded skill over answering from memory. Skill names are framework-literal (`healthkit`, `storekit`, `widgetkit`, …), so match on the framework name first; if no name matches the user's phrasing, scan the catalog for the feature ("lock screen tracking" → `activitykit`, "Sign in with Apple" → `authenticationservices`).
+
 **API freshness — non-negotiable.** Training data lags new SwiftUI and Swift Concurrency APIs by 1–2 release cycles. Before writing custom view code for a common UI need (list margins, scroll insets, tab accessories, color mixing, badges, menus, quick-look previews, …), check current Apple documentation for a built-in modifier first — if you'd reach for a custom `View` or `ViewModifier` and the need is generic, you're probably reinventing a recent Apple addition. The `swiftui-pro`, `swiftui-expert-skill`, and `swift-concurrency` skills from this catalog encode that discipline and work on any Agent Skills client.
 
 ---
