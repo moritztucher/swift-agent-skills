@@ -1,6 +1,6 @@
 ---
 name: pencilkit
-description: Add low-latency freehand drawing and Apple Pencil input to an iOS app with PencilKit — PKCanvasView, the PKDrawing model, the PKToolPicker palette, inking/eraser/lasso tools, drawing policy (finger vs pencil), persistence, and rendering to images. Use when the user mentions PencilKit, PKCanvasView, drawing canvas, sketch pad, Apple Pencil, ink, strokes, PKDrawing, PKToolPicker, handwriting capture, signature capture, or annotating with freehand strokes. For structured markup (shapes, text boxes, stickers, images) on top of drawing, use the `paperkit` skill instead — PaperKit is the iOS 26 markup layer built on PencilKit.
+description: Add low-latency freehand drawing and Apple Pencil input to an iOS app with PencilKit — PKCanvasView, the PKDrawing model, the PKToolPicker palette, inking/eraser/lasso tools, drawing policy (finger vs pencil), persistence, and rendering to images. Use when the user mentions PencilKit, PKCanvasView, drawing canvas, sketch pad, Apple Pencil, ink, strokes, PKDrawing, PKToolPicker, handwriting capture, signature capture, or annotating with freehand strokes. For structured markup (shapes, text boxes, stickers, images) on top of drawing, use Apple's PaperKit (iOS 26) instead — the markup layer built on PencilKit.
 license: MIT
 metadata:
   author: Moritz Tucher
@@ -23,7 +23,7 @@ Set these explicitly at the start; they change what "correct" means.
 
 ## When to use
 
-Reach for PencilKit when you need freehand strokes only — a sketch pad, signature capture, handwriting input, or a pure-ink annotation overlay. It's lightweight and ships back to iOS 13. If you need structured markup elements (shapes, text boxes, stickers, images) and the system insertion UI on top of drawing, use the `paperkit` skill instead — PaperKit (iOS 26+) wraps a PencilKit drawing and adds the markup layer. Don't reimplement shapes/text on a bare `PKCanvasView`.
+Reach for PencilKit when you need freehand strokes only — a sketch pad, signature capture, handwriting input, or a pure-ink annotation overlay. It's lightweight and ships back to iOS 13. If you need structured markup elements (shapes, text boxes, stickers, images) and the system insertion UI on top of drawing, use PaperKit instead — PaperKit (iOS 26+) wraps a PencilKit drawing and adds the markup layer. Don't reimplement shapes/text on a bare `PKCanvasView`.
 
 ## Core rules
 
@@ -56,7 +56,7 @@ Before shipping a PencilKit canvas, confirm every line:
 - [ ] `PKDrawing(data:)` errors handled (corrupt/incompatible data falls back, never crashes).
 - [ ] Autosave on `canvasViewDrawingDidChange` is debounced, not written every callback.
 - [ ] Image export guards `drawing.bounds.isNull`/`.isEmpty` and renders large drawings off the main thread.
-- [ ] If structured markup (shapes/text/stickers) is actually needed, switched to the `paperkit` skill instead of reinventing on a bare canvas.
+- [ ] If structured markup (shapes/text/stickers) is actually needed, switched to PaperKit instead of reinventing on a bare canvas.
 
 ## Deep reference
 

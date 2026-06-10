@@ -221,7 +221,7 @@ Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR,
    | WidgetKit | `widgetkit` |
    | CoreLocation | `corelocation` |
    | HealthKit | `healthkit` |
-   List only skills matching actual choices (and only ones present in the installed catalog). For macOS targets, point to the `appkit` skill.
+   List only skills matching actual choices (and only ones present in the installed catalog).
 
 ### D3 — Wrap Up & Handoff
 - List everything created/updated (incl. `.gitignore`, `LICENSE`, `README.md`); note skipped (already existed). Existing path: list tech-debt items.
