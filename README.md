@@ -4,7 +4,7 @@ Currency-checked agent skills for shipping **SwiftUI** apps — a SwiftUI-first 
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`68 skills · 4 agents · 4 hooks · 3 iOS reference guides`
+`63 skills · 4 agents · 4 hooks · 3 iOS reference guides`
 
 ---
 
@@ -41,7 +41,7 @@ These skills follow the open [Agent Skills](https://agentskills.io) format (a `S
 npx skills add moritztucher/swift-agent-skills
 ```
 
-The Claude plugin path gives you the 68 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
+The Claude plugin path gives you the 63 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
 
 ```bash
 npx swift-agent-skills
@@ -79,10 +79,10 @@ chmod +x ~/.claude/statusline-command.sh
 
 ### Skill context budget (Claude Code)
 
-Claude Code lists every skill's name + description in context, but caps the listing at ~1% of the context window (`skillListingBudgetFraction`, default `0.01`) — with 68 skills that budget overflows, and descriptions of less-used skills get silently dropped (names stay). Rather than raising the budget and paying ~10k tokens in every session, `settings.json.example` ships a curated `skillOverrides` block:
+Claude Code lists every skill's name + description in context, but caps the listing at ~1% of the context window (`skillListingBudgetFraction`, default `0.01`) — with 63 skills that budget overflows, and descriptions of less-used skills get silently dropped (names stay). Rather than raising the budget and paying ~10k tokens in every session, `settings.json.example` ships a curated `skillOverrides` block:
 
-- **49 skills are deliberately `"name-only"`** — their names are framework-literal triggers (`healthkit`, `storekit`, `widgetkit`, the explicitly-invoked `/ios-*` workflow skills, …), so the description adds little at listing time. They still auto-trigger on framework mentions and load their full content on invocation.
-- **19 skills keep full descriptions** — the ones whose triggers are indirect: "Live Activity" → `activitykit`, "glass effect / iOS 26 design language" → `liquid-glass`, "Sign in with Apple" / "passkeys" → `authenticationservices`, "Face ID" → `localauthentication`, "Apple Pay" → `passkit`, "Siri/Shortcuts" → `appintents`, "OCR / Live Text" → `visual-intelligence`, plus the routing/disambiguation skills (`storekit` vs `revenuecat`, `cloudkit` vs `swiftdata`, `reactivity`, `controls-controlwidget`, …). These now fit comfortably inside the default budget.
+- **46 skills are deliberately `"name-only"`** — their names are framework-literal triggers (`healthkit`, `storekit`, `widgetkit`, the explicitly-invoked `/ios-*` workflow skills, …), so the description adds little at listing time. They still auto-trigger on framework mentions and load their full content on invocation.
+- **17 skills keep full descriptions** — the ones whose triggers are indirect: "Live Activity" → `activitykit`, "glass effect / iOS 26 design language" → `liquid-glass`, "Sign in with Apple" / "passkeys" → `authenticationservices`, "Face ID" → `localauthentication`, "Apple Pay" → `passkit`, "Siri/Shortcuts" → `appintents`, "OCR / Live Text" → `visual-intelligence`, plus the routing/disambiguation skills (`storekit` vs `revenuecat`, `cloudkit` vs `swiftdata`, `controls-controlwidget`, …). These now fit comfortably inside the default budget.
 
 A skill-routing rule in `AGENTS.md` backs this up: before implementing any Apple framework feature, the agent checks the catalog for a matching specialist by name. Run `/doctor` to verify no descriptions are truncated. If you'd rather keep every description in context, delete the `skillOverrides` block and set `"skillListingBudgetFraction": 0.05` instead.
 
@@ -104,13 +104,13 @@ npx skills add moritztucher/swift-agent-skills
 
 What you get, and what's Claude-enhanced:
 
-- **All 68 skills work everywhere** — they're plain `SKILL.md` + `references/` in the open Agent Skills format, including the `/ios-*` workflow and every framework specialist.
+- **All 63 skills work everywhere** — they're plain `SKILL.md` + `references/` in the open Agent Skills format, including the `/ios-*` workflow and every framework specialist.
 - **House rules:** Claude Code loads them via `@import`; on other agents, copy [`AGENTS.md`](AGENTS.md) from this repo into your iOS project root — it carries the same stack, architecture, style, security, and testing rules in the agent-neutral `AGENTS.md` convention.
 - **Advisor guidance** (UX, UI design, onboarding, docs-writing) ships in both forms: as Claude subagents in `agents/` and as portable skills (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`) that any client can invoke.
 - **The fan-out skills degrade gracefully** — `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`, `/ios-design-elevate` spawn parallel advisor subagents on Claude Code; on agents without subagent support they run the same advisor passes inline. Same findings, sequential instead of parallel.
 - **Hooks:** `swiftlint-autofix` is also available as a standard git pre-commit hook (`hooks/pre-commit.swiftlint`) — see [Hooks](#hooks). `notify-done.sh` and the `settings.json` wiring are Claude-specific.
 
-**Kiro CLI caveat — auto-activation is not at parity.** The skill descriptions are already written as trigger lists, but Kiro's automatic skill loading is best-effort: it matches your request against skill descriptions once, with nothing forcing the model to act on a match, and with 68 skills in the catalog relevance dilutes. Also, only Kiro's *default* agent auto-loads skills at all — custom agents must list each skill explicitly as a `skill://` resource. Two mitigations:
+**Kiro CLI caveat — auto-activation is not at parity.** The skill descriptions are already written as trigger lists, but Kiro's automatic skill loading is best-effort: it matches your request against skill descriptions once, with nothing forcing the model to act on a match, and with 63 skills in the catalog relevance dilutes. Also, only Kiro's *default* agent auto-loads skills at all — custom agents must list each skill explicitly as a `skill://` resource. Two mitigations:
 
 1. **Invoke skills explicitly** when it matters: `/activitykit`, `/ios-review`, etc. Treat auto-activation as a convenience, not a guarantee.
 2. **Add a router steering rule** so Kiro checks the catalog before writing framework code. Save as `.kiro/steering/skill-router.md`:
@@ -130,7 +130,7 @@ What you get, and what's Claude-enhanced:
 
 ## Skills
 
-The 68 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 63 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -185,11 +185,8 @@ These trigger automatically while you read, write, or review SwiftUI and concurr
 | `swiftui-pro` | Comprehensive SwiftUI code review — modern APIs, performance, accessibility. Majority based on Paul Hudson's skill, with reference-guide additions (performance, Liquid Glass design, previews) by the repo author | [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) (Paul Hudson, MIT; adapted) |
 | `swiftui-tabview` | iOS 26 TabView — value-based `Tab`/`TabSection`, sidebar-adaptable, bottom accessory, minimize behavior, `.search` tab, customization | Moritz Tucher |
 | `swiftui-toolbar` | The toolbar system — `ToolbarItem`/`Group`, all placements, `ToolbarSpacer`, iOS 26 shared glass + `sharedBackgroundVisibility` | Moritz Tucher |
-| `keyboard-accessory` | A view docked above the keyboard — input accessory bars and a custom IME candidate strip (matcher / strip / wiring) | Moritz Tucher |
-| `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
 | `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
 | `swift-testing` | Swift Testing — `@Test`/`#expect`/`#require`/`@Suite`, parameterized + async tests, XCTest migration | Moritz Tucher |
-| `reactivity` | Combine vs Observation vs async — `@Observable`, `@Published`, publishers, cancellable lifecycle, migration | Moritz Tucher |
 
 ### Framework & engineering (model-invoked)
 
@@ -232,17 +229,10 @@ These trigger on framework and workflow keywords while you build. Each bundles a
 | `privacy-manifest` | PrivacyInfo.xcprivacy, required-reason API, App Store privacy rejection |
 | `oslog-logging` | OSLog/Logger, structured logging, signposts, MetricKit observability |
 | `universal-links` | universal links, associated domains, apple-app-site-association, deep linking |
-| `avkit-videoplayer` | video playback, VideoPlayer, AVPlayer, HLS streaming, Picture in Picture |
 | `pencilkit` | PencilKit, PKCanvasView, drawing, Apple Pencil, ink, PKDrawing |
 | `core-motion` | Core Motion, accelerometer, gyroscope, device motion, pedometer, step count |
 | `controls-controlwidget` | Control Center / Lock Screen control, ControlWidget, Action Button (iOS 18) |
 | `app-store-submission` | archive/export/upload, `xcodebuild exportArchive`, TestFlight, code signing, review rejection |
-
-### Meta
-
-| Skill | What it does |
-|-------|--------------|
-| `/compact-summary` | Compress the current session into a reusable context primer for the next chat |
 
 ---
 
@@ -327,7 +317,7 @@ The workflow composes left-to-right: init → brief → build features UI-first 
 
 ## Disclaimer
 
-Not affiliated with Anthropic. Claude Code is Anthropic's product. Third-party skills are reproduced under their own licenses with full attribution in each skill's frontmatter — `swiftui-pro` from [Paul Hudson](https://github.com/twostraws/SwiftUI-Agent-Skill) (MIT), `swiftui-expert-skill` and `swift-concurrency` from [Antoine van der Lee](https://github.com/AvdLee).
+Not affiliated with Anthropic. Claude Code is Anthropic's product. Third-party skills are reproduced under their own licenses with full attribution in each skill's frontmatter — `swiftui-pro` from [Paul Hudson](https://github.com/twostraws/SwiftUI-Agent-Skill) (MIT), `swift-concurrency` from [Antoine van der Lee](https://github.com/AvdLee).
 
 ---
 

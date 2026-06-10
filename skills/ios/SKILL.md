@@ -68,7 +68,7 @@ When more than one path is reasonable (design-system is optional; you might audi
 - **Verify** — `/ios-review`, `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`
 - **Ship** — `/ios-commit`, `/pr-to-develop`, `/pr-to-main`, `/ios-release-notes`
 
-Craft skills (`swiftui-pro`, `swiftui-expert-skill`, `swift-concurrency`) trigger automatically while writing/reviewing SwiftUI and concurrency code — they aren't part of the linear path. The advisor subagents (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`) are spawned by the audit skills, not invoked directly.
+Craft skills (`swiftui-pro`, `swift-concurrency`) trigger automatically while writing/reviewing SwiftUI and concurrency code — they aren't part of the linear path. The advisor subagents (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`) are spawned by the audit skills, not invoked directly.
 
 ## Edge Cases
 

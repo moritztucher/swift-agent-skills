@@ -1,6 +1,6 @@
 ---
 name: swiftui-toolbar
-description: Build and review SwiftUI toolbars — ToolbarContent with ToolbarItem / ToolbarItemGroup, semantic vs positional placements, the bottom bar, custom titles, and the iOS 26 shared-glass grouping (ToolbarSpacer, sharedBackgroundVisibility). Use when the user mentions toolbar, ToolbarItem, ToolbarItemGroup, toolbar placement, ToolbarSpacer, navigation bar buttons, bottom bar, principal title, confirmationAction/cancellationAction, toolbarRole, or sharedBackgroundVisibility. For the keyboard IME candidate strip use `keyboard-accessory`; for the glass material itself use `liquid-glass`; for the tab bar use `swiftui-tabview`.
+description: Build and review SwiftUI toolbars — ToolbarContent with ToolbarItem / ToolbarItemGroup, semantic vs positional placements, the bottom bar, custom titles, and the iOS 26 shared-glass grouping (ToolbarSpacer, sharedBackgroundVisibility). Use when the user mentions toolbar, ToolbarItem, ToolbarItemGroup, toolbar placement, ToolbarSpacer, navigation bar buttons, bottom bar, principal title, confirmationAction/cancellationAction, toolbarRole, or sharedBackgroundVisibility. For the glass material itself use `liquid-glass`; for the tab bar use `swiftui-tabview`.
 license: MIT
 metadata:
   author: Moritz Tucher
@@ -23,7 +23,7 @@ Set these explicitly at the start; they change what "correct" means.
 
 ## When to use
 
-Building or reviewing any toolbar / navigation-bar / bottom-bar content: action buttons, custom titles, modal confirm/cancel bars, grouped glass clusters, or bar visibility/background work. Explicitly out of scope: for the **keyboard IME candidate strip** (rewrites text as you type) use `keyboard-accessory`; for the **glass material** (`.glassEffect`, `GlassEffectContainer`, glass buttons) use `liquid-glass`; for the **tab bar** use `swiftui-tabview` (here you only toggle it via `for: .tabBar`).
+Building or reviewing any toolbar / navigation-bar / bottom-bar content: action buttons, custom titles, modal confirm/cancel bars, grouped glass clusters, or bar visibility/background work. Explicitly out of scope: for the **glass material** (`.glassEffect`, `GlassEffectContainer`, glass buttons) use `liquid-glass`; for the **tab bar** use `swiftui-tabview` (here you only toggle it via `for: .tabBar`).
 
 ## Core rules
 
@@ -58,7 +58,7 @@ Before shipping toolbar code, confirm every line:
 - [ ] iOS 26 APIs (`ToolbarSpacer`, `sharedBackgroundVisibility`, `DefaultToolbarItem`) are availability-gated when the target is < iOS 26.
 - [ ] Bar visibility passes the correct `ToolbarPlacement` (`for: .tabBar` / `.navigationBar`) — not an empty/default call expecting the wrong bar.
 - [ ] Toolbar background isn't forced opaque/colored over the system glass unless the design demands it (defer chrome glass to `liquid-glass`).
-- [ ] Keyboard IME strips deferred to `keyboard-accessory`; glass material deferred to `liquid-glass`; tab bar to `swiftui-tabview`.
+- [ ] Glass material deferred to `liquid-glass`; tab bar to `swiftui-tabview`.
 
 ## Deep reference
 

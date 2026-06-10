@@ -33,7 +33,6 @@ Projects may optionally keep a `VIEW-INVENTORY.md` index at the root (`/ios-init
 
 - **Context7** — `/websites/developer_apple_swiftui` (Apple's official SwiftUI docs, 15k+ snippets) for any modifier, View, or API question.
 - **`swiftui-pro` skill** (Paul Hudson) — invoke when writing or reviewing SwiftUI; nudges toward modern APIs and modifier-first patterns.
-- **`swiftui-expert-skill`** (Antoine van der Lee) — invoke for iOS 26 Liquid Glass and recent platform additions.
 
 **Discovery rule:** before implementing a custom solution for a common UI need (list margins, scroll insets, tab accessories, color mixing, recursive lists, badges, menus, quick-look previews, etc.), check Context7/skills for a built-in modifier first. If you'd reach for a custom `View` or `ViewModifier` and the need is generic, you're probably reinventing one of Apple's recent additions.
 
