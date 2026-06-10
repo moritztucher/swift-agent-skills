@@ -1,6 +1,5 @@
 # Design System — {PROJECT_NAME}
 
-> **Confidence:** {X}%
 > **Status:** {Draft | In Progress | Ready}
 
 ---

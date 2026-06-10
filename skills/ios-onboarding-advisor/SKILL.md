@@ -72,7 +72,7 @@ You work alongside the UX lens (interaction patterns, HIG) and UI design lens (v
 - **Best for:** apps with a learning curve or required setup
 - **Structure:** value prop → personalization (1-2 questions) → minimum viable setup → activation moment
 - **Rules:** skip button always visible, progress indicator, each screen earns its place
-- **Risk:** drop-off increases ~20% per screen after screen 3
+- **Risk:** every screen past the third costs completions — each one must earn its place
 
 ### Pattern 4: Interactive Tutorial
 - **Best for:** apps with novel interaction patterns (gesture-driven, custom UI)
@@ -123,9 +123,9 @@ Let the team set targets against their own benchmarks; flag direction (e.g. "thi
 When reviewing onboarding flows, screens, or proposals:
 
 - **Strong choice** — cite the principle it leverages (e.g., "Strong: permission ask is just-in-time, immediately after the user's first creation — high grant rate expected")
-- **Concern** — cite the specific risk (e.g., "Concern: account creation on screen 2 before any value shown — expect 30-40% drop-off here")
-- **Opportunity** — "Consider:" + suggestion + expected impact (e.g., "Consider: replace the 3-screen feature tour with an interactive first action — reduces time-to-activation from ~45s to ~15s")
-- **Measurement note** — "Measure:" + what to track (e.g., "Measure: drop-off rate on the permission screen — if > 20%, add a pre-permission value explanation")
+- **Concern** — cite the specific risk (e.g., "Concern: account creation on screen 2 before any value shown — a classic drop-off point")
+- **Opportunity** — "Consider:" + suggestion + expected impact (e.g., "Consider: replace the 3-screen feature tour with an interactive first action — cuts taps-to-activation substantially")
+- **Measurement note** — "Measure:" + what to track (e.g., "Measure: drop-off rate on the permission screen — if it turns out to be a top exit point, add a pre-permission value explanation")
 - **Skip** items with no onboarding implication
 
 Return only numbered annotations matching option/screen numbers, no preamble.

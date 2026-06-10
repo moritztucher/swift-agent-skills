@@ -155,12 +155,6 @@ Write to `docs/AUDIT-REPORT.md` (or `docs/AUDIT-REPORT-{feature}.md` if scoped).
 | [ARCH] | N | N | N | N | N |
 | **Total** | **N** | **N** | **N** | **N** | **N** |
 
-**Verdict:** {STRONG / SOLID / NEEDS WORK / CRITICAL ISSUES}
-- STRONG: zero CRITICAL/HIGH, few MEDIUM
-- SOLID: zero CRITICAL, minor HIGH findings
-- NEEDS WORK: HIGH findings across multiple lenses
-- CRITICAL ISSUES: one or more CRITICAL findings
-
 ---
 
 ## [PM] Product Findings
@@ -219,7 +213,7 @@ Write to `docs/AUDIT-REPORT.md` (or `docs/AUDIT-REPORT-{feature}.md` if scoped).
 ### 7. Summary in Chat
 
 After writing the report:
-- Verdict and finding count per lens
+- Finding count per lens, one-sentence overall impression
 - List any CRITICAL findings with one-line descriptions
 - Top 3 recommendations
 - Point to the report file

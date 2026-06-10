@@ -120,11 +120,6 @@ Present the full report. Also save to `review-{basename}.md` in the same directo
 | LOW | N |
 | **Total** | **N** |
 
-**Verdict:** {PASS / PASS WITH WARNINGS / FAIL}
-- PASS: zero CRITICAL and HIGH violations
-- PASS WITH WARNINGS: zero CRITICAL, one or more HIGH
-- FAIL: one or more CRITICAL violations
-
 ---
 
 ## Violations

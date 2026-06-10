@@ -40,7 +40,7 @@ Then **mine the blurb** for both kinds of signal and pre-fill the decision set �
 - **Technical:** platforms, storage/database, networking, auth, offline/sync, 3rd-party services, concurrency needs.
 - **Product / distribution:** what the app is, target audience (B2B / B2C / internal), distribution model (open source / commercial / proprietary), monetization hints.
 
-Treat mined values as **pre-filled and to-be-confirmed**, not final. On the Setup path, start the Tech Confidence meter **higher** than its 30% floor in proportion to what the blurb resolved. **Record the raw blurb verbatim** — it goes into `.ios-init-decisions.json` and is reused by `/ios-brief`.
+Treat mined values as **pre-filled and to-be-confirmed**, not final. On the Setup path, everything the blurb resolved comes off the open-decision list — only the gaps get asked. **Record the raw blurb verbatim** — it goes into `.ios-init-decisions.json` and is reused by `/ios-brief`.
 
 ---
 
@@ -60,13 +60,13 @@ Ask with AskUserQuestion — but **skip any item the blurb already answered** (c
 
 ### A2 — Technical Architecture Brainstorm
 
-Introduce a **Tech Confidence Level** and iterate batches until **≥90%** or the user says "done." Starts at ~30% (higher if the blurb pre-filled core decisions). Core decisions (networking, auth, navigation) weigh ~15% each; follow-ups (sync, offline, biometrics) ~5–10%. Present each batch as a numbered list with concrete options; mark recommended with ⭐. **Skip questions the blurb or A1 already settled.**
+Track the **open-decision list** — core decisions (networking, auth, navigation) plus the follow-ups they surface (sync, offline, biometrics) — and iterate batches until every core decision is resolved or the user says "done." Present each batch as a numbered list with concrete options; mark recommended with ⭐. **Skip questions the blurb or A1 already settled.**
 
 - **Batch 1 — Core stack:** Networking (REST ⭐ / GraphQL / None), Auth (Apple Sign-In / Firebase / Custom / None), Navigation (Simple / Multi-tab ⭐ / Deep linking).
 - **Batch 2 — Data strategy (only what's relevant):** Sync (Local-only ⭐ / CloudKit / Custom), Offline (Online-only ⭐ / Offline-first / Cache-only), Biometrics (Yes ⭐ / No if auth chosen).
 - **Batch 3 — Integrations & polish:** 3rd-party services; heavy background work (Yes / No ⭐); keychain beyond auth; accessibility priority (Standard ⭐ / High).
 
-Each batch: present open questions → read answers → resolve → surface new questions → print `Tech Confidence: XX% | Remaining: …`. At ≥90%, go to Section C. If the user says "done" early, mark the rest **TBD**.
+Each batch: present open questions → read answers → resolve → surface new questions → print `Still open: …`. When no core decision is open, go to Section C. If the user says "done" early, mark the rest **TBD**.
 
 **Folder structure** (Section C scaffolds this for New / Fresh scaffold):
 

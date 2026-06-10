@@ -200,7 +200,7 @@ The build philosophy is **UI-first**: get the app's flow feeling good with the U
 - **Build UI-first** — make the flow feel good before wiring logic. Tests are encouraged for logic/backend but not gated by a formal verification step.
 - `/ios-design-elevate` rewrites only the visual layer and must not break existing behaviour.
 - A change isn't done until `/ios-review` shows no CRITICAL issues.
-- Design isn't done until `/ios-design-audit` shows at least 2-3 levers at "bold" and no HIGH findings remain.
+- Design isn't done until `/ios-design-audit` surfaces no HIGH findings and nothing you'd be embarrassed to ship.
 
 ---
 
@@ -212,7 +212,7 @@ Detects **new** / **fresh Xcode scaffold** / **existing** codebase and adapts. T
 
 **Setup path (new / fresh scaffold):**
 - **A1 Setup:** Platforms (multi-select: iOS / iPadOS / macOS / visionOS / tvOS / watchOS), deployment target, database, distribution (open source / commercial), audience (B2B / B2C), git prefix, bundle ID.
-- **A2 Tech brainstorm:** networking, auth, navigation, sync, offline, integrations — confidence-tracked (→90%). Scaffolds the folder structure.
+- **A2 Tech brainstorm:** networking, auth, navigation, sync, offline, integrations — iterates until every core decision is resolved or deferred. Scaffolds the folder structure.
 
 **Adopt path (existing):** scan the codebase, present findings, fill only undetectable gaps; document the existing structure instead of scaffolding.
 
