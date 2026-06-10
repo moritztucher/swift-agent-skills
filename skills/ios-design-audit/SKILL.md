@@ -49,6 +49,8 @@ Run the Visual Loop on the in-scope screens. For each screen, pair the screensho
 ### 3. Advisor review (optional, larger projects)
 For substantial scopes, spawn `ios-ui-design-advisor` with the **screenshots + key code observations** and the lever framework, asking for: per-screen strong choices / concerns / opportunities (with "Consider:" framing), a strengths list, and concrete elevation opportunities citing pattern-library techniques. Integrate its annotations; you own the final findings.
 
+**No-subagent fallback:** on clients that cannot spawn subagents, read `skills/ios-ui-design-advisor/SKILL.md` and apply that lens inline to the same screenshots and observations — same annotation format, just sequential.
+
 ### 4. Assess levers & coherence
 Rate each of the levers **safe / moderate / bold** from the rendered screens:
 Typography as identity · Color as narrative · Vocabulary as design · Data viz as personality · Status indicators as signature · Motion as personality. An award-ready app pushes 2–3 levers bold; a generic one plays them all safe. Also assess cross-screen consistency (does every screen feel like one app?), dark-mode intentionality, and design-system adherence if a spec exists.

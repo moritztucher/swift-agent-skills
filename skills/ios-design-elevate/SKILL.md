@@ -54,7 +54,7 @@ For each screen, in priority order:
 6. Brief report: what changed, *why it looks better*, files changed — or "no change: already strong."
 
 ### Phase 4 — Consistency pass
-Grep for leftovers: hardcoded colors not using the theme, default `.font(.body/.headline)` without explicit weight/size, generic strings that should be vocabulary tokens, system indicators that should be custom, lingering old-package colors, materials over non-dark backgrounds, sub-minimum borders/opacities. Fix. Full build. Optionally spawn `ios-ui-design-advisor` for 10+ View projects to check cross-screen consistency.
+Grep for leftovers: hardcoded colors not using the theme, default `.font(.body/.headline)` without explicit weight/size, generic strings that should be vocabulary tokens, system indicators that should be custom, lingering old-package colors, materials over non-dark backgrounds, sub-minimum borders/opacities. Fix. Full build. Optionally spawn `ios-ui-design-advisor` for 10+ View projects to check cross-screen consistency (on clients without subagent support, read `skills/ios-ui-design-advisor/SKILL.md` and run that consistency check inline).
 
 ### Phase 5 — Report
 Summarize: views elevated (N/total), theme tokens + custom components created, before→after lever profile (safe/moderate/bold per lever with the technique used), screens table, build status, remaining opportunities (anything blocked on logic/navigation or needing user input), and a human-QA checklist (renders on device; Dynamic Type holds; respects reduce-motion; custom indicators have VoiceOver labels; feels like one cohesive app; identifiable from one screenshot).

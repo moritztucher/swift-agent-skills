@@ -4,7 +4,7 @@ Currency-checked agent skills for shipping **SwiftUI** apps — a SwiftUI-first 
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`87 skills · 4 agents · 3 hooks · 11 iOS reference guides`
+`91 skills · 4 agents · 4 hooks · 11 iOS reference guides`
 
 ---
 
@@ -41,7 +41,7 @@ These skills follow the open [Agent Skills](https://agentskills.io) format (a `S
 npx skills add moritztucher/swift-agent-skills
 ```
 
-The Claude plugin path gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
+The Claude plugin path gives you the 91 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
 
 ```bash
 npx swift-agent-skills
@@ -85,11 +85,27 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 `/ios-init` adds this automatically when it scaffolds a project's `CLAUDE.md` (it auto-detects new vs. existing codebases).
 
+### Non-Claude users (Codex, Cursor, Gemini CLI, Kiro, …)
+
+The skill catalog is fully portable — install it on any [Agent Skills](https://agentskills.io/clients)–compatible agent:
+
+```bash
+npx skills add moritztucher/swift-agent-skills
+```
+
+What you get, and what's Claude-enhanced:
+
+- **All 91 skills work everywhere** — they're plain `SKILL.md` + `references/` in the open Agent Skills format, including the `/ios-*` workflow and every framework specialist.
+- **House rules:** Claude Code loads them via `@import`; on other agents, copy [`AGENTS.md`](AGENTS.md) from this repo into your iOS project root — it carries the same stack, architecture, style, security, and testing rules in the agent-neutral `AGENTS.md` convention.
+- **Advisor guidance** (UX, UI design, onboarding, docs-writing) ships in both forms: as Claude subagents in `agents/` and as portable skills (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`) that any client can invoke.
+- **The fan-out skills degrade gracefully** — `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`, `/ios-review`, `/ios-design-elevate`, `/ios-agents` spawn parallel advisor subagents on Claude Code; on agents without subagent support they run the same advisor passes inline. Same findings, sequential instead of parallel.
+- **Hooks:** `swiftlint-autofix` is also available as a standard git pre-commit hook (`hooks/pre-commit.swiftlint`) — see [Hooks](#hooks). `notify-done.sh` and the `settings.json` wiring are Claude-specific.
+
 ---
 
 ## Skills
 
-The 87 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 91 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -237,6 +253,8 @@ Specialists invoked via the Task tool from inside skills. They advise; the paren
 | `ios-ui-design-advisor` | Visual craft — color, typography, motion, hierarchy, emotional design |
 | `context7-docs-writer` | Generates framework integration docs using Context7's live library data |
 
+Each advisor also ships as a portable skill of the same name (`skills/ios-ux-advisor/`, etc.), so non-Claude agents get the same lenses — the audit skills fall back to running them inline when no subagent support exists.
+
 ---
 
 ## Hooks
@@ -248,6 +266,15 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 | `swiftlint-autofix.sh` | After every Edit/Write to a `.swift` file | Runs `swiftlint lint --fix` quietly | ✅ |
 | `notify-done.sh` | When Claude stops | macOS notification with the Glass sound | ✅ |
 | `definition-of-done.sh` | On stop (if wired) | Builds the Xcode project, runs tests, checks SwiftLint — blocks completion if any fails | ⬜️ opt-in |
+
+**Portable variant:** `pre-commit.swiftlint` is a tool-agnostic **git pre-commit hook** with the same lint-fix behavior — it runs `swiftlint --fix` on staged Swift files and re-stages them, so non-Claude users (or anyone who prefers commit-time fixing) get the same result without Claude's hook system. Install per project:
+
+```bash
+cp hooks/pre-commit.swiftlint /path/to/project/.git/hooks/pre-commit
+chmod +x /path/to/project/.git/hooks/pre-commit
+```
+
+`notify-done.sh` and `definition-of-done.sh` depend on Claude Code's Stop event and have no portable equivalent.
 
 ---
 

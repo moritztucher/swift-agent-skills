@@ -19,7 +19,7 @@ You perform a holistic audit of an existing iOS/SwiftUI project through four len
 
 - **Read before judging** — scan the full scope before writing any findings.
 - **Four lenses, always** — every audit must cover PM, UX, UI, and ARCH. If a lens has no findings, say so explicitly.
-- **Spawn advisors** — delegate UX and UI lens reviews to their respective sub-agents (see below).
+- **Spawn advisors** — delegate UX and UI lens reviews to their respective sub-agents (see below). On clients without subagent support, run those lenses inline instead (see the no-subagent fallback).
 - **Severity on every finding** — no unclassified observations.
 - **Suggestions, not directives** — use "Consider:" framing. The user decides.
 - **Cite locations** — every finding references specific files and lines.
@@ -92,6 +92,8 @@ Skip files with no visual design concerns. No preamble.
 ```
 
 **Spawn both agents in parallel** when the scope is determined.
+
+**No-subagent fallback:** if your environment cannot spawn subagents (e.g. a non-Claude Agent Skills client with no Task tool), do not skip these lenses. Read the portable lens skills — `skills/ios-ux-advisor/SKILL.md` and `skills/ios-ui-design-advisor/SKILL.md` — and apply each one inline, sequentially, to the same file list with the same prompt and output format above. The findings contract is identical; you only lose the parallelism.
 
 ---
 
