@@ -1,18 +1,8 @@
-# Architecture Patterns
+# Architecture Patterns — Examples & Formats
 
-> Full architecture patterns reference. Core rules are in CLAUDE.md.
+> The rules live in `ios-guide.md` (loaded via `@import`). This file carries the expanded code examples, the detailed project structure, and the documentation formats.
 
-## Navigation
-
-- **Use NavigationCoordinator with NavigationPath** for all navigation logic
-- Centralize navigation in a coordinator to keep views clean and testable
-- Support deep linking through the coordinator
-
-## Dependency Injection
-
-- **Prefer Environment** for passing dependencies down the view hierarchy
-- Use init injection for ViewModels when testing is critical
-- Never use global singletons unless absolutely necessary
+## Dependency Injection (Environment)
 
 ```swift
 @main
@@ -33,11 +23,7 @@ struct ContentView: View {
 }
 ```
 
-## Network Layer
-
-- **Always use a wrapper NetworkService pattern** with async/await
-- Never put networking code directly in ViewModels
-- Centralize URL construction, headers, and error handling in the service
+## Network Layer (NetworkService wrapper)
 
 ```swift
 class NetworkService {
@@ -49,12 +35,7 @@ class NetworkService {
 }
 ```
 
-## State Management
-
-- Use `@State` for local view state and owning `@Observable` objects
-- Use `@Observable` macro for ViewModels and Managers (NOT `@ObservableObject`)
-- Use `@Environment` for app-wide dependencies
-- Pass `@Observable` objects as plain properties when not using Environment
+## State Management (@Observable)
 
 ```swift
 @Observable
@@ -76,7 +57,7 @@ struct UserView: View {
 }
 ```
 
-## Project Structure
+## Project Structure (detailed)
 
 ```
 ProjectName/
@@ -104,8 +85,6 @@ ProjectName/
 
 ## Architecture Decision Records (ADRs)
 
-### When to Create
-
 Create an ADR for decisions that:
 - Add a new dependency or framework
 - Choose between architectural patterns
@@ -114,52 +93,13 @@ Create an ADR for decisions that:
 
 **Rule of thumb:** If you'd need to explain "why did we do it this way?" in 6 months, write an ADR.
 
-### Location
-
-Store ADRs in: `docs/decisions/`
-
-### Format
-
-Filename: `NNNN-brief-title.md` (e.g., `0001-use-realmswift-for-persistence.md`)
-
-```markdown
-# ADR-NNNN: [Title]
-
-## Status
-[Proposed | Accepted | Deprecated | Superseded by ADR-XXXX]
-
-## Context
-[What is the issue or decision we're facing?]
-
-## Decision
-[What did we decide to do?]
-
-## Consequences
-### Pros
-- [Benefit 1]
-- [Benefit 2]
-
-### Cons
-- [Drawback 1]
-- [Drawback 2]
-
-## Date
-[YYYY-MM-DD]
-```
+Store in `docs/decisions/`, filename `NNNN-brief-title.md` (e.g., `0001-use-swiftdata-for-persistence.md`). Use the template at `~/.claude/docs/templates/adr-template.md`.
 
 ## ARCHITECTURE.md
 
-Maintain an `ARCHITECTURE.md` file in the project root that provides:
-- High-level system overview
-- Key architectural decisions (linking to ADRs)
-- Component relationships
-- Data flow diagrams (when helpful)
+Maintain an `ARCHITECTURE.md` in the project root: high-level system overview, key decisions (linking ADRs), component relationships, data-flow diagrams when helpful. Update when architecture changes significantly.
 
-Update when architecture changes significantly.
-
-## Documentation Management
-
-### CHANGELOG.md
+## CHANGELOG.md
 
 ```markdown
 # Changelog
@@ -177,13 +117,7 @@ Update when architecture changes significantly.
 - Updated authentication flow
 ```
 
-Include: Version number, Date, Categorized changes (Added, Fixed, Changed, Removed)
-
-### Update Documentation After
-
-- Adding public APIs or interfaces
-- Making architecture changes
-- Adding new features
+Include: version number, date, categorized changes (Added, Fixed, Changed, Removed). Update documentation after adding public APIs, making architecture changes, or adding features.
 
 ## Backlog Management
 

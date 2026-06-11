@@ -118,7 +118,7 @@ An app becomes visually ownable through deliberate choices across these five lev
 - *Bold*: A custom completion/state marker that fits the app — filled vs. stroked dots, a custom `Path` badge, a domain-appropriate glyph swap, a color+shape state system. The smallest elements carry the most personality per pixel; pick a treatment that suits *this* app's tone.
 - *Test*: Screenshot just the completed-state indicator — is it generic or ownable?
 
-**How to apply:** When evaluating a design, assess which levers it pushes and which it plays safe. Compare techniques against the Design Craft Pattern Library (the `ios-design-brief` skill's `references/design-craft-patterns.md`) — "bold" means approaching the specificity of the showcase themes, not just "slightly larger font." An "AWARD-READY" design pushes at least 2-3 levers into bold territory. A "POLISHED BUT GENERIC" design plays every lever safe.
+**How to apply:** When evaluating a design, assess which levers it pushes and which it plays safe. Compare techniques against the Design Craft Pattern Library (the `ios-design-brief` skill's `references/design-craft-patterns.md`) — "bold" means approaching the specificity of the showcase themes, not just "slightly larger font." Playing every lever safe usually reads generic; which levers (if any) deserve to be bold is the app's call — note the profile, don't score it.
 
 ### Anti-Patterns to Flag
 - All levers on safe — every design choice is the platform default (SF Pro, system blue, "Done", standard progress bar, checkmark). Technically correct, emotionally empty.

@@ -213,7 +213,7 @@ struct KeyboardBarDemo: View {
 }
 ```
 
-> **Scope boundary.** This guide covers `.keyboard` as one toolbar placement. The hard case — a **custom IME / candidate strip** that rewrites the trailing run as the user types, plus the docking-vs-`safeAreaInset` decision and edge-inset fixes — is owned by the **`keyboard-accessory`** skill. Use that skill for anything beyond a simple Done/format bar.
+> **Scope boundary.** This guide covers `.keyboard` as one toolbar placement. The hard case — a **custom IME / candidate strip** that rewrites the trailing run as the user types, plus the docking-vs-`safeAreaInset` decision and edge-inset fixes — is beyond this guide — budget real design time for it rather than treating it as another toolbar placement.
 
 ### `.accessoryBar(id:)` — custom accessory bars
 
@@ -282,7 +282,7 @@ Result: Share is one capsule, the favorite+collections group is a second capsule
 }
 ```
 
-Use `.hidden` when an item is a custom view that shouldn't sit on glass — a live status indicator, a custom-shaped control, or (the `keyboard-accessory` case) an opaque accessory whose corners would otherwise let content bleed through the capsule.
+Use `.hidden` when an item is a custom view that shouldn't sit on glass — a live status indicator, a custom-shaped control, or an opaque keyboard accessory whose corners would otherwise let content bleed through the capsule.
 
 `sharedBackgroundVisibility(_:)` is **iOS 26.0+**; gate it.
 
@@ -572,6 +572,5 @@ NavigationStack {
 
 ### Cross-skill boundaries
 
-- **`keyboard-accessory`** owns the `.keyboard` IME candidate strip and keyboard-docked accessory mechanics.
 - **`liquid-glass`** owns the glass *material* (`.glassEffect`, `GlassEffectContainer`, glass button styles). This skill only controls how the *toolbar* groups items into capsules.
 - **`swiftui-tabview`** owns the tab bar; use `for: .tabBar` here only to toggle its visibility.

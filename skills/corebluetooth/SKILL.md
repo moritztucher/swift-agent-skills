@@ -1,6 +1,6 @@
 ---
 name: corebluetooth
-description: Implement and review Bluetooth Low Energy on Apple platforms with Core Bluetooth — central scanning/connecting, GATT service & characteristic discovery, read/write/notify, and the CBPeripheralManager peripheral role with advertising, background modes, and state restoration. Use when the user mentions Core Bluetooth, BLE, CBCentralManager, CBPeripheral, peripheral, characteristic, GATT, advertising, or a bluetooth accessory. For the modern system pairing/onboarding UX (wireless accessory discovery sheet), use the `accessorysetupkit` skill instead.
+description: Implement and review Bluetooth Low Energy on Apple platforms with Core Bluetooth — central scanning/connecting, GATT service & characteristic discovery, read/write/notify, and the CBPeripheralManager peripheral role with advertising, background modes, and state restoration. Use when the user mentions Core Bluetooth, BLE, CBCentralManager, CBPeripheral, peripheral, characteristic, GATT, advertising, or a bluetooth accessory. For the modern system pairing/onboarding UX (wireless accessory discovery sheet), use Apple's AccessorySetupKit (iOS 18+) instead.
 license: MIT
 metadata:
   author: Moritz Tucher
@@ -19,11 +19,11 @@ Set these explicitly at the start; they change what "correct" means.
 
 1. `ROLE` — `central` (default; you scan for and drive remote peripherals) · `peripheral` (`CBPeripheralManager`; your device advertises services and answers reads/writes) · `both` (device-to-device).
 2. `LIFECYCLE` — `foreground` (default; scan/connect only while the app is active) · `background` (`UIBackgroundModes` = `bluetooth-central`/`bluetooth-peripheral` + state preservation/restoration with a restore identifier).
-3. `PAIRING_UX` — `manual` (your own scan list + connect flow, full control) · `accessorysetupkit` (iOS 18+ system discovery sheet for a known accessory — better UX, scoped permission; see the `accessorysetupkit` skill).
+3. `PAIRING_UX` — `manual` (your own scan list + connect flow, full control) · `accessorysetupkit` (iOS 18+ system discovery sheet for a known accessory — better UX, scoped permission).
 
 ## When to use
 
-Building or reviewing any BLE code that talks to Core Bluetooth directly: scanning, connecting, discovering services/characteristics, reading/writing/notifying, or advertising as a peripheral. If the task is purely the *onboarding/pairing UX* for a specific accessory, prefer `accessorysetupkit` and only drop to raw Core Bluetooth for the data plane.
+Building or reviewing any BLE code that talks to Core Bluetooth directly: scanning, connecting, discovering services/characteristics, reading/writing/notifying, or advertising as a peripheral. If the task is purely the *onboarding/pairing UX* for a specific accessory, prefer AccessorySetupKit and only drop to raw Core Bluetooth for the data plane.
 
 ## Core rules
 
@@ -43,7 +43,7 @@ Building or reviewing any BLE code that talks to Core Bluetooth directly: scanni
 | "I'll read the characteristic right after connecting." | Connection only gives you a peripheral. You must `discoverServices` → `discoverCharacteristics` first; acting on an undiscovered characteristic throws/does nothing. |
 | "Write-without-response is just a faster write." | It has no flow control or error: a payload over the ATT MTU is silently truncated, and writes queued when `canSendWriteWithoutResponse` is `false` are dropped. Chunk to `maximumWriteValueLength(for:)` and resume on `peripheralIsReady(toSendWriteWithoutResponse:)`. Use `.withResponse` when delivery must be confirmed. |
 | "I added `bluetooth-central` so it scans in the background." | Background scanning is heavily constrained: you *must* pass explicit service UUIDs (a `nil`/wildcard scan returns nothing in background), `CBCentralManagerScanOptionAllowDuplicatesKey` is ignored, scan intervals stretch, and you need state preservation/restoration (restore identifier + `willRestoreState`) to survive relaunch. |
-| "I'll build my own scan-and-pair screen for this accessory." | For a single known accessory, AccessorySetupKit gives a system pairing sheet, scoped Bluetooth/Wi-Fi access, and no always-on Bluetooth permission prompt. Use the `accessorysetupkit` skill for the pairing UX, then Core Bluetooth for data. |
+| "I'll build my own scan-and-pair screen for this accessory." | For a single known accessory, AccessorySetupKit gives a system pairing sheet, scoped Bluetooth/Wi-Fi access, and no always-on Bluetooth permission prompt. Use AccessorySetupKit for the pairing UX, then Core Bluetooth for data. |
 
 ## Verification gate
 
