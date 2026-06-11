@@ -40,7 +40,7 @@ Then **mine the blurb** for both kinds of signal and pre-fill the decision set �
 - **Technical:** platforms, storage/database, networking, auth, offline/sync, 3rd-party services, concurrency needs.
 - **Product / distribution:** what the app is, target audience (B2B / B2C / internal), distribution model (open source / commercial / proprietary), monetization hints.
 
-Treat mined values as **pre-filled and to-be-confirmed**, not final. On the Setup path, start the Tech Confidence meter **higher** than its 30% floor in proportion to what the blurb resolved. **Record the raw blurb verbatim** — it goes into `.ios-init-decisions.json` and is reused by `/ios-brief`.
+Treat mined values as **pre-filled and to-be-confirmed**, not final. On the Setup path, everything the blurb resolved comes off the open-decision list — only the gaps get asked. **Record the raw blurb verbatim** — it goes into `.ios-init-decisions.json` and is reused by `/ios-brief`.
 
 ---
 
@@ -60,13 +60,13 @@ Ask with AskUserQuestion — but **skip any item the blurb already answered** (c
 
 ### A2 — Technical Architecture Brainstorm
 
-Introduce a **Tech Confidence Level** and iterate batches until **≥90%** or the user says "done." Starts at ~30% (higher if the blurb pre-filled core decisions). Core decisions (networking, auth, navigation) weigh ~15% each; follow-ups (sync, offline, biometrics) ~5–10%. Present each batch as a numbered list with concrete options; mark recommended with ⭐. **Skip questions the blurb or A1 already settled.**
+Track the **open-decision list** — core decisions (networking, auth, navigation) plus the follow-ups they surface (sync, offline, biometrics) — and iterate batches until every core decision is resolved or the user says "done." Present each batch as a numbered list with concrete options; mark recommended with ⭐. **Skip questions the blurb or A1 already settled.**
 
 - **Batch 1 — Core stack:** Networking (REST ⭐ / GraphQL / None), Auth (Apple Sign-In / Firebase / Custom / None), Navigation (Simple / Multi-tab ⭐ / Deep linking).
 - **Batch 2 — Data strategy (only what's relevant):** Sync (Local-only ⭐ / CloudKit / Custom), Offline (Online-only ⭐ / Offline-first / Cache-only), Biometrics (Yes ⭐ / No if auth chosen).
 - **Batch 3 — Integrations & polish:** 3rd-party services; heavy background work (Yes / No ⭐); keychain beyond auth; accessibility priority (Standard ⭐ / High).
 
-Each batch: present open questions → read answers → resolve → surface new questions → print `Tech Confidence: XX% | Remaining: …`. At ≥90%, go to Section C. If the user says "done" early, mark the rest **TBD**.
+Each batch: present open questions → read answers → resolve → surface new questions → print `Still open: …`. When no core decision is open, go to Section C. If the user says "done" early, mark the rest **TBD**.
 
 **Folder structure** (Section C scaffolds this for New / Fresh scaffold):
 
@@ -135,10 +135,10 @@ Existing path: **do NOT scaffold folders** — document the existing structure i
 Generate-if-missing for repo files; **never silently overwrite** an existing `README.md`, `LICENSE`, or `.gitignore` — diff and ask.
 
 ### CLAUDE.md (project root)
-First line is the iOS guide import: `@~/.claude/docs/ios/ios-guide.md`. Then `## Role` (senior iOS engineer framing) and `## View Inventory` (read VIEW-INVENTORY.md before new UI). Then project config: name, bundle ID, **platforms**, deployment targets, git prefix, database, and a **`## Technical Decisions`** section with every resolved/detected choice. Mark unresolved **TBD**. Existing path: note "Generated from existing codebase scan." If CLAUDE.md exists, diff + merge (ensure the import, `## Role`, `## View Inventory` are present).
+First line is the iOS guide import: `@~/.claude/docs/ios/ios-guide.md`. Then `## Role` (senior iOS engineer framing). Then project config: name, bundle ID, **platforms**, deployment targets, git prefix, database, and a **`## Technical Decisions`** section with every resolved/detected choice. Mark unresolved **TBD**. Existing path: note "Generated from existing codebase scan." If CLAUDE.md exists, diff + merge (ensure the import and `## Role` are present).
 
 ### .claude/memory.md
-Template `project-memory-template.md`. Pre-fill Decisions (`- [YYYY-MM-DD] Area: Choice — rationale`). Existing path: label "Observed from existing codebase."
+Sections: `## Decisions` (`- [YYYY-MM-DD] Area: Choice — rationale`), `## Preferences`, `## Common Issues`. Pre-fill Decisions from the resolved choices. Existing path: label "Observed from existing codebase."
 
 ### ARCHITECTURE.md — tailored, not boilerplate
 Template `architecture-template.md`, but **render the diagram and sections from the actual decisions** rather than copying the generic layers:
@@ -192,8 +192,8 @@ Generate from the blurb + decisions (generate-if-missing; diff-and-merge if pres
 - **Getting started** — clone, open the `.xcodeproj`/`.xcworkspace`, build & run; any setup steps for chosen services.
 - **License** — the chosen license (or "Proprietary").
 
-### VIEW-INVENTORY.md (project root)
-Copy `view-inventory-template.md`, replace `{{ProjectName}}` / `{{YYYY-MM-DD}}`. New/Fresh: keep example rows as illustrations. Existing: delete examples, populate from the B1 scan; merge if it exists.
+### VIEW-INVENTORY.md (optional)
+Ask if wanted — default is **skip**; searching the codebase covers component discovery. If wanted: copy `view-inventory-template.md`, replace `{{ProjectName}}` / `{{YYYY-MM-DD}}`. Existing: delete examples, populate from the B1 scan; merge if it exists.
 
 ### Backlog.md (optional)
 Ask if wanted. New/Fresh: seed from decisions (folder structure + coordinator; NetworkService if networking; auth flow + Keychain + biometrics if auth; DB models if database; sync/offline tasks; one task per integration). Existing: seed from observed gaps (`// TODO:`s, missing tests, missing `PrivacyInfo.xcprivacy`, SwiftLint setup, `@ObservableObject`→`@Observable`, `NavigationView`→`NavigationStack`).
@@ -203,25 +203,25 @@ Ask if wanted. New/Fresh: seed from decisions (folder structure + coordinator; N
 ## Section D — Validate, Hint, Hand Off (both paths)
 
 ### D1 — Validation
-Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR, Backlog ↔ decisions, memory has an entry per decision, README/LICENSE reflect the chosen distribution. Fix silently unless ambiguous.
+Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR, Backlog ↔ decisions (if a Backlog.md was created), memory has an entry per decision, README/LICENSE reflect the chosen distribution. Fix silently unless ambiguous.
 
 ### D2 — Context7 & Framework Guide Hints
 1. **Context7** (`resolve-library-id` → `query-docs`): current setup docs for each chosen/detected 3rd-party service; note recommended version + critical steps in the ADR References. Existing path: flag outdated deps.
-2. **Framework guide hints** for each technology with a matching guide:
-   | Decision | Guide |
+2. **Framework skill hints** for each technology with a matching specialist skill in the catalog:
+   | Decision | Skill |
    |----------|-------|
-   | SwiftData | `docs/ios/data/swiftdata.md` |
-   | RealmSwift | `docs/ios/data/realmswift.md` |
-   | CloudKit sync | `docs/ios/data/cloudkit.md` |
-   | Apple Sign-In | `docs/ios/system/auth.md` |
-   | Firebase Auth | `docs/ios/commerce/firebase.md` |
-   | Biometrics | `docs/ios/system/localauthentication.md` |
-   | RevenueCat | `docs/ios/commerce/revenuecat.md` |
-   | Push notifications | `docs/ios/system/notifications.md` |
-   | WidgetKit | `docs/ios/system/widgetkit.md` |
-   | CoreLocation | `docs/ios/system/corelocation.md` |
-   | HealthKit | `docs/ios/system/healthkit.md` |
-   List only guides matching actual choices. For macOS/visionOS/etc., also point to `docs/ios/appkit/` and the relevant platform guides.
+   | SwiftData | `swiftdata` |
+   | RealmSwift | `realmswift` |
+   | CloudKit sync | `cloudkit` |
+   | Apple Sign-In | `authenticationservices` |
+   | Firebase Auth | `firebase` |
+   | Biometrics | `localauthentication` |
+   | RevenueCat | `revenuecat` |
+   | Push notifications | `usernotifications` |
+   | WidgetKit | `widgetkit` |
+   | CoreLocation | `corelocation` |
+   | HealthKit | `healthkit` |
+   List only skills matching actual choices (and only ones present in the installed catalog).
 
 ### D3 — Wrap Up & Handoff
 - List everything created/updated (incl. `.gitignore`, `LICENSE`, `README.md`); note skipped (already existed). Existing path: list tech-debt items.
@@ -259,9 +259,7 @@ Cross-check: CLAUDE.md ↔ ARCHITECTURE.md (decisions match), CLAUDE.md ↔ ADR,
 
 | Template | Path |
 |----------|------|
-| Project Memory | `~/.claude/docs/templates/project-memory-template.md` |
 | Architecture | `~/.claude/docs/templates/architecture-template.md` |
 | ADR | `~/.claude/docs/templates/adr-template.md` |
 | Changelog | `~/.claude/docs/templates/changelog-template.md` |
-| Backlog | `~/.claude/docs/templates/backlog-template.md` |
-| View Inventory | `~/.claude/docs/templates/view-inventory-template.md` |
+| View Inventory (optional) | `~/.claude/docs/templates/view-inventory-template.md` |

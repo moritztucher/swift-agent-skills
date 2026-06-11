@@ -4,7 +4,7 @@ Currency-checked agent skills for shipping **SwiftUI** apps — a SwiftUI-first 
 
 By **Moritz Tucher** · [GitHub](https://github.com/moritztucher) · [LinkedIn](https://www.linkedin.com/in/moritz-tucher/)
 
-`87 skills · 4 agents · 3 hooks · 11 iOS reference guides`
+`63 skills · 4 agents · 4 hooks · 3 iOS reference guides`
 
 ---
 
@@ -18,7 +18,7 @@ It's the configuration I use day-to-day. The skills compose into one pipeline (`
 
 ## What this isn't
 
-- Not a UIKit toolkit — it's **SwiftUI-first**; UIKit only shows up where you must bridge (MessageUI, PhotosPicker, etc.), and AppKit only for macOS
+- Not a UIKit toolkit — it's **SwiftUI-first**; UIKit only shows up where you must bridge (the occasional system picker or sheet)
 - Not a fork of every public Claude Code skill — it's curated, not comprehensive
 - Not a framework — it's a config snapshot you copy into `~/.claude/`
 - Not a substitute for thinking about your architecture — the skills surface decisions, you still make them
@@ -41,7 +41,13 @@ These skills follow the open [Agent Skills](https://agentskills.io) format (a `S
 npx skills add moritztucher/swift-agent-skills
 ```
 
-The Claude plugin path gives you the 87 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — copy the pieces into `~/.claude/`:
+The Claude plugin path gives you the 63 skills and 4 agents, namespaced under the plugin. For the **full setup** — skills, agents, the framework reference guides (loaded via `@import`), the hooks, and the example settings — one command drops the pieces into `~/.claude/`, backing up anything already there:
+
+```bash
+npx swift-agent-skills
+```
+
+It never overwrites an existing `CLAUDE.md`, `settings.json`, or `statusline-command.sh`; run with `--dry-run` to preview, or `--yes` to skip the prompt. Prefer to do it by hand? The equivalent manual steps:
 
 ```bash
 # 1. Clone into a working directory
@@ -71,6 +77,15 @@ cp -i statusline-command.sh ~/.claude/statusline-command.sh
 chmod +x ~/.claude/statusline-command.sh
 ```
 
+### Skill context budget (Claude Code)
+
+Claude Code lists every skill's name + description in context, but caps the listing at ~1% of the context window (`skillListingBudgetFraction`, default `0.01`) — with 63 skills that budget overflows, and descriptions of less-used skills get silently dropped (names stay). Rather than raising the budget and paying ~10k tokens in every session, `settings.json.example` ships a curated `skillOverrides` block:
+
+- **46 skills are deliberately `"name-only"`** — their names are framework-literal triggers (`healthkit`, `storekit`, `widgetkit`, the explicitly-invoked `/ios-*` workflow skills, …), so the description adds little at listing time. They still auto-trigger on framework mentions and load their full content on invocation.
+- **17 skills keep full descriptions** — the ones whose triggers are indirect: "Live Activity" → `activitykit`, "glass effect / iOS 26 design language" → `liquid-glass`, "Sign in with Apple" / "passkeys" → `authenticationservices`, "Face ID" → `localauthentication`, "Apple Pay" → `passkit`, "Siri/Shortcuts" → `appintents`, "OCR / Live Text" → `visual-intelligence`, plus the routing/disambiguation skills (`storekit` vs `revenuecat`, `cloudkit` vs `swiftdata`, `controls-controlwidget`, …). These now fit comfortably inside the default budget.
+
+A skill-routing rule in `AGENTS.md` backs this up: before implementing any Apple framework feature, the agent checks the catalog for a matching specialist by name. Run `/doctor` to verify no descriptions are truncated. If you'd rather keep every description in context, delete the `skillOverrides` block and set `"skillListingBudgetFraction": 0.05` instead.
+
 To opt a project into the iOS guide, add this as the first line of the project's `CLAUDE.md`:
 
 ```
@@ -79,11 +94,43 @@ To opt a project into the iOS guide, add this as the first line of the project's
 
 `/ios-init` adds this automatically when it scaffolds a project's `CLAUDE.md` (it auto-detects new vs. existing codebases).
 
+### Non-Claude users (Codex, Cursor, Gemini CLI, Kiro, …)
+
+The skill catalog is fully portable — install it on any [Agent Skills](https://agentskills.io/clients)–compatible agent:
+
+```bash
+npx skills add moritztucher/swift-agent-skills
+```
+
+What you get, and what's Claude-enhanced:
+
+- **All 63 skills work everywhere** — they're plain `SKILL.md` + `references/` in the open Agent Skills format, including the `/ios-*` workflow and every framework specialist.
+- **House rules:** Claude Code loads them via `@import`; on other agents, copy [`AGENTS.md`](AGENTS.md) from this repo into your iOS project root — it carries the same stack, architecture, style, security, and testing rules in the agent-neutral `AGENTS.md` convention.
+- **Advisor guidance** (UX, UI design, onboarding, docs-writing) ships in both forms: as Claude subagents in `agents/` and as portable skills (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`) that any client can invoke.
+- **The fan-out skills degrade gracefully** — `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`, `/ios-design-elevate` spawn parallel advisor subagents on Claude Code; on agents without subagent support they run the same advisor passes inline. Same findings, sequential instead of parallel.
+- **Hooks:** `swiftlint-autofix` is also available as a standard git pre-commit hook (`hooks/pre-commit.swiftlint`) — see [Hooks](#hooks). `notify-done.sh` and the `settings.json` wiring are Claude-specific.
+
+**Kiro CLI caveat — auto-activation is not at parity.** The skill descriptions are already written as trigger lists, but Kiro's automatic skill loading is best-effort: it matches your request against skill descriptions once, with nothing forcing the model to act on a match, and with 63 skills in the catalog relevance dilutes. Also, only Kiro's *default* agent auto-loads skills at all — custom agents must list each skill explicitly as a `skill://` resource. Two mitigations:
+
+1. **Invoke skills explicitly** when it matters: `/activitykit`, `/ios-review`, etc. Treat auto-activation as a convenience, not a guarantee.
+2. **Add a router steering rule** so Kiro checks the catalog before writing framework code. Save as `.kiro/steering/skill-router.md`:
+
+   ```markdown
+   ---
+   inclusion: always
+   ---
+
+   Before implementing or reviewing any iOS framework feature (Live Activities,
+   widgets, HealthKit, StoreKit, App Intents, …), check the installed skills for
+   a matching specialist and load it first. Prefer a loaded skill over answering
+   from memory.
+   ```
+
 ---
 
 ## Skills
 
-The 87 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
+The 63 skills group into the lifecycle phases. **`/ios` is the front door** — run it to see where a project is and what to do next.
 
 ### Setup
 
@@ -107,16 +154,16 @@ Then **build features UI-first** — write the UI layer so the flow feels good, 
 | Skill | What it does |
 |-------|--------------|
 | `/ios-design-elevate` | Apply the design system view by view, verifying each screen visually (build → screenshot → compare → iterate); never touches business logic |
-| `/ios-build` | Build the Xcode project and report results |
-| `/ios-test` | Run unit and UI tests |
 | `/ios-automate` | iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video |
+
+Building and testing run through `xcodebuild` directly — no wrapper skill needed.
 
 ### Verify
 
 | Skill | What it does |
 |-------|--------------|
 | `/ios-review` | Thorough code review on changes or specified files |
-| `/ios-audit` | Holistic project audit through PM, UX, UI, ARCH lenses |
+| `/ios-audit` | Holistic project audit through PM, UX, ARCH lenses (code evidence; visual craft → `/ios-design-audit`) |
 | `/ios-design-audit` | Visual craft audit — screenshots the running app and judges the real screens — with severity-rated findings + elevation suggestions |
 | `/ios-onboarding-audit` | Walk the real onboarding flow in the simulator (or design one from scratch) — activation psychology, permission timing, measured time-to-value |
 
@@ -136,14 +183,10 @@ These trigger automatically while you read, write, or review SwiftUI and concurr
 | Skill | What it does | Source |
 |-------|--------------|--------|
 | `swiftui-pro` | Comprehensive SwiftUI code review — modern APIs, performance, accessibility. Majority based on Paul Hudson's skill, with reference-guide additions (performance, Liquid Glass design, previews) by the repo author | [twostraws/SwiftUI-Agent-Skill](https://github.com/twostraws/SwiftUI-Agent-Skill) (Paul Hudson, MIT; adapted) |
-| `swiftui-badge` | The `.badge()` modifier — counts/labels on tabs, list rows, and toolbar buttons, plus prominence and the toolbar workaround | Moritz Tucher |
 | `swiftui-tabview` | iOS 26 TabView — value-based `Tab`/`TabSection`, sidebar-adaptable, bottom accessory, minimize behavior, `.search` tab, customization | Moritz Tucher |
 | `swiftui-toolbar` | The toolbar system — `ToolbarItem`/`Group`, all placements, `ToolbarSpacer`, iOS 26 shared glass + `sharedBackgroundVisibility` | Moritz Tucher |
-| `keyboard-accessory` | A view docked above the keyboard — input accessory bars and a custom IME candidate strip (matcher / strip / wiring) | Moritz Tucher |
-| `swiftui-expert-skill` | SwiftUI guidance incl. iOS 26 Liquid Glass + Instruments `.trace` analysis | [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill) (Antoine van der Lee) |
 | `swift-concurrency` | Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration | [AvdLee/Swift-Concurrency-Agent-Skill](https://github.com/AvdLee/Swift-Concurrency-Agent-Skill) (Antoine van der Lee) |
 | `swift-testing` | Swift Testing — `@Test`/`#expect`/`#require`/`@Suite`, parameterized + async tests, XCTest migration | Moritz Tucher |
-| `reactivity` | Combine vs Observation vs async — `@Observable`, `@Published`, publishers, cancellable lifecycle, migration | Moritz Tucher |
 
 ### Framework & engineering (model-invoked)
 
@@ -171,52 +214,25 @@ These trigger on framework and workflow keywords while you build. Each bundles a
 | `tipkit` | TipKit, tips, feature discovery, `popoverTip` |
 | `swift-charts` | Swift Charts, chart, graph, data visualization, `BarMark` |
 | `coreml` | Core ML, on-device inference, `.mlmodel`, MLModel, Vision model |
-| `eventkit` | EventKit, calendar, reminders, EKEventStore |
-| `contacts` | Contacts, CNContactStore, address book, contact picker |
-| `photosui` | PhotosPicker, photo library, PHPickerViewController, PhotoKit |
-| `messageui` | MessageUI, in-app email/SMS, MFMailComposeViewController |
 | `mapkit` | MapKit, map, Marker, MapCameraPosition, MKLocalSearch, geocoding |
-| `safariservices` | SafariServices, SFSafariViewController, in-app browser |
-| `corehaptics` | Core Haptics, haptic feedback, CHHapticEngine, AHAP |
 | `avfoundation-audio` | audio playback/recording, AVAudioSession, AVAudioEngine, microphone |
-| `corespotlight` | Core Spotlight, search indexing, CSSearchableItem, deep link |
 | `attributed-string` | AttributedString, rich/styled text, AttributeContainer, Markdown |
 | `swiftui-webview` | WebView, WKWebView, WebPage, embed web content, JS bridge |
 | `translation` | Translation, translate text, TranslationSession, on-device translation |
-| `accessorysetupkit` | AccessorySetupKit, accessory pairing, ASAccessorySession |
 | `alarmkit` | AlarmKit, alarm, timer, scheduled alert (iOS 26) |
-| `paperkit` | PaperKit, drawing, markup canvas, annotation (iOS 26) |
-| `gamesave` | GameSave, cloud game-save sync, GameSaveSyncedDirectory (iOS 26) |
-| `relevancekit` | RelevanceKit, content relevance, widget surfacing (iOS 26) |
-| `permissionkit` | PermissionKit, parental/guardian approval, communication permission (iOS 26) |
-| `declared-age-range` | Declared Age Range, privacy-preserving age verification (iOS 26) |
-| `identity-document-services` | mobile ID, digital ID / mdoc presentment (iOS 26) |
-| `energykit` | EnergyKit, clean-energy / grid-aware scheduling (iOS 26) |
-| `wifiaware` | Wi-Fi Aware, peer-to-peer device-to-device connections (iOS 26) |
 | `speech-analyzer` | speech to text, transcription, SpeechAnalyzer, SpeechTranscriber (iOS 26) |
 | `visual-intelligence` | Visual Intelligence, visual/camera search, semantic content (iOS 26) |
 | `passkit` | PassKit, Apple Wallet pass, PKPass, Apple Pay, PKPaymentRequest |
 | `firebase` | Firebase, Firestore, Auth, Cloud Messaging, Crashlytics (Google SDK) |
 | `realmswift` | Realm, RealmSwift, `@Persisted`, object database (third-party) |
-| `carplay` | CarPlay, CPTemplate, in-car app, CPInterfaceController |
 | `screen-time` | Screen Time, parental controls, app limits, FamilyControls, ManagedSettings, DeviceActivity, shield |
-| `appkit` | AppKit, macOS app, NSWindow, NSView, NSGlassEffectView, macOS Liquid Glass |
 | `privacy-manifest` | PrivacyInfo.xcprivacy, required-reason API, App Store privacy rejection |
 | `oslog-logging` | OSLog/Logger, structured logging, signposts, MetricKit observability |
 | `universal-links` | universal links, associated domains, apple-app-site-association, deep linking |
-| `avkit-videoplayer` | video playback, VideoPlayer, AVPlayer, HLS streaming, Picture in Picture |
 | `pencilkit` | PencilKit, PKCanvasView, drawing, Apple Pencil, ink, PKDrawing |
 | `core-motion` | Core Motion, accelerometer, gyroscope, device motion, pedometer, step count |
-| `core-nfc` | Core NFC, NFC tag read/write, NFCNDEFReaderSession, NFCTagReaderSession |
 | `controls-controlwidget` | Control Center / Lock Screen control, ControlWidget, Action Button (iOS 18) |
 | `app-store-submission` | archive/export/upload, `xcodebuild exportArchive`, TestFlight, code signing, review rejection |
-
-### Meta
-
-| Skill | What it does |
-|-------|--------------|
-| `/ios-agents` | List all available subagents |
-| `/compact-summary` | Compress the current session into a reusable context primer for the next chat |
 
 ---
 
@@ -231,6 +247,8 @@ Specialists invoked via the Task tool from inside skills. They advise; the paren
 | `ios-ui-design-advisor` | Visual craft — color, typography, motion, hierarchy, emotional design |
 | `context7-docs-writer` | Generates framework integration docs using Context7's live library data |
 
+Each advisor also ships as a portable skill of the same name (`skills/ios-ux-advisor/`, etc.), so non-Claude agents get the same lenses — the audit skills fall back to running them inline when no subagent support exists.
+
 ---
 
 ## Hooks
@@ -241,17 +259,23 @@ Shell hooks that run automatically. The first two are wired up in `settings/sett
 |------|------|--------------|-------------|
 | `swiftlint-autofix.sh` | After every Edit/Write to a `.swift` file | Runs `swiftlint lint --fix` quietly | ✅ |
 | `notify-done.sh` | When Claude stops | macOS notification with the Glass sound | ✅ |
-| `definition-of-done.sh` | On stop (if wired) | Builds the Xcode project, runs tests, checks SwiftLint — blocks completion if any fails | ⬜️ opt-in |
+| `definition-of-done.sh` | On stop (if wired) | Builds the Xcode project and checks SwiftLint — blocks completion if either fails (tests stay in CI) | ⬜️ opt-in |
+
+**Portable variant:** `pre-commit.swiftlint` is a tool-agnostic **git pre-commit hook** with the same lint-fix behavior — it runs `swiftlint --fix` on staged Swift files and re-stages them, so non-Claude users (or anyone who prefers commit-time fixing) get the same result without Claude's hook system. Install per project:
+
+```bash
+cp hooks/pre-commit.swiftlint /path/to/project/.git/hooks/pre-commit
+chmod +x /path/to/project/.git/hooks/pre-commit
+```
+
+`notify-done.sh` and `definition-of-done.sh` depend on Claude Code's Stop event and have no portable equivalent.
 
 ---
 
-11 reference guides under `docs/ios/`, organized by domain. Most frameworks have graduated into the **framework-integration skills** above (their deep guides now live in each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; these remain as on-demand reference:
+3 reference guides under `docs/ios/`. All framework depth lives in the **framework-integration skills** above (each skill's `references/`), and the SwiftUI craft guides folded into `swiftui-pro`; what remains is the house-rules layer:
 
-- **system/** — Span/InlineArray
-- **rules/** — Architecture, ViewModels, SwiftUI Views, SwiftUI patterns, Swift style, security, testing
-- Plus the top-level `ios-guide.md`, `ios-coding-standards.md`, and `architecture-patterns.md` (loaded via `@import`)
-
-Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@import`) and `ios-coding-standards.md` / `architecture-patterns.md` reference docs.
+- `ios-guide.md` — the consolidated entry point a project loads via `@import`
+- `ios-coding-standards.md` and `architecture-patterns.md` — the standards and architecture references it links
 
 ---
 
@@ -262,11 +286,9 @@ Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@imp
 - `project-brief-template.md`
 - `architecture-template.md`
 - `adr-template.md`
-- `backlog-template.md`
 - `changelog-template.md`
 - `design-system-template.md`
-- `view-inventory-template.md`
-- `project-memory-template.md`
+- `view-inventory-template.md` (optional — projects opt in via `/ios-init`)
 
 ---
 
@@ -274,7 +296,7 @@ Plus the top-level `ios-guide.md` (the consolidated entry point loaded via `@imp
 
 The setup splits into three layers:
 
-1. **Skills** are slash-commands the user invokes (`/ios-init`, `/ios-brief`, etc.), grouped by lifecycle phase (Setup → Plan → Build → Verify → Ship). Each is a `SKILL.md` with frontmatter and instructions. `/ios` is the orchestrator that reads project state and routes to the right phase. Some skills carry evals (`evals/evals.json`) for measuring trigger accuracy.
+1. **Skills** are slash-commands the user invokes (`/ios-init`, `/ios-brief`, etc.), grouped by lifecycle phase (Setup → Plan → Build → Verify → Ship). Each is a `SKILL.md` with frontmatter and instructions. `/ios` is the orchestrator that reads project state and routes to the right phase.
 2. **Agents** are specialists Claude spawns via the Task tool. They have a narrower scope and toolset than the main thread. Skills like `/ios-design-audit` and `/ios-onboarding-audit` spawn the design and onboarding advisors for parallel analysis.
 3. **Docs + templates** are the reference layer. The iOS guide loads via `@~/.claude/docs/ios/ios-guide.md` in a project's `CLAUDE.md`. Framework guides are read on demand. Templates feed `/ios-init` and `/ios-brief`.
 
@@ -295,7 +317,7 @@ The workflow composes left-to-right: init → brief → build features UI-first 
 
 ## Disclaimer
 
-Not affiliated with Anthropic. Claude Code is Anthropic's product. Third-party skills are reproduced under their own licenses with full attribution in each skill's frontmatter — `swiftui-pro` from [Paul Hudson](https://github.com/twostraws/SwiftUI-Agent-Skill) (MIT), `swiftui-expert-skill` and `swift-concurrency` from [Antoine van der Lee](https://github.com/AvdLee).
+Not affiliated with Anthropic. Claude Code is Anthropic's product. Third-party skills are reproduced under their own licenses with full attribution in each skill's frontmatter — `swiftui-pro` from [Paul Hudson](https://github.com/twostraws/SwiftUI-Agent-Skill) (MIT), `swift-concurrency` from [Antoine van der Lee](https://github.com/AvdLee).
 
 ---
 

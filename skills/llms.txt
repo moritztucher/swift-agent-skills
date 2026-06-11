@@ -1,6 +1,6 @@
 # Swift Agent Skills
 
-> A curated, SwiftUI-first collection of agent skills for Apple-platform development, packaged for Claude Code. 87 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/swift-agent-skills` then `/plugin install swift-skills@swift-agent-skills`, or copy into `~/.claude/`.
+> A curated, SwiftUI-first collection of agent skills for Apple-platform development, packaged for Claude Code. 63 skills span a five-phase lifecycle (Setup → Plan → Build → Verify → Ship), plus SwiftUI/Swift craft specialists and framework-integration skills that trigger automatically while you read or write code. Each skill is a `SKILL.md` with frontmatter and instructions; `/ios` is the orchestrator that detects project state and routes to the next step. Install via `/plugin marketplace add moritztucher/swift-agent-skills` then `/plugin install swift-skills@swift-agent-skills`, or copy into `~/.claude/`.
 
 ## Setup
 
@@ -16,16 +16,21 @@
 ## Build
 
 - [ios-design-elevate](ios-design-elevate/SKILL.md): Apply the design system view by view, verifying each screen visually (build → screenshot → compare → iterate); never touches business logic.
-- [ios-build](ios-build/SKILL.md): Build the Xcode project and report results.
-- [ios-test](ios-test/SKILL.md): Run unit and UI tests.
 - [ios-automate](ios-automate/SKILL.md): iOS Simulator automation via the AXe CLI — tap, swipe, type, screenshot, video.
 
 ## Verify
 
 - [ios-review](ios-review/SKILL.md): Thorough code review on changes or specified files.
-- [ios-audit](ios-audit/SKILL.md): Holistic project audit through PM, UX, UI, ARCH lenses.
+- [ios-audit](ios-audit/SKILL.md): Holistic project audit through PM, UX, ARCH lenses (code evidence; visual craft → ios-design-audit).
 - [ios-design-audit](ios-design-audit/SKILL.md): Visual craft audit — screenshots the running app and judges real screens, with severity-rated findings and elevation suggestions.
 - [ios-onboarding-audit](ios-onboarding-audit/SKILL.md): Walk the real onboarding flow in the simulator (or design one) — activation psychology, permission timing, measured time-to-value.
+
+### Advisor lenses (portable forms of the Claude subagents)
+
+- [ios-ux-advisor](ios-ux-advisor/SKILL.md): UX advisory lens — HIG compliance, accessibility, interaction patterns, component choices.
+- [ios-ui-design-advisor](ios-ui-design-advisor/SKILL.md): Visual design craft lens — color, typography, whitespace, motion, hierarchy, emotional design.
+- [ios-onboarding-advisor](ios-onboarding-advisor/SKILL.md): Onboarding strategy lens — activation, permission timing, progressive disclosure, time-to-value.
+- [context7-docs-writer](context7-docs-writer/SKILL.md): Write project-specific framework integration docs and troubleshooting notes, verified against current library documentation.
 
 ## Ship
 
@@ -37,14 +42,10 @@
 ## SwiftUI + Swift craft (model-invoked)
 
 - [swiftui-pro](swiftui-pro/SKILL.md): Comprehensive SwiftUI code review — modern APIs, performance, accessibility. From Paul Hudson (MIT).
-- [swiftui-expert-skill](swiftui-expert-skill/SKILL.md): SwiftUI guidance incl. iOS 26 Liquid Glass and Instruments `.trace` analysis. From Antoine van der Lee.
 - [swift-concurrency](swift-concurrency/SKILL.md): Diagnose concurrency issues, refactor to async/await, guide Swift 6 migration. From Antoine van der Lee.
 - [swift-testing](swift-testing/SKILL.md): Swift Testing framework — @Test/#expect/#require/@Suite, traits, parameterized + async tests, confirmation(), XCTest migration.
-- [reactivity](reactivity/SKILL.md): Combine vs Observation vs async/await — @Observable, @Bindable, withObservationTracking, Combine pipelines/operators, cancellable lifecycle, ObservableObject migration.
-- [swiftui-badge](swiftui-badge/SKILL.md): The `.badge()` modifier — counts/labels on tabs, list rows, toolbar buttons, prominence, toolbar workaround.
 - [swiftui-tabview](swiftui-tabview/SKILL.md): iOS 26 TabView — value-based Tab/TabSection, sidebarAdaptable, tabViewBottomAccessory, minimize behavior, .search tab, customization.
 - [swiftui-toolbar](swiftui-toolbar/SKILL.md): The toolbar system — ToolbarItem/Group, placements, ToolbarSpacer, iOS 26 shared-glass grouping + sharedBackgroundVisibility, role/background.
-- [keyboard-accessory](keyboard-accessory/SKILL.md): A view docked above the keyboard — .keyboard toolbar placement, iOS 26 glass opt-out, and a custom IME candidate strip (matcher/strip/wiring + replace-trailing-run edit).
 
 ## Framework & engineering (model-invoked)
 
@@ -70,47 +71,24 @@ Lean decision layer (numbered dials + anti-rationalization table + verification 
 - [tipkit](tipkit/SKILL.md): In-app tips and feature discovery — Tip rules/events, TipView/popoverTip, display frequency, Tips.configure.
 - [swift-charts](swift-charts/SKILL.md): Data visualization — Chart marks, axes/scales, selection interactivity, scrolling, iOS 26 Chart3D.
 - [coreml](coreml/SKILL.md): On-device ML inference — MLModel loading, compute units, async prediction, Vision integration, stateful models.
-- [eventkit](eventkit/SKILL.md): Calendar and reminders — EKEventStore, iOS 17+ write-only/full-access split, events, recurrence, EventKitUI.
-- [contacts](contacts/SKILL.md): Address book — CNContactStore, keysToFetch, iOS 18 limited access + ContactAccessButton, picker, save requests.
-- [photosui](photosui/SKILL.md): Photo selection — SwiftUI PhotosPicker, PHPicker, PhotoKit authorization, limited library, transferable loading.
-- [messageui](messageui/SKILL.md): In-app mail/SMS — MFMailComposeViewController, MFMessageComposeViewController, capability checks, attachments.
 - [mapkit](mapkit/SKILL.md): Maps — SwiftUI Map, Marker/Annotation, camera position, MKLocalSearch, iOS 26 GeoToolbox geocoding.
-- [safariservices](safariservices/SKILL.md): In-app web browsing — SFSafariViewController, reader, vs ASWebAuthenticationSession for auth.
-- [corehaptics](corehaptics/SKILL.md): Custom haptics — CHHapticEngine, transient/continuous events, dynamic parameters, AHAP, capability checks.
 - [avfoundation-audio](avfoundation-audio/SKILL.md): Audio playback/recording — AVAudioSession, AVAudioPlayer/Recorder, AVAudioEngine, interruptions, background audio.
-- [corespotlight](corespotlight/SKILL.md): Search indexing — CSSearchableItem, CSSearchableIndex, continuation deep-linking, iOS 18.4 intelligence.
 - [attributed-string](attributed-string/SKILL.md): Rich text — AttributedString, AttributeContainer, Markdown, scopes, iOS 26 editable rich text.
 - [swiftui-webview](swiftui-webview/SKILL.md): Embedded web — iOS 26 SwiftUI WebView/WebPage, WKWebView wrapping, navigation, JS bridge.
 - [translation](translation/SKILL.md): Text translation — translationPresentation overlay, TranslationSession, language availability/download.
-- [accessorysetupkit](accessorysetupkit/SKILL.md): Privacy-preserving accessory pairing (iOS 18+) — ASAccessorySession, discovery descriptors, migration.
 - [alarmkit](alarmkit/SKILL.md): iOS 26 alarms/timers that break through silent/Focus — AlarmManager, presentations, Live Activity countdown.
-- [paperkit](paperkit/SKILL.md): iOS 26 drawing/markup canvas on PencilKit — PaperMarkup, markup toolbar, feature sets.
-- [gamesave](gamesave/SKILL.md): iOS 26 cloud game-save sync — GameSaveSyncedDirectory/File, conflict handling.
-- [relevancekit](relevancekit/SKILL.md): iOS 26 on-device relevance signals for widget/content surfacing — WidgetRelevance, RelevantContext.
-- [permissionkit](permissionkit/SKILL.md): iOS 26 communication/guardian permission flows (iMessage) — QuestionTopic, CommunicationLimits.
-- [declared-age-range](declared-age-range/SKILL.md): iOS 26 privacy-preserving age-range sharing — AgeRangeService, age gates, protective fallback.
-- [identity-document-services](identity-document-services/SKILL.md): iOS 26 mobile-ID/mdoc presentment — provider + web-presentment, ISO 18013.
-- [energykit](energykit/SKILL.md): iOS 26 clean-energy/grid-aware scheduling — ElectricityGuidance, load events, shift vs reduce.
-- [wifiaware](wifiaware/SKILL.md): iOS 26 peer-to-peer Wi-Fi Aware — publish/subscribe services, paired-device connections, performance modes.
 - [speech-analyzer](speech-analyzer/SKILL.md): iOS 26 on-device transcription — SpeechAnalyzer/SpeechTranscriber, asset reservation, file vs live, volatile results.
 - [visual-intelligence](visual-intelligence/SKILL.md): iOS 26 visual/camera search — App Intents semanticContentSearch schema, SemanticContentDescriptor, IntentValueQuery.
 - [passkit](passkit/SKILL.md): Apple Wallet passes + Apple Pay — PKPass/PKAddPassesViewController, PKPaymentRequest, PayWithApplePayButton, server-signed passes.
 - [firebase](firebase/SKILL.md): Google's Firebase Apple SDK — FirebaseApp.configure, Auth, Firestore, Cloud Messaging, Crashlytics; SwiftPM, async/await.
 - [realmswift](realmswift/SKILL.md): Realm object database (third-party, now community-maintained) — @Persisted, write transactions, thread confinement, migrations.
-- [carplay](carplay/SKILL.md): In-car apps — CPTemplateApplicationScene, CPInterfaceController, per-category entitlement, the allowed template set.
 - [screen-time](screen-time/SKILL.md): Parental controls / app limiting — FamilyControls authorization + picker, ManagedSettings shields, DeviceActivity schedules/monitoring (one entitlement, opaque tokens).
-- [appkit](appkit/SKILL.md): macOS apps with AppKit — windows/views/responder chain, SwiftUI interop, and macOS 26 Liquid Glass (NSGlassEffectView).
 - [privacy-manifest](privacy-manifest/SKILL.md): PrivacyInfo.xcprivacy + required-reason APIs — the ship-blocking App Store requirement, reason codes, third-party SDK manifests.
 - [oslog-logging](oslog-logging/SKILL.md): Structured logging + observability — Logger/OSLog levels and privacy redaction, OSSignposter intervals, MetricKit payloads.
 - [universal-links](universal-links/SKILL.md): Universal links + deep linking — associated domains, the AASA file + hosting rules, onOpenURL / NSUserActivity handling.
-- [avkit-videoplayer](avkit-videoplayer/SKILL.md): Video playback — SwiftUI VideoPlayer, AVPlayer/AVPlayerViewController, HLS streaming, async asset loading, Picture-in-Picture, audio session.
-- [pencilkit](pencilkit/SKILL.md): Freehand drawing — PKCanvasView, PKDrawing persistence, PKToolPicker, drawing policy, SwiftUI wrapping (vs paperkit's markup layer).
+- [pencilkit](pencilkit/SKILL.md): Freehand drawing — PKCanvasView, PKDrawing persistence, PKToolPicker, drawing policy, SwiftUI wrapping.
 - [core-motion](core-motion/SKILL.md): Motion sensors — CMMotionManager device motion, pedometer, headphone motion, altimeter; shared instance, intervals, NSMotionUsageDescription.
-- [core-nfc](core-nfc/SKILL.md): NFC — NFCNDEFReaderSession read/write, NFCTagReaderSession (ISO7816/MiFare/FeliCa), entitlement + Info.plist, background tags.
 - [controls-controlwidget](controls-controlwidget/SKILL.md): iOS 18 Controls — ControlWidget for Control Center / Lock Screen / Action Button, button vs toggle, ControlValueProvider + SetValueIntent.
 - [app-store-submission](app-store-submission/SKILL.md): Ship pipeline — xcodebuild archive/exportArchive, signing, App Store Connect API key upload, TestFlight, rejection checklist.
 
-## Meta
 
-- [ios-agents](ios-agents/SKILL.md): List all available subagents.
-- [compact-summary](compact-summary/SKILL.md): Compress the current session into a reusable context primer.

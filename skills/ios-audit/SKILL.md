@@ -1,13 +1,15 @@
 ---
 name: ios-audit
-description: Holistic project audit through four lenses (PM, UX, UI, ARCH). Scans an existing codebase and produces a severity-rated findings report with actionable suggestions.
+description: Holistic project audit through three code-evidence lenses (PM, UX, ARCH). Scans an existing codebase and produces a severity-rated findings report with actionable suggestions. For rendered visual craft, use ios-design-audit; for the first-launch flow, ios-onboarding-audit.
 user_invocable: true
 argument-hint: <optional: feature name or path to scope the audit, e.g. "Auth" or "Features/Onboarding">
 ---
 
 # iOS Project Audit
 
-You perform a holistic audit of an existing iOS/SwiftUI project through four lenses: Product (PM), UX, Visual Design (UI), and Architecture (ARCH). You produce a structured report with severity-rated findings and suggestions.
+You perform a holistic audit of an existing iOS/SwiftUI project through three code-evidence lenses: Product (PM), UX, and Architecture (ARCH). You produce a structured report with severity-rated findings and suggestions.
+
+Visual design craft is **out of scope** — judging look-and-feel from source code alone produces weak findings. Route the user to `/ios-design-audit` (which screenshots the running app) for that, and to `/ios-onboarding-audit` for the first-launch flow.
 
 **Key constraint:** This skill **suggests, not decides**. Findings describe observations and trade-offs. Recommendations use "Consider:" framing.
 
@@ -18,8 +20,8 @@ You perform a holistic audit of an existing iOS/SwiftUI project through four len
 ## Rules
 
 - **Read before judging** — scan the full scope before writing any findings.
-- **Four lenses, always** — every audit must cover PM, UX, UI, and ARCH. If a lens has no findings, say so explicitly.
-- **Spawn advisors** — delegate UX and UI lens reviews to their respective sub-agents (see below).
+- **Three lenses, always** — every audit must cover PM, UX, and ARCH. If a lens has no findings, say so explicitly.
+- **Spawn the UX advisor** — delegate the UX lens review to the `ios-ux-advisor` sub-agent (see below). On clients without subagent support, run that lens inline instead (see the no-subagent fallback).
 - **Severity on every finding** — no unclassified observations.
 - **Suggestions, not directives** — use "Consider:" framing. The user decides.
 - **Cite locations** — every finding references specific files and lines.
@@ -60,38 +62,7 @@ Return findings as a numbered list. Each finding must include:
 Skip files with no UX concerns. No preamble.
 ```
 
-### UI Design Advisor
-
-Spawn the `ios-ui-design-advisor` agent for the UI lens:
-
-```
-Audit the visual design craft in this iOS/SwiftUI project scope.
-
-Scope: {SCOPE_DESCRIPTION}
-
-Files to review:
-{LIST OF VIEW FILES}
-
-For each file, check:
-- Color strategy (restraint, 60-30-10 rule, dark mode intentionality, accent usage)
-- Typography (scale contrast, SF Pro weight usage, hierarchy as navigation aid)
-- Whitespace & layout (generous spacing, focal points, grid rhythm)
-- Motion & animation (150-300ms, spring for touch, state communication, reduce motion)
-- Visual hierarchy (size as signal, layered contrast, materials over shadows)
-- Emotional design (delight moments, celebration at milestones, personality)
-- Anti-patterns (generic card grids, decorative animation, color-only status, uniform spacing)
-
-Return findings as a numbered list. Each finding must include:
-- Type (Strong design choice / Design concern / Design opportunity)
-- File path and line number
-- What you observed
-- The design principle involved
-- Suggestion if applicable (use "Consider:" framing)
-
-Skip files with no visual design concerns. No preamble.
-```
-
-**Spawn both agents in parallel** when the scope is determined.
+**No-subagent fallback:** if your environment cannot spawn subagents (e.g. a non-Claude Agent Skills client with no Task tool), do not skip the UX lens. Read the portable lens skill — `skills/ios-ux-advisor/SKILL.md` — and apply it inline to the same file list with the same prompt and output format above. The findings contract is identical; you only lose the parallelism.
 
 ---
 
@@ -119,11 +90,11 @@ Read architecturally significant files:
 
 If the scope is large (>30 files), prioritize: entry points, navigation, the most complex ViewModels, and Views with the most lines of code.
 
-### 3. Run Four-Lens Audit
+### 3. Run Three-Lens Audit
 
-**Spawn UX and UI advisor agents in parallel** (pass them the View and ViewModel files from Step 2).
+**Spawn the UX advisor agent** (pass it the View and ViewModel files from Step 2).
 
-While agents run, perform the PM and ARCH lens audits yourself:
+While it runs, perform the PM and ARCH lens audits yourself:
 
 #### `[PM]` Product Lens
 
@@ -149,7 +120,7 @@ Review for:
 
 ### 4. Integrate Sub-Agent Results
 
-Collect findings from both advisor agents. Merge all four lenses into the report.
+Collect the UX advisor's findings. Merge all three lenses into the report.
 
 ### 5. Classify Findings
 
@@ -158,8 +129,8 @@ Every finding gets a severity:
 | Severity | Definition | Examples |
 |----------|-----------|----------|
 | **CRITICAL** | Security risk, crash potential, data loss | Hardcoded secret, force unwrap on API response, no Keychain |
-| **HIGH** | Breaks architectural rule or significant UX/UI issue | Business logic in View, missing loading states, no visual hierarchy |
-| **MEDIUM** | Convention divergence, tech debt, missed opportunity | Wrong file placement, generic card layout, inconsistent patterns |
+| **HIGH** | Breaks architectural rule or significant UX issue | Business logic in View, missing loading states, broken navigation |
+| **MEDIUM** | Convention divergence, tech debt, missed opportunity | Wrong file placement, duplicated service logic, inconsistent patterns |
 | **LOW** | Minor style, small polish opportunity | Missing `// MARK:`, slight spacing inconsistency |
 
 ### 6. Generate Report
@@ -181,15 +152,8 @@ Write to `docs/AUDIT-REPORT.md` (or `docs/AUDIT-REPORT-{feature}.md` if scoped).
 |------|----------|------|--------|-----|-------|
 | [PM] | N | N | N | N | N |
 | [UX] | N | N | N | N | N |
-| [UI] | N | N | N | N | N |
 | [ARCH] | N | N | N | N | N |
 | **Total** | **N** | **N** | **N** | **N** | **N** |
-
-**Verdict:** {STRONG / SOLID / NEEDS WORK / CRITICAL ISSUES}
-- STRONG: zero CRITICAL/HIGH, few MEDIUM
-- SOLID: zero CRITICAL, minor HIGH findings
-- NEEDS WORK: HIGH findings across multiple lenses
-- CRITICAL ISSUES: one or more CRITICAL findings
 
 ---
 
@@ -208,16 +172,6 @@ Write to `docs/AUDIT-REPORT.md` (or `docs/AUDIT-REPORT-{feature}.md` if scoped).
 - **Location:** `path/to/file.swift:line`
 - **Observation:** {What you found}
 - **Principle:** {HIG or UX principle}
-- **Consider:** {Suggestion}
-
-...
-
-## [UI] Visual Design Findings
-
-### UI-1: {Short title} — {SEVERITY}
-- **Location:** `path/to/file.swift:line`
-- **Observation:** {What you found}
-- **Principle:** {Design principle}
 - **Consider:** {Suggestion}
 
 ...
@@ -244,9 +198,6 @@ Write to `docs/AUDIT-REPORT.md` (or `docs/AUDIT-REPORT-{feature}.md` if scoped).
 ### [UX]
 - ...
 
-### [UI]
-- ...
-
 ### [ARCH]
 - ...
 
@@ -262,7 +213,7 @@ Write to `docs/AUDIT-REPORT.md` (or `docs/AUDIT-REPORT-{feature}.md` if scoped).
 ### 7. Summary in Chat
 
 After writing the report:
-- Verdict and finding count per lens
+- Finding count per lens, one-sentence overall impression
 - List any CRITICAL findings with one-line descriptions
 - Top 3 recommendations
 - Point to the report file

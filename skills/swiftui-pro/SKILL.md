@@ -14,6 +14,7 @@ Review process:
 1. Check for deprecated API using `references/api.md`.
 1. Check that views, modifiers, and animations have been written optimally using `references/views.md`.
 1. Validate that data flow is configured correctly using `references/data.md`.
+1. Check reactive-state choices (Observation vs Combine vs async sequences, `ObservableObject` migration) using `references/reactivity.md`.
 1. Ensure navigation is updated and performant using `references/navigation.md`.
 1. Ensure the code uses designs that are accessible and compliant with Apple’s Human Interface Guidelines using `references/design.md`.
 1. Validate accessibility compliance including Dynamic Type, VoiceOver, and Reduce Motion using `references/accessibility.md`.
@@ -104,5 +105,6 @@ End of example.
 - `references/navigation.md` - navigation using `NavigationStack`/`NavigationSplitView`, plus alerts, confirmation dialogs, and sheets.
 - `references/performance.md` - optimizing SwiftUI code for maximum performance.
 - `references/data.md` - data flow, shared state, and property wrappers.
+- `references/reactivity.md` - choosing between Observation (`@Observable`), Combine, and async/await for reactive state, and migrating off `ObservableObject`.
 - `references/swift.md` - tips on writing modern Swift code, including using Swift Concurrency effectively.
 - `references/views.md` - view structure, composition, and animation.

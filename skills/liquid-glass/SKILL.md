@@ -1,6 +1,6 @@
 ---
 name: liquid-glass
-description: Adopt and review Apple's iOS 26 Liquid Glass in SwiftUI — the .glassEffect(_:in:) material, GlassEffectContainer batching, glassEffectID morphing, .buttonStyle(.glass)/.glassProminent, backgroundExtensionEffect, scrollEdgeEffectStyle, and toolbar/tab-bar glass. Use when the user mentions Liquid Glass, glass effect, glassEffect, iOS 26 glass, GlassEffectContainer, frosted or translucent material, glass buttons, or glassy toolbars/tab bars. For general SwiftUI structure, state, and performance review use the `swiftui-pro` / `swiftui-expert-skill` skill alongside this one.
+description: Adopt and review Apple's iOS 26 Liquid Glass in SwiftUI — the .glassEffect(_:in:) material, GlassEffectContainer batching, glassEffectID morphing, .buttonStyle(.glass)/.glassProminent, backgroundExtensionEffect, scrollEdgeEffectStyle, and toolbar/tab-bar glass. Use when the user mentions Liquid Glass, glass effect, glassEffect, iOS 26 glass, GlassEffectContainer, frosted or translucent material, glass buttons, or glassy toolbars/tab bars. For general SwiftUI structure, state, and performance review use the `swiftui-pro` skill alongside this one.
 license: MIT
 metadata:
   author: Moritz Tucher
@@ -25,7 +25,7 @@ Set these explicitly at the start; they change what "correct" means.
 
 ## When to use
 
-Building or reviewing any SwiftUI surface that adopts iOS 26 Liquid Glass: glassy custom controls, floating buttons, morphing toolbars, hero headers under a translucent nav bar, or a migration of `.ultraThinMaterial` UI to the new material. Pair with `swiftui-pro` / `swiftui-expert-skill` for the surrounding SwiftUI architecture, state, and performance review — this skill owns the glass material specifically.
+Building or reviewing any SwiftUI surface that adopts iOS 26 Liquid Glass: glassy custom controls, floating buttons, morphing toolbars, hero headers under a translucent nav bar, or a migration of `.ultraThinMaterial` UI to the new material. Pair with `swiftui-pro` for the surrounding SwiftUI architecture, state, and performance review — this skill owns the glass material specifically.
 
 ## Core rules
 

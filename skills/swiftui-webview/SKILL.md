@@ -1,6 +1,6 @@
 ---
 name: swiftui-webview
-description: Embed and control web content in SwiftUI — the iOS 26 native WebView + WebPage observable (url/title/load/navigation/callJavaScript), and the WKWebView via UIViewRepresentable path for older targets (navigation delegate, JS messaging, configuration). Use when the user mentions WebView, WKWebView, WebPage, embed web content, SwiftUI web view, load HTML, or a JavaScript bridge. For opening arbitrary external links or trusted full-browser content, use the `safariservices` skill (SFSafariViewController) instead.
+description: Embed and control web content in SwiftUI — the iOS 26 native WebView + WebPage observable (url/title/load/navigation/callJavaScript), and the WKWebView via UIViewRepresentable path for older targets (navigation delegate, JS messaging, configuration). Use when the user mentions WebView, WKWebView, WebPage, embed web content, SwiftUI web view, load HTML, or a JavaScript bridge. For opening arbitrary external links or trusted full-browser content, use SFSafariViewController (SafariServices) instead.
 license: MIT
 metadata:
   author: Moritz Tucher
@@ -18,12 +18,12 @@ Displaying and controlling web content in SwiftUI. The deep API reference — na
 Set these explicitly at the start; they change what "correct" means.
 
 1. `BACKEND` — `native` (iOS 26+ SwiftUI `WebView` + `WebPage`, default; no UIKit) · `representable` (`WKWebView` via `UIViewRepresentable` + `Coordinator`, required below iOS 26) · `conditional` (`if #available(iOS 26, *)` switching between the two — the real answer when your deployment target is < iOS 26).
-2. `CONTENT_TRUST` — `bundled` (your own HTML/JS via `URLSchemeHandler` or `load(html:baseURL:)`) · `first-party` (your own web properties, fixed allowlist) · `arbitrary` (user-followable external links — **this is the SFSafariViewController case, not a bare WebView**; see `safariservices`).
+2. `CONTENT_TRUST` — `bundled` (your own HTML/JS via `URLSchemeHandler` or `load(html:baseURL:)`) · `first-party` (your own web properties, fixed allowlist) · `arbitrary` (user-followable external links — **this is the SFSafariViewController case, not a bare WebView**).
 3. `JS_BRIDGE` — `none` · `read` (Swift calls `callJavaScript` / `evaluateJavaScript` to read the page) · `two-way` (page posts to a `WKScriptMessageHandler` / native handler — every inbound message must be validated).
 
 ## When to use
 
-Embedding web content you control inside your own UI: rendered HTML, a bundled web app, a first-party page with a native chrome around it, or a Swift↔JS bridge. If the goal is to open an arbitrary URL the user tapped (external links, "open in browser", OAuth, marketing pages), reach for `SFSafariViewController` via the `safariservices` skill — App Review treats a bare `WKWebView` showing third-party content as a rejection risk.
+Embedding web content you control inside your own UI: rendered HTML, a bundled web app, a first-party page with a native chrome around it, or a Swift↔JS bridge. If the goal is to open an arbitrary URL the user tapped (external links, "open in browser", OAuth, marketing pages), reach for `SFSafariViewController` — App Review treats a bare `WKWebView` showing third-party content as a rejection risk.
 
 ## Core rules
 
@@ -37,7 +37,7 @@ Embedding web content you control inside your own UI: rendered HTML, a bundled w
 | The rationalization | The reality |
 |---|---|
 | "I'll just use the new native `WebView` everywhere." | `WebView`/`WebPage` are iOS 26+. If your deployment target is below 26 they won't compile/run there — gate with `if #available(iOS 26, *)` and keep a `WKWebView` `UIViewRepresentable` fallback. `conditional` is the honest dial. |
-| "I'll drop a `WKWebView` in to show this external/marketing/login page." | Apple rejects apps that wrap arbitrary third-party web content in a bare web view (and you lose Safari's autofill/cookies/security UI). For user-followable external links and trusted full-browser content use `SFSafariViewController` (`safariservices`). |
+| "I'll drop a `WKWebView` in to show this external/marketing/login page." | Apple rejects apps that wrap arbitrary third-party web content in a bare web view (and you lose Safari's autofill/cookies/security UI). For user-followable external links and trusted full-browser content use `SFSafariViewController`. |
 | "The coordinator's a local, ARC will keep it." | In the `UIViewRepresentable` path the `Coordinator` is the `navigationDelegate`/`WKScriptMessageHandler`; it must be owned (returned from `makeCoordinator()` and retained by the representable), and message handlers removed in `dismantleUIView` or they leak and replay. |
 | "Messages from the page are my own JS, I trust them." | Anything loaded in the web view can post to your `WKScriptMessageHandler` — including injected/third-party script. Validate `message.name`, type-check `message.body`, and never `eval`/route it into native actions unchecked. A bridge is an attack surface. |
 | "Loading the http URL works in the simulator, ship it." | App Transport Security blocks cleartext `http` by default; it "works" only because of a debug exception or a cached load. Use `https`, or add a scoped ATS exception you can justify — don't disable ATS globally. |
@@ -49,7 +49,7 @@ Embedding web content you control inside your own UI: rendered HTML, a bundled w
 Before shipping a WebView, confirm every line:
 
 - [ ] Backend matches the deployment target: native `WebView` only if iOS 26+ everywhere, otherwise `if #available` + `WKWebView` fallback that actually compiles below 26.
-- [ ] Arbitrary external/third-party links go to `SFSafariViewController` (`safariservices`), not a bare `WKWebView` — App Review safe.
+- [ ] Arbitrary external/third-party links go to `SFSafariViewController`, not a bare `WKWebView` — App Review safe.
 - [ ] (`representable` path) `Coordinator` is owned, set as `navigationDelegate`/handler, and every `WKScriptMessageHandler` is removed in `dismantleUIView`.
 - [ ] Inbound JS messages validate name + body type before acting; no unvalidated routing into native code.
 - [ ] Outbound JS uses `arguments:` (or escaping) — no raw interpolation of user/dynamic data into the script string.

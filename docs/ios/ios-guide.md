@@ -10,15 +10,11 @@ Load this guide for iOS work only. Project CLAUDE.md files in iOS projects pull 
 
 ---
 
-## View Inventory (per project)
+## Component Reuse
 
-Every iOS project maintains a `VIEW-INVENTORY.md` at the project root.
+Before implementing any new View, ViewModifier, ButtonStyle, or shared UI component, search the codebase (`ViewComponents/`, the feature's `ViewComponents/`) for an existing match — reuse or extend it rather than inventing a parallel one.
 
-- **Before implementing any new View, ViewModifier, ButtonStyle, or shared UI component:** read `VIEW-INVENTORY.md` first. If a matching component already exists, reuse or extend it rather than inventing a parallel one.
-- **When adding a new shared component:** add an entry to `VIEW-INVENTORY.md` in the same turn that introduces the file.
-- **When renaming or deleting a component:** update the inventory in the same diff.
-
-`/ios-init` scaffolds an empty inventory for a new project, or scans the codebase and pre-fills it for an existing one (it auto-detects which).
+Projects may optionally keep a `VIEW-INVENTORY.md` index at the root (`/ios-init` offers to scaffold one). If the project has one, treat it as authoritative: check it first, and update it in the same diff that adds, renames, or removes a shared component.
 
 ---
 
@@ -37,7 +33,6 @@ Every iOS project maintains a `VIEW-INVENTORY.md` at the project root.
 
 - **Context7** — `/websites/developer_apple_swiftui` (Apple's official SwiftUI docs, 15k+ snippets) for any modifier, View, or API question.
 - **`swiftui-pro` skill** (Paul Hudson) — invoke when writing or reviewing SwiftUI; nudges toward modern APIs and modifier-first patterns.
-- **`swiftui-expert-skill`** (Antoine van der Lee) — invoke for iOS 26 Liquid Glass and recent platform additions.
 
 **Discovery rule:** before implementing a custom solution for a common UI need (list margins, scroll insets, tab accessories, color mixing, recursive lists, badges, menus, quick-look previews, etc.), check Context7/skills for a built-in modifier first. If you'd reach for a custom `View` or `ViewModifier` and the need is generic, you're probably reinventing one of Apple's recent additions.
 
@@ -190,7 +185,7 @@ The build philosophy is **UI-first**: get the app's flow feeling good with the U
 | Plan | `/ios-design-brief` | Establish project-wide visual design system through Q&A | docs/DESIGN-SYSTEM.md |
 | Build | *(write code)* | Build the next MVP feature UI-first, then layer in logic & backend | Production code |
 | Build | `/ios-design-elevate` | Rewrite visual layer to match design system — theme, levers, consistency | Elevated Views + theme layer |
-| Build | `/ios-build`, `/ios-test`, `/ios-automate` | Build the project, run tests, drive the simulator | Build/test results |
+| Build | `xcodebuild` + `/ios-automate` | Build the project, run tests, drive the simulator | Build/test results |
 | Verify | `/ios-review` | Severity-rated code review (CRITICAL/HIGH/MEDIUM/LOW) | review-{file}.md |
 | Verify | `/ios-audit` | Four-lens audit (PM/UX/UI/ARCH) of project or feature | docs/AUDIT-REPORT.md |
 | Verify | `/ios-design-audit` | Audit visual craft against pattern library benchmarks | docs/DESIGN-AUDIT.md |
@@ -204,7 +199,7 @@ The build philosophy is **UI-first**: get the app's flow feeling good with the U
 - **Build UI-first** — make the flow feel good before wiring logic. Tests are encouraged for logic/backend but not gated by a formal verification step.
 - `/ios-design-elevate` rewrites only the visual layer and must not break existing behaviour.
 - A change isn't done until `/ios-review` shows no CRITICAL issues.
-- Design isn't done until `/ios-design-audit` shows at least 2-3 levers at "bold" and no HIGH findings remain.
+- Design isn't done until `/ios-design-audit` surfaces no HIGH findings and nothing you'd be embarrassed to ship.
 
 ---
 
@@ -216,11 +211,11 @@ Detects **new** / **fresh Xcode scaffold** / **existing** codebase and adapts. T
 
 **Setup path (new / fresh scaffold):**
 - **A1 Setup:** Platforms (multi-select: iOS / iPadOS / macOS / visionOS / tvOS / watchOS), deployment target, database, distribution (open source / commercial), audience (B2B / B2C), git prefix, bundle ID.
-- **A2 Tech brainstorm:** networking, auth, navigation, sync, offline, integrations — confidence-tracked (→90%). Scaffolds the folder structure.
+- **A2 Tech brainstorm:** networking, auth, navigation, sync, offline, integrations — iterates until every core decision is resolved or deferred. Scaffolds the folder structure.
 
 **Adopt path (existing):** scan the codebase, present findings, fill only undetectable gaps; document the existing structure instead of scaffolding.
 
-Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md` (diagram tailored to the actual decisions), `docs/decisions/ADR-0001`, `CHANGELOG.md`, `VIEW-INVENTORY.md`, `.gitignore`, `LICENSE` (when applicable), `README.md`, folder structure (new/fresh only), and optionally `Backlog.md`. Repo files are generated-if-missing — never silently overwritten. Finishes by writing `docs/.ios-init-decisions.json` and handing off to `/ios-brief`.
+Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md` (diagram tailored to the actual decisions), `docs/decisions/ADR-0001`, `CHANGELOG.md`, `.gitignore`, `LICENSE` (when applicable), `README.md`, folder structure (new/fresh only), and optionally `VIEW-INVENTORY.md` and `Backlog.md`. Repo files are generated-if-missing — never silently overwritten. Finishes by writing `docs/.ios-init-decisions.json` and handing off to `/ios-brief`.
 
 ---
 
@@ -239,13 +234,13 @@ Then create: `CLAUDE.md`, `.claude/memory.md`, `ARCHITECTURE.md` (diagram tailor
 
 ## Reference Docs
 
-For detailed guidelines, read these when needed:
+The rules above are the single source of truth; these docs carry the expanded examples and formats — read when needed:
 
 | Topic | Doc |
 |-------|-----|
-| Coding standards, testing, security | `~/.claude/docs/ios/ios-coding-standards.md` |
+| Code-organization, error-handling, testing examples | `~/.claude/docs/ios/ios-coding-standards.md` |
 | Git workflow, commits, PRs, Issues | `~/.claude/docs/git-workflow.md` |
-| Architecture, DI, project structure, ADRs | `~/.claude/docs/ios/architecture-patterns.md` |
+| DI/networking/state examples, detailed project structure, ADR & changelog formats | `~/.claude/docs/ios/architecture-patterns.md` |
 
 ---
 
@@ -253,27 +248,14 @@ For detailed guidelines, read these when needed:
 
 | Template | Location |
 |----------|----------|
-| Project Memory | `~/.claude/docs/templates/project-memory-template.md` |
 | Architecture | `~/.claude/docs/templates/architecture-template.md` |
 | ADR | `~/.claude/docs/templates/adr-template.md` |
 | Changelog | `~/.claude/docs/templates/changelog-template.md` |
-| Backlog | `~/.claude/docs/templates/backlog-template.md` |
 | Design System | `~/.claude/docs/templates/design-system-template.md` |
-| View Inventory | `~/.claude/docs/templates/view-inventory-template.md` |
+| View Inventory (optional) | `~/.claude/docs/templates/view-inventory-template.md` |
 
 ---
 
-## Framework Guides
+## Framework Skills
 
-Organized by domain in `~/.claude/docs/ios/`. Read the relevant guide before implementing unfamiliar frameworks.
-
-| Category | Path | Guides |
-|----------|------|--------|
-| SwiftUI | `docs/ios/swiftui/` | swiftui-guidelines, swiftui-performance, swiftui-badge, swiftui-webview, LiquidGlass, swift-charts, attributed-string, tipkit, design-craft-patterns |
-| AppKit | `docs/ios/appkit/` | appkit, appkit-liquid-glass |
-| Data & Persistence | `docs/ios/data/` | swiftdata, realmswift, cloudkit, corespotlight |
-| Commerce | `docs/ios/commerce/` | storekit, revenuecat, revenuecat-paywall-fix, firebase, passkit |
-| AI & ML | `docs/ios/ai/` | coreml, foundation-models, visual-intelligence, speech-analyzer |
-| Screen Time | `docs/ios/screen-time/` | screen-time-api, familycontrols, managedsettings, deviceactivity |
-| Hardware | `docs/ios/hardware/` | corebluetooth, accessorysetupkit, wifiaware, corehaptics, energykit, watchconnectivity |
-| System | `docs/ios/system/` | activitykit, widgetkit, appintents, healthkit, auth, localauthentication, corelocation, mapkit, avfoundation, photosui, contacts, eventkit, notifications, carplay, translation, and more |
+The deep framework guidance lives in the installed skill catalog, not in docs. Before implementing or reviewing any Apple framework feature (Live Activities, widgets, HealthKit, StoreKit, App Intents, …), check the catalog for a matching specialist skill and load it before writing code — prefer a loaded skill over answering from memory. Skill names are framework-literal (`healthkit`, `storekit`, `widgetkit`, …); if no name matches the user's phrasing, scan for the feature ("lock screen tracking" → `activitykit`, "Sign in with Apple" → `authenticationservices`).

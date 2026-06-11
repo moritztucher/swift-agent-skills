@@ -49,9 +49,11 @@ Run the Visual Loop on the in-scope screens. For each screen, pair the screensho
 ### 3. Advisor review (optional, larger projects)
 For substantial scopes, spawn `ios-ui-design-advisor` with the **screenshots + key code observations** and the lever framework, asking for: per-screen strong choices / concerns / opportunities (with "Consider:" framing), a strengths list, and concrete elevation opportunities citing pattern-library techniques. Integrate its annotations; you own the final findings.
 
+**No-subagent fallback:** on clients that cannot spawn subagents, read `skills/ios-ui-design-advisor/SKILL.md` and apply that lens inline to the same screenshots and observations — same annotation format, just sequential.
+
 ### 4. Assess levers & coherence
 Rate each of the levers **safe / moderate / bold** from the rendered screens:
-Typography as identity · Color as narrative · Vocabulary as design · Data viz as personality · Status indicators as signature · Motion as personality. An award-ready app pushes 2–3 levers bold; a generic one plays them all safe. Also assess cross-screen consistency (does every screen feel like one app?), dark-mode intentionality, and design-system adherence if a spec exists.
+Typography as identity · Color as narrative · Vocabulary as design · Data viz as personality · Status indicators as signature · Motion as personality. The profile is descriptive, not a score — playing every lever safe usually reads generic, but which levers (if any) deserve to be bold is this app's call. Also assess cross-screen consistency (does every screen feel like one app?), dark-mode intentionality, and design-system adherence if a spec exists.
 
 ### 5. Write the report
 Write `docs/DESIGN-AUDIT.md` (or `docs/DESIGN-AUDIT-{feature}.md` if scoped):
@@ -70,7 +72,6 @@ Write `docs/DESIGN-AUDIT.md` (or `docs/DESIGN-AUDIT-{feature}.md` if scoped):
 | Color · Typography · Spacing · Motion · Hierarchy · Emotional · Visibility · Consistency | … | … | … |
 
 **Lever profile:** Typography {safe/moderate/bold} · Color {…} · Vocabulary {…} · Data Viz {…} · Status {…} · Motion {…}
-**Verdict:** {AWARD-READY / POLISHED / SOLID / NEEDS ATTENTION / BARE BONES}
 
 ## Strengths
 - {What works, with screen + file citations.}
@@ -98,4 +99,4 @@ The few highest-leverage changes that move this from good to exceptional. For ea
 Severity guide (always judged by on-screen impact, never by distance from the doc): **HIGH** = significant issue affecting perception (no hierarchy, competing focal points, invisible cards, materials/system-colors rendering wrong); **MEDIUM** = visible convention gap or missed opportunity (inconsistent spacing, generic cards that read flat, uniform type with no contrast); **LOW** = polish (rhythm, spring timing, symbol weight). A value that merely differs from `DESIGN-SYSTEM.md` but looks fine is **not** a finding — it goes under *Drift* as a question.
 
 ### 6. Summary in chat
-Verdict + finding counts, any HIGH findings (one line each), top 3 quick wins, the signature-moment prescription, and an offer to run `/ios-design-elevate` to implement. Point to the report file.
+One-sentence overall impression + finding counts, any HIGH findings (one line each), top 3 quick wins, the signature-moment prescription, and an offer to run `/ios-design-elevate` to implement. Point to the report file.

@@ -46,6 +46,8 @@ Run the **Visual Loop** to walk and capture the real flow. Pair each screenshot 
 
 Integrate their annotations; you own the final findings.
 
+**No-subagent fallback:** on clients that cannot spawn subagents, read the portable lens skills — `skills/ios-onboarding-advisor/SKILL.md`, `skills/ios-ux-advisor/SKILL.md`, `skills/ios-ui-design-advisor/SKILL.md` — and apply each lens inline, sequentially, to the same screenshots and context (this also covers the Greenfield-mode spawns below). Same annotation contract, just not parallel.
+
 ### 2B. Greenfield mode (blueprint — unvalidated)
 From context, determine the activation moment, the minimum setup required before it, permissions (by sensitivity), personalization potential, and the app's personality. Spawn `ios-onboarding-advisor` (recommend flow pattern + screen-by-screen sequence + permission timing + activation placement + one micro-delight + what to defer to TipKit + metrics) and `ios-ui-design-advisor` (how the app's levers should manifest per screen so it feels like the app, not a template). Mark the blueprint **unvalidated — verify by walking it once built**.
 

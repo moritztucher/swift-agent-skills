@@ -1,6 +1,6 @@
 ---
 name: swift-testing
-description: Write and review unit/integration tests with Apple's Swift Testing framework (the Xcode 16/26 default) — @Test, #expect, #require, @Suite, traits, parameterized tests, async tests, confirmation(), and migrating from XCTest. Use when the user mentions Swift Testing, @Test, #expect, #require, @Suite, unit test, parameterized test, migrate from XCTest, or writing a test. For async/await mechanics inside tests see the swift-concurrency skill; for building and running the tests in the project lifecycle see the ios-test skill.
+description: Write and review unit/integration tests with Apple's Swift Testing framework (the Xcode 16/26 default) — @Test, #expect, #require, @Suite, traits, parameterized tests, async tests, confirmation(), and migrating from XCTest. Use when the user mentions Swift Testing, @Test, #expect, #require, @Suite, unit test, parameterized test, migrate from XCTest, or writing a test. For async/await mechanics inside tests see the swift-concurrency skill.
 license: MIT
 metadata:
   author: Moritz Tucher
@@ -23,7 +23,7 @@ Set these explicitly at the start; they change what "correct" means.
 
 ## When to use
 
-Writing or reviewing any unit or integration test for Swift code, or migrating an XCTest suite. Swift Testing and XCTest run in the same target — migrate file by file, don't rewrite wholesale. For the async/await and Sendable mechanics a test exercises, pair with `swift-concurrency`. To actually build and run the tests in the project workflow, use `ios-test`.
+Writing or reviewing any unit or integration test for Swift code, or migrating an XCTest suite. Swift Testing and XCTest run in the same target — migrate file by file, don't rewrite wholesale. For the async/await and Sendable mechanics a test exercises, pair with `swift-concurrency`. Run the suite with `xcodebuild test -scheme "<Scheme>" -destination 'platform=iOS Simulator,name=<device>'`.
 
 ## Core rules
 

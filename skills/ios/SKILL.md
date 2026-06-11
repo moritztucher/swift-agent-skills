@@ -50,7 +50,7 @@ State the single best next step in one sentence, then offer to act on it. If the
 | No `CLAUDE.md` import | Initialize the project | `/ios-init` |
 | Initialized, no brief | Build the project brief | `/ios-brief` |
 | Brief done, no design system *(optional)* | Establish the design system | `/ios-design-brief` |
-| Brief done | Build the next MVP feature — **UI first**, then logic | just start building (use `/ios-build`, `/ios-test`, `/ios-automate` as tools) |
+| Brief done | Build the next MVP feature — **UI first**, then logic | just start building (build/test with `xcodebuild`, drive the simulator with `/ios-automate`) |
 | UI built, feels good | Layer in logic & backend for that feature | continue building |
 | Want to raise the visual bar | Audit / elevate the design | `/ios-design-audit`, `/ios-design-elevate` |
 | Code written, want a check | Review or audit | `/ios-review`, `/ios-audit` |
@@ -64,11 +64,11 @@ When more than one path is reasonable (design-system is optional; you might audi
 
 - **Setup** — `/ios-load` (ad-hoc, no project), `/ios-init`
 - **Plan** — `/ios-brief`, `/ios-design-brief`
-- **Build** — write features UI-first; `/ios-design-elevate`, `/ios-build`, `/ios-test`, `/ios-automate`
+- **Build** — write features UI-first; `/ios-design-elevate`, `/ios-automate` (build/test via `xcodebuild` directly)
 - **Verify** — `/ios-review`, `/ios-audit`, `/ios-design-audit`, `/ios-onboarding-audit`
 - **Ship** — `/ios-commit`, `/pr-to-develop`, `/pr-to-main`, `/ios-release-notes`
 
-Craft skills (`swiftui-pro`, `swiftui-expert-skill`, `swift-concurrency`) trigger automatically while writing/reviewing SwiftUI and concurrency code — they aren't part of the linear path. List `/ios-agents` if the user wants to see the specialist subagents.
+Craft skills (`swiftui-pro`, `swift-concurrency`) trigger automatically while writing/reviewing SwiftUI and concurrency code — they aren't part of the linear path. The advisor subagents (`ios-ux-advisor`, `ios-ui-design-advisor`, `ios-onboarding-advisor`, `context7-docs-writer`) are spawned by the audit skills, not invoked directly.
 
 ## Edge Cases
 
